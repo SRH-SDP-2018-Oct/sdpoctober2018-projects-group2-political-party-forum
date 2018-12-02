@@ -4,8 +4,9 @@ public class GroupComments {
 	private int commentId;
 	private String commentBody;
 	private String commentCreationTime;
-	
-	public GroupComments() {}
+
+	public GroupComments() {
+	}
 
 	public GroupComments(int commentId, String commentBody, String commentCreationTime) {
 		super();
@@ -49,5 +50,5 @@ public class GroupComments {
 		return "GroupComments [commentId=" + commentId + ", commentBody=" + commentBody + ", commentCreationTime="
 				+ commentCreationTime + "]";
 	}
-	
+
 }

@@ -10,8 +10,9 @@ public class Project {
 	private double taskAllocatedFund;
 	private String taskCreationTimestamp;
 	private String contractorName;
-	
-	public Project() {}
+
+	public Project() {
+	}
 
 	public Project(int groupProgressReportId, String taskName, String taskStartDate, String taskEndDate,
 			String intendedCompletionDate, String taskDescription, double taskAllocatedFund,
@@ -120,5 +121,5 @@ public class Project {
 				+ ", taskDescription=" + taskDescription + ", taskAllocatedFund=" + taskAllocatedFund
 				+ ", taskCreationTimestamp=" + taskCreationTimestamp + ", contractorName=" + contractorName + "]";
 	}
-	
+
 }

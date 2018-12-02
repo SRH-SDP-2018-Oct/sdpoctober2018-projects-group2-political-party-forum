@@ -2,14 +2,15 @@ package com.politicalforum.beans;
 
 public class Group {
 
-	private int groupId ;
+	private int groupId;
 	private String groupName;
 	private String groupDescription;
 	private int groupOwnerId;
 	private String groupCreationTime;
-	
-	public Group() {}
-	
+
+	public Group() {
+	}
+
 	public Group(int groupId, String groupName, String groupDescription, int groupOwnerId, String groupCreationTime) {
 		super();
 		this.groupId = groupId;
@@ -64,6 +65,5 @@ public class Group {
 		return "Group [groupId=" + groupId + ", groupName=" + groupName + ", groupDescription=" + groupDescription
 				+ ", groupOwnerId=" + groupOwnerId + ", groupCreationTime=" + groupCreationTime + "]";
 	}
-	
-	
+
 }

@@ -6,8 +6,9 @@ public class Poll {
 	private String pollOption;
 	private String pollAnswer;
 	private String pollCreationTime;
-	
-	public Poll() {}
+
+	public Poll() {
+	}
 
 	public Poll(int pollId, String pollName, String pollOption, String pollAnswer, String pollCreationTime) {
 		super();
@@ -71,5 +72,5 @@ public class Poll {
 		return "Poll [pollId=" + pollId + ", pollName=" + pollName + ", pollOption=" + pollOption + ", pollAnswer="
 				+ pollAnswer + ", pollCreationTime=" + pollCreationTime + "]";
 	}
-	
+
 }

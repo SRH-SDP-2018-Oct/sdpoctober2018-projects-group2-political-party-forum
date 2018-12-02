@@ -1,7 +1,7 @@
 package com.politicalforum.beans;
 
 public class PoliticalUser {
-	
+
 	private int politicalUserId;
 	private String firstName;
 	private String lastName;
@@ -10,7 +10,7 @@ public class PoliticalUser {
 	private String gender;
 	private int age;
 	private Boolean isAnnonymous;
-	
+
 	public PoliticalUser() {
 	}
 
@@ -101,6 +101,5 @@ public class PoliticalUser {
 				+ lastName + ", emailId=" + emailId + ", politicianId=" + politicianId + ", gender=" + gender + ", age="
 				+ age + ", isAnnonymous=" + isAnnonymous + "]";
 	}
-	
-	
-	}
+
+}

@@ -5,8 +5,9 @@ public class GroupDiscussion {
 	private String groupDiscussionName;
 	private String groupDiscussionBody;
 	private String groupCreationTime;
-	
-	public GroupDiscussion() {}
+
+	public GroupDiscussion() {
+	}
 
 	public GroupDiscussion(int groupDiscussionId, String groupDiscussionName, String groupDiscussionBody,
 			String groupCreationTime) {
@@ -62,6 +63,5 @@ public class GroupDiscussion {
 				+ groupDiscussionName + ", groupDiscussionBody=" + groupDiscussionBody + ", groupCreationTime="
 				+ groupCreationTime + "]";
 	}
-	
-	
+
 }

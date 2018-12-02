@@ -4,8 +4,9 @@ public class Notification {
 	private int notificationId;
 	private String notificationBody;
 	private String notificationcreationTime;
-	
-	public Notification() {}
+
+	public Notification() {
+	}
 
 	public Notification(int notificationId, String notificationBody, String notificationcreationTime) {
 		super();
@@ -49,5 +50,5 @@ public class Notification {
 		return "Notification [notificationId=" + notificationId + ", notificationBody=" + notificationBody
 				+ ", notificationcreationTime=" + notificationcreationTime + "]";
 	}
-	
+
 }
