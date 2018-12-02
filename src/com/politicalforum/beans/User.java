@@ -9,9 +9,10 @@ public class User {
 	private String gender;
 	private String aadharNumber;
 	private Boolean isAnonymous;
+	private String region;
 
 	public User(int userId, String firstName, String lastName, int age, String emailId, String gender,
-			String aadharNumber, Boolean isAnonymous) {
+			String aadharNumber, Boolean isAnonymous, String region) {
 		super();
 		this.userId = userId;
 		this.firstName = firstName;
@@ -21,10 +22,11 @@ public class User {
 		this.gender = gender;
 		this.aadharNumber = aadharNumber;
 		this.isAnonymous = isAnonymous;
+		this.region = region;
 	}
 
 	public User(String firstName, String lastName, int age, String emailId, String gender, String aadharNumber,
-			Boolean isAnonymous) {
+			Boolean isAnonymous, String region) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -33,6 +35,7 @@ public class User {
 		this.gender = gender;
 		this.aadharNumber = aadharNumber;
 		this.isAnonymous = isAnonymous;
+		this.region = region;
 	}
 
 	public String getFirstName() {
@@ -91,11 +94,19 @@ public class User {
 		this.isAnonymous = isAnonymous;
 	}
 
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age
 				+ ", emailId=" + emailId + ", gender=" + gender + ", aadharNumber=" + aadharNumber + ", isAnonymous="
-				+ isAnonymous + "]";
+				+ isAnonymous + ", region=" + region + "]";
 	}
 
 }

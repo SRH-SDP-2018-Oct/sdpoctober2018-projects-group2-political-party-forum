@@ -1,5 +1,7 @@
 package com.politicalforum.daoServices;
 
-public interface PoliticalPartyDAOServices {
+import com.politicalforum.beans.User;
 
+public interface PoliticalPartyDAOServices {
+	public String insertUserDetails(User user);
 }
