@@ -3,22 +3,22 @@ package com.politicalforum.beans;
 public class Notification {
 	private int notificationId;
 	private String notificationBody;
-	private String notificationcreationTime;
+	private String notificationCreationTime;
 
 	public Notification() {
 	}
 
-	public Notification(int notificationId, String notificationBody, String notificationcreationTime) {
+	public Notification(int notificationId, String notificationBody, String notificationCreationTime) {
 		super();
 		this.notificationId = notificationId;
 		this.notificationBody = notificationBody;
-		this.notificationcreationTime = notificationcreationTime;
+		this.notificationCreationTime = notificationCreationTime;
 	}
 
-	public Notification(String notificationBody, String notificationcreationTime) {
+	public Notification(String notificationBody, String notificationCreationTime) {
 		super();
 		this.notificationBody = notificationBody;
-		this.notificationcreationTime = notificationcreationTime;
+		this.notificationCreationTime = notificationCreationTime;
 	}
 
 	public int getNotificationId() {
@@ -37,18 +37,18 @@ public class Notification {
 		this.notificationBody = notificationBody;
 	}
 
-	public String getNotificationcreationTime() {
-		return notificationcreationTime;
+	public String getNotificationCreationTime() {
+		return notificationCreationTime;
 	}
 
-	public void setNotificationcreationTime(String notificationcreationTime) {
-		this.notificationcreationTime = notificationcreationTime;
+	public void setNotificationCreationTime(String notificationCreationTime) {
+		this.notificationCreationTime = notificationCreationTime;
 	}
 
 	@Override
 	public String toString() {
 		return "Notification [notificationId=" + notificationId + ", notificationBody=" + notificationBody
-				+ ", notificationcreationTime=" + notificationcreationTime + "]";
+				+ ", notificationCreationTime=" + notificationCreationTime + "]";
 	}
 
 }
