@@ -16,7 +16,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	private ResultSet resultSet = null;
 
 	public PoliticalPartyDAOServicesImplementation() throws ServicNotFoundException {
-		connection = PoliticalPartyConnectionProvider.getBankingConnectionServices();
+		connection = PoliticalPartyConnectionProvider.getPoliticalForumConnectionServices();
 	}
 
 	@Override

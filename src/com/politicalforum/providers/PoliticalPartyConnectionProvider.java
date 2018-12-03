@@ -13,7 +13,7 @@ import com.politicalforum.exceptions.ServicNotFoundException;
 
 public class PoliticalPartyConnectionProvider {
 
-	public static Connection getBankingConnectionServices() throws ServicNotFoundException {
+	public static Connection getPoliticalForumConnectionServices() throws ServicNotFoundException {
 		try {
 			Properties p = new Properties();
 			p.load(new FileReader(new File("resources/politicalparty.properties")));

@@ -21,7 +21,7 @@ public class DynamicJasperReport {
 
 		try {
 			ResultSet resultSet = null;
-			Connection con = PoliticalPartyConnectionProvider.getBankingConnectionServices();
+			Connection con = PoliticalPartyConnectionProvider.getPoliticalForumConnectionServices();
 			resultSet = con.prepareStatement(
 					"select firstname, lastname, region, emailid, aadharnumber, gender, age, isanonymous from userdetails")
 					.executeQuery();
