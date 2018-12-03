@@ -1,5 +1,6 @@
 package com.politicalforum.services;
 
+import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
 import com.politicalforum.daoServices.PoliticalPartyDAOServices;
 import com.politicalforum.exceptions.ServicNotFoundException;
@@ -19,4 +20,16 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 				new User(firstName, lastName, age, emailId, gender, aadharNumber, isAnonymous, region));
 	}
 
+	@Override
+	public String registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId,
+			String gender, String politicianId, Boolean isAnonymous, String region) throws ServicNotFoundException {
+		// TODO Auto-generated method stub
+		return  politicalPartyDaoServices.insertPoliticalUserDetails(new PoliticalUser(firstName, lastName, emailId, politicianId, gender, age, region, isAnonymous));
+
+	}
+
 }
+
+
+
+

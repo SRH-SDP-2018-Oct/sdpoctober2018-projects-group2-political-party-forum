@@ -9,13 +9,14 @@ public class PoliticalUser {
 	private String politicianId;
 	private String gender;
 	private int age;
-	private Boolean isAnnonymous;
+	private String region;
+	private Boolean isAnonymous;
 
 	public PoliticalUser() {
 	}
 
 	public PoliticalUser(int politicalUserId, String firstName, String lastName, String emailId, String politicianId,
-			String gender, int age, Boolean isAnnonymous) {
+			String gender, int age, String region, Boolean isAnnonymous) {
 		super();
 		this.politicalUserId = politicalUserId;
 		this.firstName = firstName;
@@ -24,11 +25,12 @@ public class PoliticalUser {
 		this.politicianId = politicianId;
 		this.gender = gender;
 		this.age = age;
-		this.isAnnonymous = isAnnonymous;
+		this.region = region;
+		this.isAnonymous = isAnnonymous;
 	}
 
 	public PoliticalUser(String firstName, String lastName, String emailId, String politicianId, String gender, int age,
-			Boolean isAnnonymous) {
+			String region, Boolean isAnnonymous) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -36,7 +38,8 @@ public class PoliticalUser {
 		this.politicianId = politicianId;
 		this.gender = gender;
 		this.age = age;
-		this.isAnnonymous = isAnnonymous;
+		this.region = region;
+		this.isAnonymous = isAnnonymous;
 	}
 
 	public String getFirstName() {
@@ -87,19 +90,27 @@ public class PoliticalUser {
 		this.age = age;
 	}
 
-	public Boolean getIsAnnonymous() {
-		return isAnnonymous;
+	public Boolean getIsAnonymous() {
+		return isAnonymous;
 	}
 
 	public void setIsAnnonymous(Boolean isAnnonymous) {
-		this.isAnnonymous = isAnnonymous;
+		this.isAnonymous = isAnnonymous;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
 	}
 
 	@Override
 	public String toString() {
 		return "PoliticalUser [politicalUserId=" + politicalUserId + ", firstName=" + firstName + ", lastName="
 				+ lastName + ", emailId=" + emailId + ", politicianId=" + politicianId + ", gender=" + gender + ", age="
-				+ age + ", isAnnonymous=" + isAnnonymous + "]";
+				+ age + ", region=" + region + ", isAnnonymous=" + isAnonymous + "]";
 	}
 
 }

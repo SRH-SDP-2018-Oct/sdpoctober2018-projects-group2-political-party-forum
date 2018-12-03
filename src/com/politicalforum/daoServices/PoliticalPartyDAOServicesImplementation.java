@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.ServicNotFoundException;
 import com.politicalforum.providers.PoliticalPartyConnectionProvider;
@@ -54,5 +55,44 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 
 		return userId;
 	}
+
+	@Override
+	public String insertPoliticalUserDetails(PoliticalUser politicalUser) {
+		String politicalUserId = null;
+		try {
+			connection.setAutoCommit(false);
+			String sql = "select politicaluser_sequence.nextval from politicaluserdetails";
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()) {
+				politicalUserId = "P"+resultSet.getString(1);
+				preparedStatement.closeOnCompletion();
+			}
+			preparedStatement = connection.prepareStatement(
+					"insert into politicaluserdetails(politicaluserid, firstname, lastname, region, emailId, politicianId, gender, age, isanonymous) values(?,?,?,?,?,?,?,?,?)");
+			preparedStatement.setString(1, politicalUserId);
+			preparedStatement.setString(2, politicalUser.getFirstName());
+			preparedStatement.setString(3, politicalUser.getLastName());
+			preparedStatement.setString(4, politicalUser.getRegion());
+			preparedStatement.setString(5, politicalUser.getEmailId());
+			preparedStatement.setString(6, politicalUser.getPoliticianId());
+			preparedStatement.setString(7, politicalUser.getGender());
+			preparedStatement.setString(8, String.valueOf(politicalUser.getAge()));
+			preparedStatement.setInt(9, politicalUser.getIsAnonymous() ? 1 : 0);
+			preparedStatement.executeUpdate();
+			preparedStatement = connection.prepareStatement("select max(POLITICALUSERID) from politicaluserdetails");
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			politicalUserId = resultSet.getString(1);
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+
+		return politicalUserId;
+	}
+	
+	
 
 }
