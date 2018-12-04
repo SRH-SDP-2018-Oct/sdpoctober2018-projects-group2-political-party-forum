@@ -9,11 +9,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import com.politicalforum.exceptions.ServicNotFoundException;
+import com.politicalforum.exceptions.ServiceNotFoundException;
 
 public class PoliticalPartyConnectionProvider {
 
-	public static Connection getPoliticalForumConnectionServices() throws ServicNotFoundException {
+	public static Connection getPoliticalForumConnectionServices() throws ServiceNotFoundException {
 		try {
 			Properties p = new Properties();
 			p.load(new FileReader(new File("resources/politicalparty.properties")));
@@ -22,16 +22,16 @@ public class PoliticalPartyConnectionProvider {
 					p.getProperty("password"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			throw new ServicNotFoundException("Service down!", e);
+			throw new ServiceNotFoundException("Service down!", e);
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new ServicNotFoundException("Service down!", e);
+			throw new ServiceNotFoundException("Service down!", e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new ServicNotFoundException("Service down!", e);
+			throw new ServiceNotFoundException("Service down!", e);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			throw new ServicNotFoundException("Service down!", e);
+			throw new ServiceNotFoundException("Service down!", e);
 		}
 	}
 

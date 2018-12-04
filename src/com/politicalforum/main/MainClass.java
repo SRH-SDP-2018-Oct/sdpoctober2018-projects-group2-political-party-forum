@@ -37,6 +37,7 @@ public class MainClass {
 				Boolean isAnonymous = sc.nextBoolean();
 				System.out.println("User ID is:- " + politicalPartyServices.registerUserDetails(firstName, lastName,
 						age, emailId, gender, aadharNumber, isAnonymous, region));
+				break;
 			case 2:
 				System.out.println("Your First Name:- ");
 				firstName = sc.next();
@@ -56,6 +57,8 @@ public class MainClass {
 				 isAnonymous = sc.nextBoolean();
 				System.out.println("User ID is:- " + politicalPartyServices.registerPoliticalUserDetails(firstName, lastName,
 						age, emailId, gender, politicianId, isAnonymous, region));
+				break;
+			default: System.out.println("Wrong option!");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

@@ -1,31 +1,31 @@
 package com.politicalforum.exceptions;
 
-public class ServicNotFoundException extends Exception {
+public class ServiceNotFoundException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public ServicNotFoundException() {
+	public ServiceNotFoundException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ServicNotFoundException(String message, Throwable cause, boolean enableSuppression,
+	public ServiceNotFoundException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ServicNotFoundException(String message, Throwable cause) {
+	public ServiceNotFoundException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ServicNotFoundException(String message) {
+	public ServiceNotFoundException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ServicNotFoundException(Throwable cause) {
+	public ServiceNotFoundException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}

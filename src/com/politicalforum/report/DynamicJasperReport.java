@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.Date;
 
-import com.politicalforum.exceptions.ServicNotFoundException;
+import com.politicalforum.exceptions.ServiceNotFoundException;
 import com.politicalforum.providers.PoliticalPartyConnectionProvider;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
@@ -17,7 +17,7 @@ import net.sf.jasperreports.view.JasperViewer;
 
 public class DynamicJasperReport {
 
-	public static void main(String[] args) throws ServicNotFoundException {
+	public static void main(String[] args) throws ServiceNotFoundException {
 
 		try {
 			ResultSet resultSet = null;
