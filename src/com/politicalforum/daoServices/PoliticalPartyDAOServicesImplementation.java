@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.politicalforum.beans.Group;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.ServiceNotFoundException;
@@ -71,6 +72,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			politicalUserId = resultSet.getString(1);
+			preparedStatement.close();
+			resultSet.close();
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -78,11 +81,33 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.close();
 			resultSet.close();
 		}
-
-
 		return politicalUserId;
 	}
-	
-	
+
+	@Override
+	public String insertGroupDetails(Group group) {
+		String groupId = null;
+		try {
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(
+					"insert into groupdetails(groupdetailsid, groupdetailsname, groupdetailsbody, politicaluserid, dateofcreation) values('GD' || groupdetail_sequence.nextval,?,?,?,?)");
+			preparedStatement.setString(1, group.getGroupName());
+			preparedStatement.setString(2, group.getGroupDescription());
+			preparedStatement.setString(3, group.getGroupOwnerId());
+			preparedStatement.setDate(4, group.getGroupCreationTime());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			preparedStatement = connection.prepareStatement("select max(groupdetailsId) from Groupdetails");
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			groupId = resultSet.getString(1);
+			preparedStatement.close();
+			resultSet.close();
+			connection.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return groupId;
+	}
 
 }
