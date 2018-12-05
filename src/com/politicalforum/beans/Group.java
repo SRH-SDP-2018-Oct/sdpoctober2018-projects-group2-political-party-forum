@@ -1,17 +1,19 @@
 package com.politicalforum.beans;
 
+import java.sql.Date;
+
 public class Group {
 
 	private int groupId;
 	private String groupName;
 	private String groupDescription;
-	private int groupOwnerId;
-	private String groupCreationTime;
+	private String groupOwnerId;
+	private Date groupCreationTime;
 
 	public Group() {
 	}
 
-	public Group(int groupId, String groupName, String groupDescription, int groupOwnerId, String groupCreationTime) {
+	public Group(int groupId, String groupName, String groupDescription, String groupOwnerId, Date groupCreationTime) {
 		super();
 		this.groupId = groupId;
 		this.groupName = groupName;
@@ -20,7 +22,7 @@ public class Group {
 		this.groupCreationTime = groupCreationTime;
 	}
 
-	public Group(String groupName, String groupDescription, int groupOwnerId, String groupCreationTime) {
+	public Group(String groupName, String groupDescription, String groupOwnerId, Date groupCreationTime) {
 		super();
 		this.groupName = groupName;
 		this.groupDescription = groupDescription;
@@ -44,19 +46,19 @@ public class Group {
 		this.groupDescription = groupDescription;
 	}
 
-	public int getGroupOwnerId() {
+	public String getGroupOwnerId() {
 		return groupOwnerId;
 	}
 
-	public void setGroupOwnerId(int groupOwnerId) {
+	public void setGroupOwnerId(String groupOwnerId) {
 		this.groupOwnerId = groupOwnerId;
 	}
 
-	public String getGroupCreationTime() {
+	public Date getGroupCreationTime() {
 		return groupCreationTime;
 	}
 
-	public void setGroupCreationTime(String groupCreationTime) {
+	public void setGroupCreationTime(Date groupCreationTime) {
 		this.groupCreationTime = groupCreationTime;
 	}
 

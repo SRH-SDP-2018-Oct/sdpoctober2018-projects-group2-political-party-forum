@@ -7,8 +7,11 @@ import com.politicalforum.services.PoliticalPartyServices;
 
 public class MainClass {
 
+	private static Scanner sc = new Scanner(System.in);
+
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+		System.out.println("Hello!");
+
 		try {
 			PoliticalPartyServices politicalPartyServices = PoliticalPartyServicesProvider
 					.getPoliticalPartyServiceImplementor();
@@ -18,7 +21,7 @@ public class MainClass {
 			System.out.println("Your choice: ");
 			choice = sc.nextInt();
 			switch (choice) {
-			case 1 : 
+			case 1:
 				System.out.println("Your First Name:- ");
 				String firstName = sc.next();
 				System.out.println("Your Last Name:- ");
@@ -42,28 +45,51 @@ public class MainClass {
 				System.out.println("Your First Name:- ");
 				firstName = sc.next();
 				System.out.println("Your Last Name:- ");
-				 lastName = sc.next();
+				lastName = sc.next();
 				System.out.println("Your Age:- ");
-				 age = sc.nextInt();
+				age = sc.nextInt();
 				System.out.println("Your Email-ID:- ");
-				 emailId = sc.next();
+				emailId = sc.next();
 				System.out.println("Your Gender:- ");
-				 gender = sc.next();
+				gender = sc.next();
 				System.out.println("Your PoliticianId:- ");
 				String politicianId = sc.next();
 				System.out.println("Your Region:- ");
-				 region = sc.next();
+				region = sc.next();
 				System.out.println("Do you want to remain Anonymous(true/false)?");
-				 isAnonymous = sc.nextBoolean();
-				System.out.println("User ID is:- " + politicalPartyServices.registerPoliticalUserDetails(firstName, lastName,
-						age, emailId, gender, politicianId, isAnonymous, region));
+				isAnonymous = sc.nextBoolean();
+				politicalUserMenu(politicalPartyServices.registerPoliticalUserDetails(firstName, lastName, age, emailId,
+						gender, politicianId, isAnonymous, region), politicalPartyServices);
 				break;
-			default: System.out.println("Wrong option!");
+			default:
+				System.out.println("Wrong option!");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			// TODO: handle exception
 		} finally {
 			sc.close();
+		}
+	}
+
+	private static void politicalUserMenu(String groupOwnerId, PoliticalPartyServices politicalPartyServices) {
+		int choice = 0;
+		System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Join Group\n");
+		System.out.println("Enter Option:- ");
+		choice = sc.nextInt();
+		switch (choice) {
+		case 1:
+			System.out.println("Enter Group Name:- ");
+			String groupName = sc.next();
+			System.out.println("Describe this group:- ");
+			String groupDescription = sc.next();
+			System.out.println("Group Created ID:- "
+					+ politicalPartyServices.createGroup(groupName, groupDescription, groupOwnerId));
+			break;
+		default:
+			System.out.println("Wrong Option!");
+			break;
+
 		}
 	}
 
