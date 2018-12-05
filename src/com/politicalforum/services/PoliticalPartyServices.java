@@ -2,7 +2,9 @@ package com.politicalforum.services;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
+import com.politicalforum.beans.Group;
 import com.politicalforum.exceptions.ServiceNotFoundException;
 
 public interface PoliticalPartyServices {
@@ -16,5 +18,7 @@ public interface PoliticalPartyServices {
 	public HashMap<String, Object> login(String emailId, String password) throws SQLException;
 
 	public String createGroup(String groupName, String groupDescription, String groupOwnerId);
+	
+	public List<Group> browseGroups() throws SQLException;
 
 }

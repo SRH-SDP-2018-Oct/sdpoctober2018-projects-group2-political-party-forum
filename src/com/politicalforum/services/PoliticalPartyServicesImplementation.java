@@ -2,6 +2,7 @@ package com.politicalforum.services;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.PoliticalUser;
@@ -61,6 +62,12 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 			idAndClassObjectMap.put(user.getUserId(), user);
 		}
 		return idAndClassObjectMap;
+	}
+
+	@Override
+	public List<Group> browseGroups() throws SQLException {
+		// TODO Auto-generated method stub
+		return politicalPartyDaoServices.retrieveGroupDetails();
 	}
 	
 }

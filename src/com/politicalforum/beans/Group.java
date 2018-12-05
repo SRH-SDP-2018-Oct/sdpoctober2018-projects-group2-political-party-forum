@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Group {
 
-	private int groupId;
+	private String groupId;
 	private String groupName;
 	private String groupDescription;
 	private String groupOwnerId;
@@ -13,7 +13,7 @@ public class Group {
 	public Group() {
 	}
 
-	public Group(int groupId, String groupName, String groupDescription, String groupOwnerId, Date groupCreationTime) {
+	public Group(String groupId, String groupName, String groupDescription, String groupOwnerId, Date groupCreationTime) {
 		super();
 		this.groupId = groupId;
 		this.groupName = groupName;

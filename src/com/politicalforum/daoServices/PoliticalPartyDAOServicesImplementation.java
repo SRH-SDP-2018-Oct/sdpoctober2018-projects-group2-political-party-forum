@@ -1,9 +1,12 @@
 package com.politicalforum.daoServices;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.PoliticalUser;
@@ -211,6 +214,22 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			return Helper.isPasswordCorrect(password, resultSet.getString(1));
 		}
 		return false;
+	}
+
+	@Override
+	public List<Group> retrieveGroupDetails() throws SQLException {
+		preparedStatement= connection.prepareStatement("select * from groupdetails");
+		resultSet= preparedStatement.executeQuery();
+		List<Group> group = new ArrayList<>();
+		while(resultSet.next()) {
+			String groupId = resultSet.getString(1);
+			String groupName = resultSet.getString(2);
+			String groupDescription = resultSet.getString(3);
+			String groupOwnerId = resultSet.getString(4);
+			Date groupCreationTime = resultSet.getDate(5);
+			group.add(new Group(groupId, groupName, groupDescription, groupOwnerId, groupCreationTime));
+		}
+		return group;	
 	}
 
 }

@@ -1,8 +1,11 @@
 package com.politicalforum.main;
 
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
+import com.politicalforum.beans.Group;
 import com.politicalforum.providers.PoliticalPartyServicesProvider;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.utils.Helper;
@@ -109,9 +112,9 @@ public class MainClass {
 		}
 	}
 
-	private static void politicalUserMenu(String groupOwnerId, PoliticalPartyServices politicalPartyServices) {
+	private static void politicalUserMenu(String groupOwnerId, PoliticalPartyServices politicalPartyServices) throws SQLException {
 		int choice = 0;
-		System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Join Group\n");
+		System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Browse Groups\n");
 		System.out.println("Enter Option:- ");
 		choice = sc.nextInt();
 		switch (choice) {
@@ -122,6 +125,13 @@ public class MainClass {
 			String groupDescription = sc.next();
 			System.out.println("Group Created ID:- "
 					+ politicalPartyServices.createGroup(groupName, groupDescription, groupOwnerId));
+			break;
+		case 2: 
+			System.out.println("Available groups to join");
+			List<Group> groups = politicalPartyServices.browseGroups();
+			for(int i=0; i<groups.size();i++) {
+				System.out.println((i+1)+". " + groups.get(i).getGroupName());
+			}
 			break;
 		default:
 			System.out.println("Wrong Option!");
