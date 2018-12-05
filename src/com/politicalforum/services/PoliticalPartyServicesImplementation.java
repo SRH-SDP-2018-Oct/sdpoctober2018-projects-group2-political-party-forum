@@ -1,6 +1,7 @@
 package com.politicalforum.services;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.PoliticalUser;
@@ -44,9 +45,22 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 				: "User is not a politician";
 	}
 	
-	public <T> GenericUser<T> login(String emailId, String password) throws SQLException {
-		return politicalPartyDaoServices.checkCredentials(emailId, password);
-		
+	@Override
+	public HashMap<String , Object> login(String emailId, String password) throws SQLException {
+		GenericUser<Object> genericUser = politicalPartyDaoServices.checkCredentials(emailId, password);
+		return getGenericUserHashMap(genericUser);
 	}
 
+	private HashMap<String, Object> getGenericUserHashMap(GenericUser<Object> genericUser) {
+		HashMap<String, Object> idAndClassObjectMap = new HashMap<>();
+		if(genericUser.getGenericUser() instanceof PoliticalUser) {
+			PoliticalUser politicalUser = (PoliticalUser)genericUser.getGenericUser();
+			idAndClassObjectMap.put(politicalUser.getPoliticalUserId(), politicalUser);
+		} else if(genericUser.getGenericUser() instanceof User) {
+			User user = (User)genericUser.getGenericUser();
+			idAndClassObjectMap.put(user.getUserId(), user);
+		}
+		return idAndClassObjectMap;
+	}
+	
 }

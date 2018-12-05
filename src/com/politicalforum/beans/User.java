@@ -112,6 +112,10 @@ public class User {
 		this.password = password;
 	}
 
+	public String getUserId() {
+		return this.userId;
+	}
+	
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age

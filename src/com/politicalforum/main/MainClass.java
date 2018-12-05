@@ -1,12 +1,11 @@
 package com.politicalforum.main;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
-import com.politicalforum.beans.PoliticalUser;
-import com.politicalforum.beans.User;
 import com.politicalforum.providers.PoliticalPartyServicesProvider;
 import com.politicalforum.services.PoliticalPartyServices;
-import com.politicalforum.utils.GenericUser;
+import com.politicalforum.utils.Helper;
 
 public class MainClass {
 
@@ -90,14 +89,13 @@ public class MainClass {
 				emailId = sc.next();
 				System.out.println("Enter Password:- ");
 				password = sc.next();
-				GenericUser<Object> genericUser = politicalPartyServices.login(emailId, password);
-				if(genericUser.getGenericUser() instanceof User) {
-					User usr = (User)genericUser.getGenericUser();
-					System.out.println(usr.toString());
-				} else if(genericUser.getGenericUser() instanceof PoliticalUser) {
-					PoliticalUser pu = (PoliticalUser)genericUser.getGenericUser();
-					System.out.println(pu.toString());
-					politicalUserMenu( pu.getPoliticalUserId(), politicalPartyServices);
+				HashMap<String, Object> user = politicalPartyServices.login(emailId, password);
+				for(String key: user.keySet()) {
+					if(Helper.checkIfUserIsPolitician(key)) {
+						politicalUserMenu(key, politicalPartyServices);
+					} else {
+						System.out.println("General User Login");
+					}
 				}
 				break;
 			default:
