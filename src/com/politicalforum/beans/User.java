@@ -1,7 +1,7 @@
 package com.politicalforum.beans;
 
 public class User {
-	private int userId;
+	private String userId;
 	private String firstName;
 	private String lastName;
 	private int age;
@@ -10,8 +10,9 @@ public class User {
 	private String aadharNumber;
 	private Boolean isAnonymous;
 	private String region;
-
-	public User(int userId, String firstName, String lastName, int age, String emailId, String gender,
+	private String password;
+	
+	public User(String userId, String firstName, String lastName, int age, String emailId, String gender,
 			String aadharNumber, Boolean isAnonymous, String region) {
 		super();
 		this.userId = userId;
@@ -26,7 +27,7 @@ public class User {
 	}
 
 	public User(String firstName, String lastName, int age, String emailId, String gender, String aadharNumber,
-			Boolean isAnonymous, String region) {
+			Boolean isAnonymous, String region, String password) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -36,6 +37,7 @@ public class User {
 		this.aadharNumber = aadharNumber;
 		this.isAnonymous = isAnonymous;
 		this.region = region;
+		this.password = password;
 	}
 
 	public String getFirstName() {
@@ -100,6 +102,14 @@ public class User {
 
 	public void setRegion(String region) {
 		this.region = region;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override

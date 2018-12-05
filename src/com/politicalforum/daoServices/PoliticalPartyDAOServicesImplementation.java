@@ -10,6 +10,8 @@ import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.ServiceNotFoundException;
 import com.politicalforum.providers.PoliticalPartyConnectionProvider;
+import com.politicalforum.utils.GenericUser;
+import com.politicalforum.utils.Helper;
 
 public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDAOServices {
 
@@ -24,6 +26,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public String insertUserDetails(User user) throws SQLException {
 		String userId = null;
+		String hashPassword = null;
 		try {
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(
@@ -41,6 +44,12 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			userId = resultSet.getString(1);
+			hashPassword = Helper.generateHashPassword(user.getPassword());
+			preparedStatement = connection
+					.prepareStatement("insert into usercredentials(userid, hashpassword) values(?,?)");
+			preparedStatement.setString(1, userId);
+			preparedStatement.setString(2, hashPassword);
+			preparedStatement.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -55,6 +64,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public String insertPoliticalUserDetails(PoliticalUser politicalUser) throws SQLException {
 		String politicalUserId = null;
+		String hashPassword = null;
 		try {
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(
@@ -72,8 +82,12 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			politicalUserId = resultSet.getString(1);
-			preparedStatement.close();
-			resultSet.close();
+			hashPassword = Helper.generateHashPassword(politicalUser.getPassword());
+			preparedStatement = connection.prepareStatement(
+					"insert into politicalusercredentials(politicaluserid, hashpassword) values(?,?)");
+			preparedStatement.setString(1, politicalUserId);
+			preparedStatement.setString(2, hashPassword);
+			preparedStatement.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -99,8 +113,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.close();
 			preparedStatement = connection.prepareStatement("select max(groupdetailsId) from Groupdetails");
 			resultSet = preparedStatement.executeQuery();
-			resultSet.next();
-			groupId = resultSet.getString(1);
+			if(resultSet.next())
+				groupId = resultSet.getString(1);
 			preparedStatement.close();
 			resultSet.close();
 			connection.commit();
@@ -108,6 +122,95 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			e.printStackTrace();
 		}
 		return groupId;
+	}
+	
+	@Override
+	public <T> GenericUser<T> checkCredentials(String emailId, String password) throws SQLException {
+		try {
+			connection.setAutoCommit(false);
+			return checkUser(emailId, password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			resultSet.close();
+		}
+		return null;
+	}
+
+	private User getUserDetails(String userId) throws SQLException {
+		preparedStatement = connection.prepareStatement("select * from userdetails where userid='"+userId+"'");
+		resultSet = preparedStatement.executeQuery();
+		if(resultSet.next()) {
+			String firstName = resultSet.getString(2);
+			String lastName = resultSet.getString(3);
+			String region = resultSet.getString(4);
+			String emailId = resultSet.getString(5);
+			String aadharNumber = resultSet.getString(6);
+			String gender = resultSet.getString(7);
+			int age = Integer.parseInt(resultSet.getString(8));
+			Boolean isAnonymous = resultSet.getInt(9) > 0? true:false;
+			return new User(userId, firstName, lastName, age, emailId, gender, aadharNumber, isAnonymous, region);
+		}
+		return null;
+	}
+	
+	private PoliticalUser getPoliticalUserDetails(String politicalUserId) throws SQLException {
+		preparedStatement = connection.prepareStatement("select * from politicaluserdetails where politicaluserid='"+politicalUserId+"'");
+		resultSet = preparedStatement.executeQuery();
+		if(resultSet.next()) {
+			String firstName = resultSet.getString(2);
+			String lastName = resultSet.getString(3);
+			String region = resultSet.getString(4);
+			String emailId = resultSet.getString(5);
+			String politicianId = resultSet.getString(6);
+			String gender = resultSet.getString(7);
+			int age = Integer.parseInt(resultSet.getString(8));
+			Boolean isAnonymous = resultSet.getInt(9) > 0? true:false;
+			return new PoliticalUser(politicalUserId, firstName, lastName, emailId, politicianId, gender, age, region, isAnonymous);
+		}
+		return null;
+	}
+	
+	
+	private <T> GenericUser<T> checkUser(String emailId, String password) throws SQLException {
+		resultSet = connection.prepareStatement("select userid from userdetails where emailid='" + emailId + "'")
+				.executeQuery();
+		String id = null;
+		if (resultSet.next()) {
+			 id = resultSet.getString(1);
+			return checkCredentialsForUser(id, password)? new GenericUser<T>(getUserDetails(id)) : null;
+		} else {
+			resultSet = connection
+					.prepareStatement(
+							"select politicaluserid from politicaluserdetails where emailid='" + emailId + "'")
+					.executeQuery();
+			if (resultSet.next()) {
+				id = resultSet.getString(1);
+				return checkCredentialsForPoliticalUser(id, password)? new GenericUser<T>(getPoliticalUserDetails(id)) : null;
+			}
+			return null;
+		}
+	}
+
+
+	private Boolean checkCredentialsForUser(String id, String password) throws SQLException {
+		resultSet = connection.prepareStatement("select hashpassword from usercredentials where userid='" + id + "'")
+				.executeQuery();
+		if (resultSet.next()) {
+			return Helper.isPasswordCorrect(password, resultSet.getString(1));
+		}
+		return false;
+	}
+
+	private Boolean checkCredentialsForPoliticalUser(String id, String password) throws SQLException {
+		resultSet = connection
+				.prepareStatement(
+						"select hashpassword from politicalusercredentials where politicaluserid='" + id + "'")
+				.executeQuery();
+		if (resultSet.next()) {
+			return Helper.isPasswordCorrect(password, resultSet.getString(1));
+		}
+		return false;
 	}
 
 }

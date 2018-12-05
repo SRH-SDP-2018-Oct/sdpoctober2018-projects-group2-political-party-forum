@@ -2,7 +2,7 @@ package com.politicalforum.beans;
 
 public class PoliticalUser {
 
-	private int politicalUserId;
+	private String politicalUserId;
 	private String firstName;
 	private String lastName;
 	private String emailId;
@@ -11,11 +11,12 @@ public class PoliticalUser {
 	private int age;
 	private String region;
 	private Boolean isAnonymous;
-
+	private String password;
+	
 	public PoliticalUser() {
 	}
 
-	public PoliticalUser(int politicalUserId, String firstName, String lastName, String emailId, String politicianId,
+	public PoliticalUser(String politicalUserId, String firstName, String lastName, String emailId, String politicianId,
 			String gender, int age, String region, Boolean isAnnonymous) {
 		super();
 		this.politicalUserId = politicalUserId;
@@ -30,7 +31,7 @@ public class PoliticalUser {
 	}
 
 	public PoliticalUser(String firstName, String lastName, String emailId, String politicianId, String gender, int age,
-			String region, Boolean isAnnonymous) {
+			String region, Boolean isAnnonymous, String password) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -40,6 +41,7 @@ public class PoliticalUser {
 		this.age = age;
 		this.region = region;
 		this.isAnonymous = isAnnonymous;
+		this.password = password;
 	}
 
 	public String getFirstName() {
@@ -106,6 +108,18 @@ public class PoliticalUser {
 		this.region = region;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPoliticalUserId() {
+		return this.politicalUserId;
+	}
+	
 	@Override
 	public String toString() {
 		return "PoliticalUser [politicalUserId=" + politicalUserId + ", firstName=" + firstName + ", lastName="

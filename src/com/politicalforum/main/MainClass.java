@@ -2,22 +2,24 @@ package com.politicalforum.main;
 
 import java.util.Scanner;
 
+import com.politicalforum.beans.PoliticalUser;
+import com.politicalforum.beans.User;
 import com.politicalforum.providers.PoliticalPartyServicesProvider;
 import com.politicalforum.services.PoliticalPartyServices;
+import com.politicalforum.utils.GenericUser;
 
 public class MainClass {
 
 	private static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		System.out.println("Hello!");
 
 		try {
 			PoliticalPartyServices politicalPartyServices = PoliticalPartyServicesProvider
 					.getPoliticalPartyServiceImplementor();
 			int choice = 0;
 			System.out.println("\t\t\t\t\tMain Class");
-			System.out.println("\t\tMenu\n\n1.Register User \n\n2.Political User");
+			System.out.println("\t\tMenu\n\n1.Register User \n\n2.Political User\n\n3. Login");
 			System.out.println("Your choice: ");
 			choice = sc.nextInt();
 			switch (choice) {
@@ -38,8 +40,19 @@ public class MainClass {
 				String region = sc.next();
 				System.out.println("Do you want to remain Anonymous(true/false)?");
 				Boolean isAnonymous = sc.nextBoolean();
+				String password = null;
+				String confirmPassword = null;
+				do {
+					System.out.println("Enter a Password:- ");
+					password = sc.next();
+					System.out.println("Confirm password");
+					confirmPassword = sc.next();
+					if(!confirmPassword.equals(password)) {
+						System.out.println("Reenter password.");
+					}
+				} while(!confirmPassword.equals(password));
 				System.out.println("User ID is:- " + politicalPartyServices.registerUserDetails(firstName, lastName,
-						age, emailId, gender, aadharNumber, isAnonymous, region));
+						age, emailId, gender, aadharNumber, isAnonymous, region, password));
 				break;
 			case 2:
 				System.out.println("Your First Name:- ");
@@ -58,8 +71,34 @@ public class MainClass {
 				region = sc.next();
 				System.out.println("Do you want to remain Anonymous(true/false)?");
 				isAnonymous = sc.nextBoolean();
+				password = null;
+				confirmPassword = null;
+				do {
+					System.out.println("Enter a Password:- ");
+					password = sc.next();
+					System.out.println("Confirm password");
+					confirmPassword = sc.next();
+					if(!confirmPassword.equals(password)) {
+						System.out.println("Reenter password.");
+					}
+				} while(!confirmPassword.equals(password));
 				politicalUserMenu(politicalPartyServices.registerPoliticalUserDetails(firstName, lastName, age, emailId,
-						gender, politicianId, isAnonymous, region), politicalPartyServices);
+						gender, politicianId, isAnonymous, region, password), politicalPartyServices);
+				break;
+			case 3:
+				System.out.println("Enter Email-Id:- ");
+				emailId = sc.next();
+				System.out.println("Enter Password:- ");
+				password = sc.next();
+				GenericUser<Object> genericUser = politicalPartyServices.login(emailId, password);
+				if(genericUser.getGenericUser() instanceof User) {
+					User usr = (User)genericUser.getGenericUser();
+					System.out.println(usr.toString());
+				} else if(genericUser.getGenericUser() instanceof PoliticalUser) {
+					PoliticalUser pu = (PoliticalUser)genericUser.getGenericUser();
+					System.out.println(pu.toString());
+					politicalUserMenu( pu.getPoliticalUserId(), politicalPartyServices);
+				}
 				break;
 			default:
 				System.out.println("Wrong option!");
