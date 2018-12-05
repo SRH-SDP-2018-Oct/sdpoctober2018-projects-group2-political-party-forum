@@ -11,7 +11,8 @@ public class PoliticalUser {
 	private int age;
 	private String region;
 	private Boolean isAnonymous;
-
+	private String password;
+	
 	public PoliticalUser() {
 	}
 
@@ -30,7 +31,7 @@ public class PoliticalUser {
 	}
 
 	public PoliticalUser(String firstName, String lastName, String emailId, String politicianId, String gender, int age,
-			String region, Boolean isAnnonymous) {
+			String region, Boolean isAnnonymous, String password) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -40,6 +41,7 @@ public class PoliticalUser {
 		this.age = age;
 		this.region = region;
 		this.isAnonymous = isAnnonymous;
+		this.password = password;
 	}
 
 	public String getFirstName() {
@@ -104,6 +106,14 @@ public class PoliticalUser {
 
 	public void setRegion(String region) {
 		this.region = region;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override

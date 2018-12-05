@@ -45,5 +45,10 @@
   	<artifactId>junit4-engine</artifactId>
   	<version>5.0.0-ALPHA</version>
   </dependency>
+  <dependency>
+  	<groupId>de.svenkubiak</groupId>
+  	<artifactId>jBCrypt</artifactId>
+  	<version>0.4</version>
+  </dependency>
   </dependencies>
 </project>

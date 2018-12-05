@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.ServiceNotFoundException;
@@ -23,6 +25,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public String insertUserDetails(User user) throws SQLException {
 		String userId = null;
+		String hashPassword = null;
 		try {
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(
@@ -40,6 +43,12 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			userId = resultSet.getString(1);
+			hashPassword = generateHashPassword(user.getPassword());
+			preparedStatement = connection
+					.prepareStatement("insert into usercredentials(userid, hashpassword) values(?,?)");
+			preparedStatement.setString(1, userId);
+			preparedStatement.setString(2, hashPassword);
+			preparedStatement.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,6 +63,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public String insertPoliticalUserDetails(PoliticalUser politicalUser) throws SQLException {
 		String politicalUserId = null;
+		String hashPassword = null;
 		try {
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(
@@ -71,6 +81,12 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			politicalUserId = resultSet.getString(1);
+			hashPassword = generateHashPassword(politicalUser.getPassword());
+			preparedStatement = connection.prepareStatement(
+					"insert into politicalusercredentials(politicaluserid, hashpassword) values(?,?)");
+			preparedStatement.setString(1, politicalUserId);
+			preparedStatement.setString(2, hashPassword);
+			preparedStatement.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,10 +95,67 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			resultSet.close();
 		}
 
-
 		return politicalUserId;
 	}
-	
-	
+
+	@Override
+	public Boolean checkCredentials(String emailId, String password) throws SQLException {
+		try {
+			connection.setAutoCommit(false);
+			return checkIfUserIsPolitician(emailId, password);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			resultSet.close();
+		}
+
+		return null;
+	}
+
+	private Boolean checkCredentialsForUser(String id, String password) throws SQLException {
+		resultSet = connection.prepareStatement("select hashpassword from usercredentials where userid='" + id + "'")
+				.executeQuery();
+		if (resultSet.next()) {
+			return isPasswordCorrect(password, resultSet.getString(1));
+		}
+		return false;
+	}
+
+	private Boolean checkCredentialsForPoliticalUser(String id, String password) throws SQLException {
+		resultSet = connection
+				.prepareStatement(
+						"select hashpassword from politicalusercredentials where politicaluserid='" + id + "'")
+				.executeQuery();
+		if (resultSet.next()) {
+			return isPasswordCorrect(password, resultSet.getString(1));
+		}
+		return false;
+	}
+
+	private Boolean checkIfUserIsPolitician(String emailId, String password) throws SQLException {
+		resultSet = connection.prepareStatement("select userid from userdetails where emailid='" + emailId + "'")
+				.executeQuery();
+		if (resultSet.next()) {
+			return checkCredentialsForUser(resultSet.getString(1), password);
+		} else {
+			resultSet = connection
+					.prepareStatement(
+							"select politicaluserid from politicaluserdetails where emailid='" + emailId + "'")
+					.executeQuery();
+			if (resultSet.next()) {
+				return checkCredentialsForPoliticalUser(resultSet.getString(1), password);
+			}
+			return false;
+		}
+	}
+
+	private String generateHashPassword(String password) {
+		return BCrypt.hashpw(password, BCrypt.gensalt());
+	}
+
+	private Boolean isPasswordCorrect(String password, String encryptedPassword) {
+		return BCrypt.checkpw(password, encryptedPassword);
+	}
 
 }

@@ -8,4 +8,5 @@ import com.politicalforum.beans.User;
 public interface PoliticalPartyDAOServices {
 	public String insertUserDetails(User user) throws SQLException;
 	public String insertPoliticalUserDetails(PoliticalUser politicalUser) throws SQLException;
+	public Boolean checkCredentials(String emailId, String password) throws SQLException;
 }
