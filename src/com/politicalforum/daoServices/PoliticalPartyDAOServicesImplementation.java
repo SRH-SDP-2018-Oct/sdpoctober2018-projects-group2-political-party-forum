@@ -29,7 +29,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public String insertUserDetails(User user) throws SQLException {
+	public User insertUserDetails(User user) throws SQLException {
 		String userId = null;
 		String hashPassword = null;
 		try {
@@ -63,7 +63,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			resultSet.close();
 		}
 
-		return userId;
+		return getUserDetails(userId);
 	}
 
 	@Override

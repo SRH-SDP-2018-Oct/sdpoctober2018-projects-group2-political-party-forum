@@ -20,7 +20,7 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	}
 
 	@Override
-	public String registerUserDetails(String firstName, String lastName, int age, String emailId, String gender,
+	public User registerUserDetails(String firstName, String lastName, int age, String emailId, String gender,
 			String aadharNumber, Boolean isAnonymous, String region, String password)
 			throws ServiceNotFoundException, SQLException {
 		return politicalPartyDaoServices.insertUserDetails(
@@ -31,26 +31,27 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public PoliticalUser registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId,
 			String gender, String politicianId, Boolean isAnonymous, String region, String password)
 			throws ServiceNotFoundException, SQLException {
-		return politicalPartyDaoServices.insertPoliticalUserDetails(
-				new PoliticalUser(firstName, lastName, emailId, politicianId, gender, age, region, isAnonymous, password));
+		return politicalPartyDaoServices.insertPoliticalUserDetails(new PoliticalUser(firstName, lastName, emailId,
+				politicianId, gender, age, region, isAnonymous, password));
 	}
 
 	@Override
 	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) throws SQLException {
 		return politicalPartyDaoServices.checkIfGroupWithSimilarNameExists(groupName);
 	}
-	
+
 	@Override
 	public PoliticalUser createGroup(String groupName, String groupDescription, PoliticalUser politicalUser) {
-		if(Helper.checkIfUserIsPolitician(politicalUser.getPoliticalUserId())) {
-			politicalUser.getGroups().add(politicalPartyDaoServices.insertGroupDetails(new Group(groupName, groupDescription, politicalUser.getPoliticalUserId(), Helper.getCurrentDateOfTypeJavaSql())));
+		if (Helper.checkIfUserIsPolitician(politicalUser.getPoliticalUserId())) {
+			politicalUser.getGroups().add(politicalPartyDaoServices.insertGroupDetails(new Group(groupName,
+					groupDescription, politicalUser.getPoliticalUserId(), Helper.getCurrentDateOfTypeJavaSql())));
 			return politicalUser;
 		}
-		return null; //Throw Error
+		return null; // Throw Error
 	}
-	
+
 	@Override
-	public HashMap<String , Object> login(String emailId, String password) throws SQLException {
+	public HashMap<String, Object> login(String emailId, String password) throws SQLException {
 		return politicalPartyDaoServices.getUser(emailId, password);
 	}
 
@@ -71,5 +72,5 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 		// TODO Auto-generated method stub
 		return politicalPartyDaoServices.retrieveGroupDetails();
 	}
-	
+
 }
