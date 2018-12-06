@@ -13,13 +13,16 @@ import com.politicalforum.exceptions.ServiceNotFoundException;
 
 public class PoliticalPartyConnectionProvider {
 
+	private static Connection connection;
+	
 	public static Connection getPoliticalForumConnectionServices() throws ServiceNotFoundException {
 		try {
 			Properties p = new Properties();
 			p.load(new FileReader(new File("resources/politicalparty.properties")));
 			Class.forName(p.getProperty("driver"));
-			return DriverManager.getConnection(p.getProperty("url"), p.getProperty("username"),
-					p.getProperty("password"));
+			connection = DriverManager.getConnection(p.getProperty("url"), p.getProperty("username"),
+					p.getProperty("password")); 
+			return connection;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new ServiceNotFoundException("Service down!", e);

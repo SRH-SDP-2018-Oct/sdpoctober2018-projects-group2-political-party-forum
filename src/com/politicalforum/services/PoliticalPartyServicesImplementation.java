@@ -10,7 +10,6 @@ import com.politicalforum.beans.User;
 import com.politicalforum.daoServices.PoliticalPartyDAOServices;
 import com.politicalforum.exceptions.ServiceNotFoundException;
 import com.politicalforum.providers.PoliticalPartyDAOServicesProvider;
-import com.politicalforum.utils.GenericUser;
 import com.politicalforum.utils.Helper;
 
 public class PoliticalPartyServicesImplementation implements PoliticalPartyServices {
@@ -29,40 +28,43 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	}
 
 	@Override
-	public String registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId,
+	public PoliticalUser registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId,
 			String gender, String politicianId, Boolean isAnonymous, String region, String password)
 			throws ServiceNotFoundException, SQLException {
-		// TODO Auto-generated method stub
 		return politicalPartyDaoServices.insertPoliticalUserDetails(
 				new PoliticalUser(firstName, lastName, emailId, politicianId, gender, age, region, isAnonymous, password));
 	}
 
 	@Override
-	public String createGroup(String groupName, String groupDescription, String groupOwnerId) {
-
-		return Helper.checkIfUserIsPolitician(groupOwnerId)
-				? politicalPartyDaoServices.insertGroupDetails(
-						new Group(groupName, groupDescription, groupOwnerId, Helper.getCurrentDateOfTypeJavaSql()))
-				: "User is not a politician";
+	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) throws SQLException {
+		return politicalPartyDaoServices.checkIfGroupWithSimilarNameExists(groupName);
+	}
+	
+	@Override
+	public PoliticalUser createGroup(String groupName, String groupDescription, PoliticalUser politicalUser) {
+		if(Helper.checkIfUserIsPolitician(politicalUser.getPoliticalUserId())) {
+			politicalUser.getGroups().add(politicalPartyDaoServices.insertGroupDetails(new Group(groupName, groupDescription, politicalUser.getPoliticalUserId(), Helper.getCurrentDateOfTypeJavaSql())));
+			return politicalUser;
+		}
+		return null; //Throw Error
 	}
 	
 	@Override
 	public HashMap<String , Object> login(String emailId, String password) throws SQLException {
-		GenericUser<Object> genericUser = politicalPartyDaoServices.checkCredentials(emailId, password);
-		return getGenericUserHashMap(genericUser);
+		return politicalPartyDaoServices.getUser(emailId, password);
 	}
 
-	private HashMap<String, Object> getGenericUserHashMap(GenericUser<Object> genericUser) {
-		HashMap<String, Object> idAndClassObjectMap = new HashMap<>();
-		if(genericUser.getGenericUser() instanceof PoliticalUser) {
-			PoliticalUser politicalUser = (PoliticalUser)genericUser.getGenericUser();
-			idAndClassObjectMap.put(politicalUser.getPoliticalUserId(), politicalUser);
-		} else if(genericUser.getGenericUser() instanceof User) {
-			User user = (User)genericUser.getGenericUser();
-			idAndClassObjectMap.put(user.getUserId(), user);
-		}
-		return idAndClassObjectMap;
-	}
+//	private HashMap<String, Object> getGenericUserHashMap(GenericUser<Object> genericUser) {
+//		HashMap<String, Object> idAndClassObjectMap = new HashMap<>();
+//		if(genericUser.getGenericUser() instanceof PoliticalUser) {
+//			PoliticalUser politicalUser = (PoliticalUser)genericUser.getGenericUser();
+//			idAndClassObjectMap.put(politicalUser.getPoliticalUserId(), politicalUser);
+//		} else if(genericUser.getGenericUser() instanceof User) {
+//			User user = (User)genericUser.getGenericUser();
+//			idAndClassObjectMap.put(user.getUserId(), user);
+//		}
+//		return idAndClassObjectMap;
+//	}
 
 	@Override
 	public List<Group> browseGroups() throws SQLException {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.politicalforum.beans.Group;
+import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.providers.PoliticalPartyServicesProvider;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.utils.Helper;
@@ -93,9 +94,10 @@ public class MainClass {
 				System.out.println("Enter Password:- ");
 				password = sc.next();
 				HashMap<String, Object> user = politicalPartyServices.login(emailId, password);
+				System.out.println("Login success  " + user);
 				for(String key: user.keySet()) {
 					if(Helper.checkIfUserIsPolitician(key)) {
-						politicalUserMenu(key, politicalPartyServices);
+						politicalUserMenu((PoliticalUser)user.get(key), politicalPartyServices);
 					} else {
 						System.out.println("General User Login");
 					}
@@ -112,7 +114,7 @@ public class MainClass {
 		}
 	}
 
-	private static void politicalUserMenu(String groupOwnerId, PoliticalPartyServices politicalPartyServices) throws SQLException {
+	private static void politicalUserMenu(PoliticalUser politicalUser, PoliticalPartyServices politicalPartyServices) throws SQLException {
 		int choice = 0;
 		System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Browse Groups\n");
 		System.out.println("Enter Option:- ");
@@ -123,14 +125,30 @@ public class MainClass {
 			String groupName = sc.next();
 			System.out.println("Describe this group:- ");
 			String groupDescription = sc.next();
-			System.out.println("Group Created ID:- "
-					+ politicalPartyServices.createGroup(groupName, groupDescription, groupOwnerId));
+			List<Group> similarGroups = politicalPartyServices.checkIfGroupExistsWithSimilarNames(groupName); 
+			if(similarGroups.isEmpty()) {
+				System.out.println("Group Created ID:- "
+						+ politicalPartyServices.createGroup(groupName, groupDescription, politicalUser).toString());
+			} else {
+				for(int i=0;i<similarGroups.size();i++) {
+					System.out.println((i+1)+". "+similarGroups.get(i).getGroupName());
+				}
+			}
+			
+			
 			break;
 		case 2: 
 			System.out.println("Available groups to join");
 			List<Group> groups = politicalPartyServices.browseGroups();
+			HashMap<Integer, Group> map = new HashMap<>();
 			for(int i=0; i<groups.size();i++) {
+				map.put((i+1), groups.get(i));
 				System.out.println((i+1)+". " + groups.get(i).getGroupName());
+			}
+			System.out.println("Enter the group number to join:- ");
+			int groupNumber = sc.nextInt();
+			if(map.containsKey(groupNumber)) {
+				System.out.println("Logic to join the group:- "+ map.get(groupNumber).toString());
 			}
 			break;
 		default:
