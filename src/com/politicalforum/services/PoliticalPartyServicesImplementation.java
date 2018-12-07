@@ -1,9 +1,10 @@
 package com.politicalforum.services;
 
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
@@ -23,16 +24,16 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public User registerUserDetails(String firstName, String lastName, int age, String emailId, String gender,
 			String aadharNumber, Boolean isAnonymous, String region, String password)
 			throws ServiceNotFoundException, SQLException {
-		return politicalPartyDaoServices.insertUserDetails(
-				new User(firstName, lastName, age, emailId, gender, aadharNumber, isAnonymous, region, password));
+		return politicalPartyDaoServices.insertUserDetails(new GeneralUser(firstName, lastName, age, emailId, gender,
+				isAnonymous, region, password, new ArrayList<>(), aadharNumber));
 	}
 
 	@Override
-	public PoliticalUser registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId,
-			String gender, String politicianId, Boolean isAnonymous, String region, String password)
+	public User registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId, String gender,
+			String politicianId, Boolean isAnonymous, String region, String password)
 			throws ServiceNotFoundException, SQLException {
-		return politicalPartyDaoServices.insertPoliticalUserDetails(new PoliticalUser(firstName, lastName, emailId,
-				politicianId, gender, age, region, isAnonymous, password));
+		return politicalPartyDaoServices.insertPoliticalUserDetails(new PoliticalUser(firstName, lastName, age, emailId,
+				gender, isAnonymous, region, password, new ArrayList<>(), politicianId));
 	}
 
 	@Override
@@ -41,35 +42,34 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	}
 
 	@Override
-	public PoliticalUser createGroup(String groupName, String groupDescription, PoliticalUser politicalUser) {
-		if (Helper.checkIfUserIsPolitician(politicalUser.getPoliticalUserId())) {
-			Group group = politicalPartyDaoServices.insertGroupDetails(new Group(groupName,
-					groupDescription, politicalUser.getPoliticalUserId(), Helper.getCurrentDateOfTypeJavaSql()));
-			if (politicalPartyDaoServices.addFollowerToAGroup(politicalUser.getPoliticalUserId(), group)) {
-				politicalUser.getGroups().add(group);
-				return politicalUser;
+	public User createGroup(String groupName, String groupDescription, User user) {
+		if (Helper.checkIfUserIsPolitician(user.getUserId())) {
+			Group group = politicalPartyDaoServices.insertGroupDetails(new Group(groupName, groupDescription,
+					user.getUserId(), Helper.getCurrentDateOfTypeJavaSql()));
+			if (politicalPartyDaoServices.addFollowerToAGroup(user.getUserId(), group)) {
+				user.getGroups().add(group);
+				return user;
 			}
 		}
 		return null; // Throw Error
 	}
 
 	@Override
-	public HashMap<String, Object> login(String emailId, String password) throws SQLException {
-		return politicalPartyDaoServices.getUser(emailId, password);
+	public User login(String emailId, String password) throws SQLException {
+		User user = politicalPartyDaoServices.getUser(emailId, password);
+		user.setGroups(politicalPartyDaoServices.getUserGroups(user.getUserId()));
+		return user;
 	}
-	
+
 	@Override
 	public List<Group> browseGroups() throws SQLException {
-		// TODO Auto-generated method stub
 		return politicalPartyDaoServices.retrieveGroupDetails();
 	}
 
 	@Override
-	public List<Object> joinGroup(List<Object> user, Group group) {
-		User generalUser = (User)user.get(0);
-		if(politicalPartyDaoServices.addFollowerToAGroup(generalUser.getUserId(), group)) {
-			generalUser.getGroups().add(group);
-			user.set(0, generalUser);
+	public User joinGroup(User user, Group group) {
+		if (politicalPartyDaoServices.addFollowerToAGroup(user.getUserId(), group)) {
+			user.getGroups().add(group);
 			return user;
 		}
 		return null;

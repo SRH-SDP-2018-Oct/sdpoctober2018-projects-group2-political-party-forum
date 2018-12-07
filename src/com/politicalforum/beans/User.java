@@ -10,15 +10,17 @@ public class User {
 	private int age;
 	private String emailId;
 	private String gender;
-	private String aadharNumber;
 	private Boolean isAnonymous;
 	private String region;
 	private String password;
 	private List<Group> groups = new ArrayList<>();
 	
-	
+	public User() {
+		super();
+	}
+
 	public User(String userId, String firstName, String lastName, int age, String emailId, String gender,
-			String aadharNumber, Boolean isAnonymous, String region) {
+			Boolean isAnonymous, String region, List<Group> groups) {
 		super();
 		this.userId = userId;
 		this.firstName = firstName;
@@ -26,37 +28,22 @@ public class User {
 		this.age = age;
 		this.emailId = emailId;
 		this.gender = gender;
-		this.aadharNumber = aadharNumber;
 		this.isAnonymous = isAnonymous;
 		this.region = region;
+		this.groups = groups;
 	}
 
-	public User(String firstName, String lastName, int age, String emailId, String gender, String aadharNumber,
-			Boolean isAnonymous, String region, String password) {
+	public User(String firstName, String lastName, int age, String emailId, String gender, Boolean isAnonymous,
+			String region, String password, List<Group> groups) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 		this.emailId = emailId;
 		this.gender = gender;
-		this.aadharNumber = aadharNumber;
 		this.isAnonymous = isAnonymous;
 		this.region = region;
 		this.password = password;
-	}
-	
-	public User(String userId, String firstName, String lastName, int age, String emailId, String gender,
-			String aadharNumber, Boolean isAnonymous, String region, List<Group> groups) {
-		super();
-		this.userId = userId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.age = age;
-		this.emailId = emailId;
-		this.gender = gender;
-		this.aadharNumber = aadharNumber;
-		this.isAnonymous = isAnonymous;
-		this.region = region;
 		this.groups = groups;
 	}
 
@@ -100,14 +87,6 @@ public class User {
 		this.gender = gender;
 	}
 
-	public String getAadharNumber() {
-		return aadharNumber;
-	}
-
-	public void setAadharNumber(String aadharNumber) {
-		this.aadharNumber = aadharNumber;
-	}
-
 	public Boolean getIsAnonymous() {
 		return isAnonymous;
 	}
@@ -123,17 +102,13 @@ public class User {
 	public void setRegion(String region) {
 		this.region = region;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getUserId() {
-		return this.userId;
 	}
 
 	public List<Group> getGroups() {
@@ -144,11 +119,15 @@ public class User {
 		this.groups = groups;
 	}
 
+	public String getUserId() {
+		return userId;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age
-				+ ", emailId=" + emailId + ", gender=" + gender + ", aadharNumber=" + aadharNumber + ", isAnonymous="
-				+ isAnonymous + ", region=" + region + ", password=" + password + ", groups=" + groups + "]";
+				+ ", emailId=" + emailId + ", gender=" + gender + ", isAnonymous=" + isAnonymous + ", region=" + region
+				+ ", groups=" + groups + "]";
 	}
 
 }

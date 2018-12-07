@@ -6,9 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
@@ -23,13 +23,11 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	private ResultSet resultSet = null;
 
 	public PoliticalPartyDAOServicesImplementation() throws ServiceNotFoundException {
-		
 		connection = PoliticalPartyConnectionProvider.getPoliticalForumConnectionServices();
-		
 	}
 
 	@Override
-	public User insertUserDetails(User user) throws SQLException {
+	public User insertUserDetails(GeneralUser user) throws SQLException {
 		String userId = null;
 		String hashPassword = null;
 		try {
@@ -62,7 +60,6 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.close();
 			resultSet.close();
 		}
-
 		return getUserDetails(userId);
 	}
 
@@ -109,8 +106,9 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public List<Group> checkIfGroupWithSimilarNameExists(String groupName) throws SQLException {
 		List<Group> groups = new ArrayList<>();
 		try {
-			preparedStatement = connection.prepareStatement(
-					"select UPPER(groupdetailsname) from groupdetails where groupdetailsname like '%" + groupName + "%'");
+			preparedStatement = connection
+					.prepareStatement("select UPPER(groupdetailsname) from groupdetails where groupdetailsname like '%"
+							+ groupName + "%'");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				groups.add(new Group(resultSet.getString(1)));
@@ -150,14 +148,15 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public HashMap<String, Object> getUser(String emailId, String password) throws SQLException {
+	public User getUser(String emailId, String password) throws SQLException {
 		try {
 			connection.setAutoCommit(false);
 			String userId = getUserId(emailId);
 			System.out.println("User- " + userId);
 			Boolean isPasswordValid = userId != null ? checkCredentialsForUser(userId, password) : false;
 			if (isPasswordValid) {
-				return identifyAndCreateUser(userId);
+				return Helper.checkIfUserIsPolitician(userId) ? getPoliticalUserDetails(userId)
+						: getUserDetails(userId);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -166,11 +165,12 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Boolean addFollowerToAGroup(String userId, Group group) {
 		try {
-			preparedStatement = connection.prepareStatement("insert into groupfollowers(groupfollowersid, groupdetailsid, userid) values('GF'||groupfollowers_sequence.nextval,?,?)");
+			preparedStatement = connection.prepareStatement(
+					"insert into groupfollowers(groupfollowersid, groupdetailsid, userid) values('GF'||groupfollowers_sequence.nextval,?,?)");
 			preparedStatement.setString(1, group.getGroupId());
 			preparedStatement.setString(2, userId);
 			preparedStatement.executeUpdate();
@@ -183,17 +183,6 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		}
 		return false;
 	}
-	
-	private HashMap<String, Object> identifyAndCreateUser(String userId) throws SQLException {
-		Boolean isUserPolitician = Helper.checkIfUserIsPolitician(userId);
-		HashMap<String, Object> map = new HashMap<>();
-		if (isUserPolitician) {
-			map.put(userId, getPoliticalUserDetails(userId));
-		} else {
-			map.put(userId, getUserDetails(userId));
-		}
-		return map;
-	}
 
 	private String getUserId(String emailId) throws SQLException {
 		preparedStatement = connection
@@ -202,7 +191,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		if (resultSet.next()) {
 			return resultSet.getString(1);
 		}
-		return null;
+		return null; // Throw User with this ID does not exists.
 	}
 
 	private User getUserDetails(String userId) throws SQLException {
@@ -217,7 +206,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			String gender = resultSet.getString(7);
 			int age = Integer.parseInt(resultSet.getString(8));
 			Boolean isAnonymous = resultSet.getInt(9) > 0 ? true : false;
-			return new User(userId, firstName, lastName, age, emailId, gender, aadharNumber, isAnonymous, region);
+			return new GeneralUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region, new ArrayList<>(),
+					aadharNumber);
 		}
 		return null;
 	}
@@ -240,9 +230,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		return groups;
 	}
 
-	private PoliticalUser getPoliticalUserDetails(String politicalUserId) throws SQLException {
-		preparedStatement = connection
-				.prepareStatement("select * from userdetails where userid='" + politicalUserId + "'");
+	private PoliticalUser getPoliticalUserDetails(String userId) throws SQLException {
+		preparedStatement = connection.prepareStatement("select * from userdetails where userid='" + userId + "'");
 		resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
 			String firstName = resultSet.getString(2);
@@ -253,8 +242,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			String gender = resultSet.getString(7);
 			int age = Integer.parseInt(resultSet.getString(8));
 			Boolean isAnonymous = resultSet.getInt(9) > 0 ? true : false;
-			return new PoliticalUser(politicalUserId, firstName, lastName, emailId, politicianId, gender, age, region,
-					isAnonymous, getGroupDetails(politicalUserId));
+			return new PoliticalUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region, new ArrayList<>(),
+					politicianId);
 		}
 		return null;
 	}
@@ -281,7 +270,28 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		if (resultSet.next()) {
 			return Helper.isPasswordCorrect(password, resultSet.getString(1));
 		}
-		return false;
+		return false; // Throw invalid password exception
+	}
+
+	@Override
+	public List<Group> getUserGroups(String userId) {
+		try {
+			List<Group> group = new ArrayList<>();
+			preparedStatement = connection.prepareStatement("select groupdetailsid, groupdetailsname, groupdetailsbody, dateofcreation from groupdetails where groupdetailsid in (select groupdetailsid from groupfollowers where userid='"+userId+"')");
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()) {
+				String groupId = resultSet.getString(1);
+				String groupName = resultSet.getString(2);
+				String groupDescription = resultSet.getString(3);
+				Date groupCreationTime = resultSet.getDate(4);
+				group.add(new Group(groupId, groupName, groupDescription, groupCreationTime)); 
+			}
+			return group;
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return new ArrayList<>();
 	}
 
 }

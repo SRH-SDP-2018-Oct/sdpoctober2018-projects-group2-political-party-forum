@@ -22,5 +22,5 @@ public class Helper {
 	public static Boolean isPasswordCorrect(String password, String encryptedPassword) {
 		return BCrypt.checkpw(password, encryptedPassword);
 	}
-	
+		
 }

@@ -1,11 +1,9 @@
 package com.politicalforum.services;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
 import com.politicalforum.beans.Group;
-import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.ServiceNotFoundException;
 
@@ -15,18 +13,18 @@ public interface PoliticalPartyServices {
 			String aadharNumber, Boolean isAnonymous, String region, String password)
 			throws ServiceNotFoundException, SQLException;
 
-	public PoliticalUser registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId,
+	public User registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId,
 			String gender, String politicianId, Boolean isAnonymous, String region, String password)
 			throws ServiceNotFoundException, SQLException;
 
-	public HashMap<String, Object> login(String emailId, String password) throws SQLException;
+	public User login(String emailId, String password) throws SQLException;
 
-	public PoliticalUser createGroup(String groupName, String groupDescription, PoliticalUser politicalUser);
+	public User createGroup(String groupName, String groupDescription, User user);
 
 	public List<Group> browseGroups() throws SQLException;
 
 	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) throws SQLException;
 
-	public List<Object> joinGroup(List<Object> user, Group group);
+	public User joinGroup(User user, Group group);
 	
 }
