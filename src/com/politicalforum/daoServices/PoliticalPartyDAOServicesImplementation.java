@@ -143,8 +143,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Group(groupId, group.getGroupName(), group.getGroupDescription(), group.getGroupOwnerId(),
-				group.getGroupCreationTime());
+		return new Group(groupId, group.getGroupName(), group.getGroupDescription(), group.getGroupCreationTime());
 	}
 
 	@Override
