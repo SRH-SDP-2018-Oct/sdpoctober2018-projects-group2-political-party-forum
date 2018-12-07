@@ -1,6 +1,7 @@
 package com.politicalforum.main;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -30,12 +31,15 @@ public class GeneralUserMenu {
 			System.out.println("Enter the group number to join:- ");
 			int groupNumber = sc.nextInt();
 			if (map.containsKey(groupNumber)) {
-				System.out.println("Logic to join the group:- " + map.get(groupNumber).toString());
+				List<Object> userObject = new ArrayList<>();
+				userObject.add(user);
+				user = (User)politicalPartyServices.joinGroup(userObject, map.get(groupNumber)).get(0);
+				System.out.println("User now :- "+user.toString());
 			}
 
 			break;
 		case 2:
-
+			
 			break;
 		default:
 			System.out.println("Wrong Option!");

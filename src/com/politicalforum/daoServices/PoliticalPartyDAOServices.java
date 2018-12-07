@@ -20,4 +20,5 @@ public interface PoliticalPartyDAOServices {
 	public HashMap<String, Object> getUser(String emailId, String password) throws SQLException;
 
 	public List<Group> retrieveGroupDetails() throws SQLException;
+	Boolean addFollowerToAGroup(String userId, Group group);
 }

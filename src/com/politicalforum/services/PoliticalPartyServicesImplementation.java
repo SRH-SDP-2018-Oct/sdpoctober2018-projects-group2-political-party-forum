@@ -43,9 +43,12 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	@Override
 	public PoliticalUser createGroup(String groupName, String groupDescription, PoliticalUser politicalUser) {
 		if (Helper.checkIfUserIsPolitician(politicalUser.getPoliticalUserId())) {
-			politicalUser.getGroups().add(politicalPartyDaoServices.insertGroupDetails(new Group(groupName,
-					groupDescription, politicalUser.getPoliticalUserId(), Helper.getCurrentDateOfTypeJavaSql())));
-			return politicalUser;
+			Group group = politicalPartyDaoServices.insertGroupDetails(new Group(groupName,
+					groupDescription, politicalUser.getPoliticalUserId(), Helper.getCurrentDateOfTypeJavaSql()));
+			if (politicalPartyDaoServices.addFollowerToAGroup(politicalUser.getPoliticalUserId(), group)) {
+				politicalUser.getGroups().add(group);
+				return politicalUser;
+			}
 		}
 		return null; // Throw Error
 	}
@@ -54,23 +57,22 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public HashMap<String, Object> login(String emailId, String password) throws SQLException {
 		return politicalPartyDaoServices.getUser(emailId, password);
 	}
-
-//	private HashMap<String, Object> getGenericUserHashMap(GenericUser<Object> genericUser) {
-//		HashMap<String, Object> idAndClassObjectMap = new HashMap<>();
-//		if(genericUser.getGenericUser() instanceof PoliticalUser) {
-//			PoliticalUser politicalUser = (PoliticalUser)genericUser.getGenericUser();
-//			idAndClassObjectMap.put(politicalUser.getPoliticalUserId(), politicalUser);
-//		} else if(genericUser.getGenericUser() instanceof User) {
-//			User user = (User)genericUser.getGenericUser();
-//			idAndClassObjectMap.put(user.getUserId(), user);
-//		}
-//		return idAndClassObjectMap;
-//	}
-
+	
 	@Override
 	public List<Group> browseGroups() throws SQLException {
 		// TODO Auto-generated method stub
 		return politicalPartyDaoServices.retrieveGroupDetails();
+	}
+
+	@Override
+	public List<Object> joinGroup(List<Object> user, Group group) {
+		User generalUser = (User)user.get(0);
+		if(politicalPartyDaoServices.addFollowerToAGroup(generalUser.getUserId(), group)) {
+			generalUser.getGroups().add(group);
+			user.set(0, generalUser);
+			return user;
+		}
+		return null;
 	}
 
 }

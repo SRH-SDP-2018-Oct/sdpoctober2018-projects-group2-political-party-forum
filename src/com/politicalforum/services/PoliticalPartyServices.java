@@ -27,4 +27,6 @@ public interface PoliticalPartyServices {
 
 	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) throws SQLException;
 
+	public List<Object> joinGroup(List<Object> user, Group group);
+	
 }

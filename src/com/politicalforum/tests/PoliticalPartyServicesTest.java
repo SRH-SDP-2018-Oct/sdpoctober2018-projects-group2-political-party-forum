@@ -21,11 +21,10 @@ public class PoliticalPartyServicesTest {
 	public static void setConnectionsBeforeAll() throws ServiceNotFoundException {
 		politicalServices = new PoliticalPartyServicesImplementation();
 	}
-	
-	
+		
 	@Test
 	public void testRegisterUserDetails() throws ServiceNotFoundException, SQLException {
-	//	assertThat(politicalServices.registerUserDetails("Vaibhav", "Singh", 25, "vaibhav@gmail.com", "Male", "341324", false, "Delhi") , StringStartsWith.startsWith("U"));
+	//	assertThat(politicalServices.registerUserDetails("gfhgfh", "sshjg", 55, "abcdeed@efg.com", "Male", "dgghjsdaghjje768e7d", true, "hsdjdg", "abcd") , StringStartsWith.startsWith("U"));
 	}
 
 }

@@ -110,7 +110,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		List<Group> groups = new ArrayList<>();
 		try {
 			preparedStatement = connection.prepareStatement(
-					"select groupdetailsname from groupdetails where groupdetailsname like '%" + groupName + "%'");
+					"select UPPER(groupdetailsname) from groupdetails where groupdetailsname like '%" + groupName + "%'");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				groups.add(new Group(resultSet.getString(1)));
@@ -127,7 +127,6 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public Group insertGroupDetails(Group group) {
 		String groupId = null;
 		try {
-			// connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(
 					"insert into groupdetails(groupdetailsid, groupdetailsname, groupdetailsbody, userid, dateofcreation) values('GD' || groupdetail_sequence.nextval,?,?,?,?)");
 			preparedStatement.setString(1, group.getGroupName());
@@ -167,7 +166,24 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		}
 		return null;
 	}
-
+	
+	@Override
+	public Boolean addFollowerToAGroup(String userId, Group group) {
+		try {
+			preparedStatement = connection.prepareStatement("insert into groupfollowers(groupfollowersid, groupdetailsid, userid) values('GF'||groupfollowers_sequence.nextval,?,?)");
+			preparedStatement.setString(1, group.getGroupId());
+			preparedStatement.setString(2, userId);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			connection.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return false;
+	}
+	
 	private HashMap<String, Object> identifyAndCreateUser(String userId) throws SQLException {
 		Boolean isUserPolitician = Helper.checkIfUserIsPolitician(userId);
 		HashMap<String, Object> map = new HashMap<>();

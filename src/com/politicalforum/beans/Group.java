@@ -67,6 +67,10 @@ public class Group {
 		this.groupCreationTime = groupCreationTime;
 	}
 
+	public String getGroupId() {
+		return this.groupId;
+	}
+	
 	@Override
 	public String toString() {
 		return "Group [groupId=" + groupId + ", groupName=" + groupName + ", groupDescription=" + groupDescription
