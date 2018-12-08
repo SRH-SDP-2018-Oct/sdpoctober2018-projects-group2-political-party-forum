@@ -15,7 +15,6 @@ public class MainClass {
 			PoliticalPartyServices politicalPartyServices = PoliticalPartyServicesProvider
 					.getPoliticalPartyServiceImplementor();
 			int choice = 0;
-			System.out.println("\t\t\t\t\tMain Class");
 			System.out.println("\t\tMenu\n\n1.Register User \n\n2.Login\n\n\n");
 			System.out.println("Your choice: ");
 			choice = sc.nextInt();
@@ -31,7 +30,6 @@ public class MainClass {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		} finally {
 			sc.close();
 		}
