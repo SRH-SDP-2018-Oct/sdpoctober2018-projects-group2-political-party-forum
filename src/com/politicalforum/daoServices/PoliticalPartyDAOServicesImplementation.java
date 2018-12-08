@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
+import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.ServiceNotFoundException;
@@ -133,17 +134,21 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.setDate(4, group.getGroupCreationTime());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
-			preparedStatement = connection.prepareStatement("select max(groupdetailsId) from Groupdetails");
+			preparedStatement = connection.prepareStatement("select max(groupdetailsId) from groupdetails");
 			resultSet = preparedStatement.executeQuery();
-			if (resultSet.next())
+			if (resultSet.next()) {
+				
 				groupId = resultSet.getString(1);
+				System.out.println("Group Id fetched:- "+ groupId);
+			}
+				
 			preparedStatement.close();
 			resultSet.close();
 			connection.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Group(groupId, group.getGroupName(), group.getGroupDescription(), group.getGroupCreationTime());
+		return new Group(groupId, group.getGroupName(), group.getGroupDescription(), group.getGroupOwnerId(), group.getGroupCreationTime());
 	}
 
 	@Override
@@ -175,6 +180,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			connection.commit();
+			preparedStatement.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,29 +211,29 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			String gender = resultSet.getString(7);
 			int age = Integer.parseInt(resultSet.getString(8));
 			Boolean isAnonymous = resultSet.getInt(9) > 0 ? true : false;
-			return new GeneralUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region, new ArrayList<>(),
-					aadharNumber);
+			return new GeneralUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region,
+					new ArrayList<>(), aadharNumber);
 		}
 		return null;
 	}
 
-	private List<Group> getGroupDetails(String politicalUserId) {
-		List<Group> groups = new ArrayList<>();
-		try {
-			preparedStatement = connection
-					.prepareStatement("select * from groupdetails where userid='" + politicalUserId + "'");
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()) {
-				groups.add(new Group(resultSet.getString("groupdetailsid"), resultSet.getString("groupdetailsname"),
-						resultSet.getString("groupdetailsbody"), resultSet.getString("userid"),
-						resultSet.getDate("dateofcreation")));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return groups;
-	}
+//	private List<Group> getGroupDetails(String politicalUserId) {
+//		List<Group> groups = new ArrayList<>();
+//		try {
+//			preparedStatement = connection
+//					.prepareStatement("select * from groupdetails where userid='" + politicalUserId + "'");
+//			resultSet = preparedStatement.executeQuery();
+//			while (resultSet.next()) {
+//				groups.add(new Group(resultSet.getString("groupdetailsid"), resultSet.getString("groupdetailsname"),
+//						resultSet.getString("groupdetailsbody"), resultSet.getString("userid"),
+//						resultSet.getDate("dateofcreation")));
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return groups;
+//	}
 
 	private PoliticalUser getPoliticalUserDetails(String userId) throws SQLException {
 		preparedStatement = connection.prepareStatement("select * from userdetails where userid='" + userId + "'");
@@ -241,8 +247,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			String gender = resultSet.getString(7);
 			int age = Integer.parseInt(resultSet.getString(8));
 			Boolean isAnonymous = resultSet.getInt(9) > 0 ? true : false;
-			return new PoliticalUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region, new ArrayList<>(),
-					politicianId);
+			return new PoliticalUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region,
+					new ArrayList<>(), politicianId);
 		}
 		return null;
 	}
@@ -276,14 +282,16 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public List<Group> getUserGroups(String userId) {
 		try {
 			List<Group> group = new ArrayList<>();
-			preparedStatement = connection.prepareStatement("select groupdetailsid, groupdetailsname, groupdetailsbody, dateofcreation from groupdetails where groupdetailsid in (select groupdetailsid from groupfollowers where userid='"+userId+"')");
+			preparedStatement = connection.prepareStatement(
+					"select groupdetailsid, groupdetailsname, groupdetailsbody, dateofcreation from groupdetails where groupdetailsid in (select groupdetailsid from groupfollowers where userid='"
+							+ userId + "')");
 			resultSet = preparedStatement.executeQuery();
-			if(resultSet.next()) {
+			while(resultSet.next()) {
 				String groupId = resultSet.getString(1);
 				String groupName = resultSet.getString(2);
 				String groupDescription = resultSet.getString(3);
 				Date groupCreationTime = resultSet.getDate(4);
-				group.add(new Group(groupId, groupName, groupDescription, groupCreationTime)); 
+				group.add(new Group(groupId, groupName, groupDescription, groupCreationTime));
 			}
 			return group;
 		} catch (Exception e) {
@@ -291,6 +299,67 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			// TODO: handle exception
 		}
 		return new ArrayList<>();
+	}
+
+	@Override
+	public Group createDiscussion(String userId, Group group, GroupDiscussion groupDiscussion) {
+		try {
+			String groupFollowersId = fetchGroupFollowerId(userId, group.getGroupId());
+			preparedStatement = connection.prepareStatement("insert into discussion(discussionid, discussionname, discussionbody, groupfollowersid, dateofdiscussion, groupdetailsid) values('D'||discussion_sequence.nextval,?,?,?,?,?)");
+			preparedStatement.setString(1, groupDiscussion.getGroupDiscussionName());
+			preparedStatement.setString(2, groupDiscussion.getGroupDiscussionBody());
+			preparedStatement.setString(3, groupFollowersId);
+			preparedStatement.setDate(4, groupDiscussion.getGroupCreationTime());
+			preparedStatement.setString(5, group.getGroupId());
+			preparedStatement.executeUpdate();
+			connection.commit();
+			preparedStatement = connection.prepareStatement("select max(discussionid) from discussion");
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			group.getGroupDiscussions().add(new GroupDiscussion(resultSet.getString(1), groupDiscussion.getGroupDiscussionName(), groupDiscussion.getGroupDiscussionBody(), groupDiscussion.getGroupCreationTime()));
+			return group;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+	}
+	
+	
+	
+	private String fetchGroupFollowerId(String userId, String groupId) {
+		try {
+			preparedStatement = connection.prepareStatement("select groupfollowersid from groupfollowers where userid='"+userId+"' and groupdetailsid='"+groupId+"'");
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()) {
+				return resultSet.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return null;
+	}
+
+	@Override
+	public List<GroupDiscussion> fetchAllDiscussions(String groupId) {
+		List<GroupDiscussion> discussions = new ArrayList<>();
+		try {
+			preparedStatement = connection.prepareStatement("select * from discussion where groupdetailsid='"+groupId+"'");
+			resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				String discussionId = resultSet.getString(1);
+				String discussionName = resultSet.getString(2);
+				String discussionBody = resultSet.getString(3);
+				Date dateOfDiscussion = resultSet.getDate("dateOfDiscussion");
+				discussions.add(new GroupDiscussion(discussionId, discussionName, discussionBody, dateOfDiscussion));
+			}
+			return discussions;
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return null;
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
+import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
 
@@ -24,4 +25,9 @@ public interface PoliticalPartyDAOServices {
 	Boolean addFollowerToAGroup(String userId, Group group);
 	
 	public List<Group> getUserGroups(String userId);
+	
+	public Group createDiscussion(String userId, Group group, GroupDiscussion groupDiscussion);
+	
+	public List<GroupDiscussion> fetchAllDiscussions(String groupId);
+
 }

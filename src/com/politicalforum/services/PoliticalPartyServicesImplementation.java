@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
+import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
 import com.politicalforum.daoServices.PoliticalPartyDAOServices;
@@ -44,8 +45,9 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	@Override
 	public User createGroup(String groupName, String groupDescription, User user) {
 		if (Helper.checkIfUserIsPolitician(user.getUserId())) {
-			Group group = politicalPartyDaoServices.insertGroupDetails(new Group(groupName, groupDescription,
-					user.getUserId(), Helper.getCurrentDateOfTypeJavaSql()));
+			Group group = politicalPartyDaoServices.insertGroupDetails(
+					new Group(groupName, groupDescription, user.getUserId(), Helper.getCurrentDateOfTypeJavaSql()));
+			
 			if (politicalPartyDaoServices.addFollowerToAGroup(user.getUserId(), group)) {
 				user.getGroups().add(group);
 				return user;
@@ -73,6 +75,18 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 			return user;
 		}
 		return null;
+	}
+
+	@Override
+	public User createDiscussion(User user, String groupDiscussionName, String groupDiscussionBody) {
+		user.setSelectedGroup(politicalPartyDaoServices.createDiscussion(user.getUserId(), user.getSelectedGroup(),
+				new GroupDiscussion(groupDiscussionName, groupDiscussionBody, Helper.getCurrentDateOfTypeJavaSql())));
+		return user;
+	}
+
+	@Override
+	public List<GroupDiscussion> viewAllDiscussions(String groupId) {
+		return politicalPartyDaoServices.fetchAllDiscussions(groupId);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.politicalforum.beans.Group;
+import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.ServiceNotFoundException;
 
@@ -26,5 +27,9 @@ public interface PoliticalPartyServices {
 	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) throws SQLException;
 
 	public User joinGroup(User user, Group group);
+	
+	public User createDiscussion(User user, String groupDiscussionName, String groupDiscussionBody);
+	
+	public List<GroupDiscussion> viewAllDiscussions(String groupId);
 	
 }

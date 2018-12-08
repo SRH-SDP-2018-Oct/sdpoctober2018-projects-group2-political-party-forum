@@ -11,8 +11,7 @@ import com.politicalforum.services.PoliticalPartyServices;
 public class PoliticalUserMenu {
 	private static Scanner sc = new Scanner(System.in);
 
-	public static void menu(User user, PoliticalPartyServices politicalPartyServices)
-			throws SQLException {
+	public static void menu(User user, PoliticalPartyServices politicalPartyServices) throws SQLException {
 		int choice = 0;
 		System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Browse Groups\n");
 		System.out.println("Enter Option:- ");

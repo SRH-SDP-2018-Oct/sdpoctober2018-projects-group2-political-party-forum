@@ -18,11 +18,11 @@ public class Login {
 			String password = sc.next();
 			User user = politicalPartyServices.login(emailId, password);
 			System.out.println("Login success  " + user);
-			if(Helper.checkIfUserIsPolitician(user.getUserId())) {
+			if (Helper.checkIfUserIsPolitician(user.getUserId())) {
 				PoliticalUserMenu.menu(user, politicalPartyServices);
 			} else {
 				GeneralUserMenu.menu(user, politicalPartyServices);
-			}			
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

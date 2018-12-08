@@ -1,16 +1,18 @@
 package com.politicalforum.beans;
 
+import java.sql.Date;
+
 public class GroupDiscussion {
-	private int groupDiscussionId;
+	private String groupDiscussionId;
 	private String groupDiscussionName;
 	private String groupDiscussionBody;
-	private String groupCreationTime;
+	private Date groupCreationTime;
 
 	public GroupDiscussion() {
 	}
 
-	public GroupDiscussion(int groupDiscussionId, String groupDiscussionName, String groupDiscussionBody,
-			String groupCreationTime) {
+	public GroupDiscussion(String groupDiscussionId, String groupDiscussionName, String groupDiscussionBody,
+			Date groupCreationTime) {
 		super();
 		this.groupDiscussionId = groupDiscussionId;
 		this.groupDiscussionName = groupDiscussionName;
@@ -18,18 +20,18 @@ public class GroupDiscussion {
 		this.groupCreationTime = groupCreationTime;
 	}
 
-	public GroupDiscussion(String groupDiscussionName, String groupDiscussionBody, String groupCreationTime) {
+	public GroupDiscussion(String groupDiscussionName, String groupDiscussionBody, Date groupCreationTime) {
 		super();
 		this.groupDiscussionName = groupDiscussionName;
 		this.groupDiscussionBody = groupDiscussionBody;
 		this.groupCreationTime = groupCreationTime;
 	}
 
-	public int getGroupDiscussionId() {
+	public String getGroupDiscussionId() {
 		return groupDiscussionId;
 	}
 
-	public void setGroupDiscussionId(int groupDiscussionId) {
+	public void setGroupDiscussionId(String groupDiscussionId) {
 		this.groupDiscussionId = groupDiscussionId;
 	}
 
@@ -49,11 +51,11 @@ public class GroupDiscussion {
 		this.groupDiscussionBody = groupDiscussionBody;
 	}
 
-	public String getGroupCreationTime() {
+	public Date getGroupCreationTime() {
 		return groupCreationTime;
 	}
 
-	public void setGroupCreationTime(String groupCreationTime) {
+	public void setGroupCreationTime(Date groupCreationTime) {
 		this.groupCreationTime = groupCreationTime;
 	}
 

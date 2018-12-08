@@ -14,6 +14,7 @@ public class User {
 	private String region;
 	private String password;
 	private List<Group> groups = new ArrayList<>();
+	private Group selectedGroup = null;
 	
 	public User() {
 		super();
@@ -121,6 +122,14 @@ public class User {
 
 	public String getUserId() {
 		return userId;
+	}
+
+	public Group getSelectedGroup() {
+		return selectedGroup;
+	}
+
+	public void setSelectedGroup(Group selectedGroup) {
+		this.selectedGroup = selectedGroup;
 	}
 
 	@Override

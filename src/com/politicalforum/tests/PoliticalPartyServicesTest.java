@@ -24,7 +24,7 @@ public class PoliticalPartyServicesTest {
 		
 	@Test
 	public void testRegisterUserDetails() throws ServiceNotFoundException, SQLException {
-	//	assertThat(politicalServices.registerUserDetails("gfhgfh", "sshjg", 55, "abcdeed@efg.com", "Male", "dgghjsdaghjje768e7d", true, "hsdjdg", "abcd") , StringStartsWith.startsWith("U"));
+		assertThat(politicalServices.registerUserDetails("abc", "def", 25, "nas@h.com", "Male", "123456", true, "Delhi", "abcd").getUserId(), StringStartsWith.startsWith("U"));
 	}
 
 }
