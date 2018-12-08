@@ -1,6 +1,8 @@
 package com.politicalforum.beans;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Group {
 
@@ -9,7 +11,9 @@ public class Group {
 	private String groupDescription;
 	private String groupOwnerId;
 	private Date groupCreationTime;
-
+	private List<GroupDiscussion> discussions = new ArrayList<>();
+	private GroupDiscussion selectedDiscussion = null;
+	
 	public Group() {
 	}
 
@@ -71,10 +75,27 @@ public class Group {
 		return this.groupId;
 	}
 	
+	public List<GroupDiscussion> getDiscussions() {
+		return discussions;
+	}
+
+	public void setDiscussions(List<GroupDiscussion> discussions) {
+		this.discussions = discussions;
+	}
+
+	public GroupDiscussion getSelectedDiscussion() {
+		return selectedDiscussion;
+	}
+
+	public void setSelectedDiscussion(GroupDiscussion selectedDiscussion) {
+		this.selectedDiscussion = selectedDiscussion;
+	}
+
 	@Override
 	public String toString() {
 		return "Group [groupId=" + groupId + ", groupName=" + groupName + ", groupDescription=" + groupDescription
-				+ ", groupOwnerId=" + groupOwnerId + ", groupCreationTime=" + groupCreationTime + "]";
+				+ ", groupOwnerId=" + groupOwnerId + ", groupCreationTime=" + groupCreationTime + ", discussions="
+				+ discussions + ", selectedDiscussion=" + selectedDiscussion + "]";
 	}
 
 }

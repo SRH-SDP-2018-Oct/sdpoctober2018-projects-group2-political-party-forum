@@ -143,7 +143,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Group(groupId, group.getGroupName(), group.getGroupDescription(), group.getGroupCreationTime());
+		return new Group(groupId, group.getGroupName(), group.getGroupDescription(), group.getGroupOwnerId(),
+				group.getGroupCreationTime());
 	}
 
 	@Override
@@ -175,6 +176,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			connection.commit();
+			preparedStatement.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,29 +207,29 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			String gender = resultSet.getString(7);
 			int age = Integer.parseInt(resultSet.getString(8));
 			Boolean isAnonymous = resultSet.getInt(9) > 0 ? true : false;
-			return new GeneralUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region, new ArrayList<>(),
-					aadharNumber);
+			return new GeneralUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region,
+					new ArrayList<>(), aadharNumber);
 		}
 		return null;
 	}
 
-	private List<Group> getGroupDetails(String politicalUserId) {
-		List<Group> groups = new ArrayList<>();
-		try {
-			preparedStatement = connection
-					.prepareStatement("select * from groupdetails where userid='" + politicalUserId + "'");
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()) {
-				groups.add(new Group(resultSet.getString("groupdetailsid"), resultSet.getString("groupdetailsname"),
-						resultSet.getString("groupdetailsbody"), resultSet.getString("userid"),
-						resultSet.getDate("dateofcreation")));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return groups;
-	}
+//	private List<Group> getGroupDetails(String politicalUserId) {
+//		List<Group> groups = new ArrayList<>();
+//		try {
+//			preparedStatement = connection
+//					.prepareStatement("select * from groupdetails where userid='" + politicalUserId + "'");
+//			resultSet = preparedStatement.executeQuery();
+//			while (resultSet.next()) {
+//				groups.add(new Group(resultSet.getString("groupdetailsid"), resultSet.getString("groupdetailsname"),
+//						resultSet.getString("groupdetailsbody"), resultSet.getString("userid"),
+//						resultSet.getDate("dateofcreation")));
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return groups;
+//	}
 
 	private PoliticalUser getPoliticalUserDetails(String userId) throws SQLException {
 		preparedStatement = connection.prepareStatement("select * from userdetails where userid='" + userId + "'");
@@ -241,8 +243,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			String gender = resultSet.getString(7);
 			int age = Integer.parseInt(resultSet.getString(8));
 			Boolean isAnonymous = resultSet.getInt(9) > 0 ? true : false;
-			return new PoliticalUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region, new ArrayList<>(),
-					politicianId);
+			return new PoliticalUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region,
+					new ArrayList<>(), politicianId);
 		}
 		return null;
 	}
@@ -276,14 +278,16 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public List<Group> getUserGroups(String userId) {
 		try {
 			List<Group> group = new ArrayList<>();
-			preparedStatement = connection.prepareStatement("select groupdetailsid, groupdetailsname, groupdetailsbody, dateofcreation from groupdetails where groupdetailsid in (select groupdetailsid from groupfollowers where userid='"+userId+"')");
+			preparedStatement = connection.prepareStatement(
+					"select groupdetailsid, groupdetailsname, groupdetailsbody, dateofcreation from groupdetails where groupdetailsid in (select groupdetailsid from groupfollowers where userid='"
+							+ userId + "')");
 			resultSet = preparedStatement.executeQuery();
-			if(resultSet.next()) {
+			if (resultSet.next()) {
 				String groupId = resultSet.getString(1);
 				String groupName = resultSet.getString(2);
 				String groupDescription = resultSet.getString(3);
 				Date groupCreationTime = resultSet.getDate(4);
-				group.add(new Group(groupId, groupName, groupDescription, groupCreationTime)); 
+				group.add(new Group(groupId, groupName, groupDescription, groupCreationTime));
 			}
 			return group;
 		} catch (Exception e) {
@@ -291,6 +295,10 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			// TODO: handle exception
 		}
 		return new ArrayList<>();
+	}
+
+	private void insertNotification(String groupFollowersId, String notificationBody) {
+
 	}
 
 }

@@ -24,4 +24,5 @@ public interface PoliticalPartyDAOServices {
 	Boolean addFollowerToAGroup(String userId, Group group);
 	
 	public List<Group> getUserGroups(String userId);
+	
 }
