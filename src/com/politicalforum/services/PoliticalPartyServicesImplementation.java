@@ -81,6 +81,7 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public User createDiscussion(User user, String groupDiscussionName, String groupDiscussionBody) {
 		user.setSelectedGroup(politicalPartyDaoServices.createDiscussion(user.getUserId(), user.getSelectedGroup(),
 				new GroupDiscussion(groupDiscussionName, groupDiscussionBody, Helper.getCurrentDateOfTypeJavaSql())));
+		System.out.println("User after creating discussion--- "+user.getSelectedGroup());
 		return user;
 	}
 

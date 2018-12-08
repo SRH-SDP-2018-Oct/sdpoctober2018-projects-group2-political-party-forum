@@ -20,7 +20,7 @@ public class GeneralUserMenu {
 			CommonFeatures.joinGroup(user, politicalPartyServices);
 			break;
 		case 2:
-				
+			CommonFeatures.myGroups(user, politicalPartyServices);
 			break;
 		default:
 			System.out.println("Wrong Option!");

@@ -34,7 +34,10 @@ public class PoliticalUserMenu {
 
 			break;
 		case 2:
-			user = CommonFeatures.joinGroup(user, politicalPartyServices);
+			CommonFeatures.joinGroup(user, politicalPartyServices);
+			break;
+		case 3:
+			CommonFeatures.myGroups(user, politicalPartyServices);
 			break;
 		default:
 			System.out.println("Wrong Option!");

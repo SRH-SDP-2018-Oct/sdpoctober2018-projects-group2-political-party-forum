@@ -1,6 +1,7 @@
 package com.politicalforum.beans;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Group {
@@ -10,7 +11,7 @@ public class Group {
 	private String groupDescription;
 	private String groupOwnerId;
 	private Date groupCreationTime;
-	private List<GroupDiscussion> groupDiscussions; 
+	private List<GroupDiscussion> groupDiscussions = new ArrayList<>(); 
 	private GroupDiscussion selectedGroupDiscussion;
 	private String groupFollowersId;
 	

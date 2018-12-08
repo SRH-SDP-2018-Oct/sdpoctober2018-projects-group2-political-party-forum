@@ -283,7 +283,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		try {
 			List<Group> group = new ArrayList<>();
 			preparedStatement = connection.prepareStatement(
-					"select groupdetailsid, groupdetailsname, groupdetailsbody, dateofcreation from groupdetails where groupdetailsid in (select groupdetailsid from groupfollowers where userid='"
+					"select groupdetailsid, groupdetailsname, groupdetailsbody, dateofcreation, userid from groupdetails where groupdetailsid in (select groupdetailsid from groupfollowers where userid='"
 							+ userId + "')");
 			resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
@@ -291,7 +291,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 				String groupName = resultSet.getString(2);
 				String groupDescription = resultSet.getString(3);
 				Date groupCreationTime = resultSet.getDate(4);
-				group.add(new Group(groupId, groupName, groupDescription, groupCreationTime));
+				String groupOwnerId = resultSet.getString(5);
+				group.add(new Group(groupId, groupName, groupDescription, groupOwnerId, groupCreationTime));
 			}
 			return group;
 		} catch (Exception e) {
@@ -316,9 +317,14 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement = connection.prepareStatement("select max(discussionid) from discussion");
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
-			group.getGroupDiscussions().add(new GroupDiscussion(resultSet.getString(1), groupDiscussion.getGroupDiscussionName(), groupDiscussion.getGroupDiscussionBody(), groupDiscussion.getGroupCreationTime()));
+			String groupDiscussionId = resultSet.getString(1);
+			System.out.println("Id Generated:- "+groupDiscussionId);
+			groupDiscussion.setGroupDiscussionId(groupDiscussionId);
+			group.getGroupDiscussions().add(groupDiscussion);
+			System.out.println("Group now:- "+ group.toString());
 			return group;
 		} catch (Exception e) {
+			e.printStackTrace();
 			// TODO: handle exception
 		}
 		
