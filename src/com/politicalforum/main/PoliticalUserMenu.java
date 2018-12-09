@@ -16,12 +16,13 @@ public class PoliticalUserMenu {
 		System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Browse Groups\n");
 		System.out.println("Enter Option:- ");
 		choice = sc.nextInt();
+		sc.nextLine();
 		switch (choice) {
 		case 1:
 			System.out.println("Enter Group Name:- ");
-			String groupName = sc.next();
+			String groupName = sc.nextLine();
 			System.out.println("Describe this group:- ");
-			String groupDescription = sc.next();
+			String groupDescription = sc.nextLine();
 			List<Group> similarGroups = politicalPartyServices.checkIfGroupExistsWithSimilarNames(groupName);
 			if (similarGroups.isEmpty()) {
 				System.out.println("Group Created ID:- "

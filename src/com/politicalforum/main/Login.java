@@ -13,9 +13,9 @@ public class Login {
 	public static void userLogin(PoliticalPartyServices politicalPartyServices) {
 		try {
 			System.out.println("Enter Email-Id:- ");
-			String emailId = sc.next();
+			String emailId = sc.nextLine();
 			System.out.println("Enter Password:- ");
-			String password = sc.next();
+			String password = sc.nextLine();
 			User user = politicalPartyServices.login(emailId, password);
 			System.out.println("Login success  " + user);
 			if (Helper.checkIfUserIsPolitician(user.getUserId())) {

@@ -23,56 +23,56 @@ public class Registration {
 			System.out.println("\t\tMenu\n\n1.General User \n\n2.Political User\n\n");
 			System.out.println("Your choice: ");
 			choice = sc.nextInt();
-
+			sc.nextLine();
 			switch (choice) {
 			//General User Registration
 			case 1:
 				do {
 					System.out.println("Your First Name:- ");
-					firstName = sc.next();
+					firstName = sc.nextLine();
 				} while (!Validations.validateName(firstName));
 
 				do {
 					System.out.println("Your Last Name:- ");
-					lastName = sc.next();
+					lastName = sc.nextLine();
 				} while (!Validations.validateName(lastName));
 
 				do {
 					System.out.println("Your Age:- ");
-					age = sc.next();
+					age = sc.nextLine();
 				} while (!Validations.validateAge(age));
 
 				do {
 					System.out.println("Your Email-ID:- ");
-					emailId = sc.next();
+					emailId = sc.nextLine();
 				} while (!Validations.validateEmail(emailId));
 
 				do {
 					System.out.println("Your Gender:- ");
-					gender = sc.next();
+					gender = sc.nextLine();
 				} while (!Validations.validateGender(gender));
 
 				do {
 					System.out.println("Your 12 Digit Aadhar Number:- ");
-					aadharNumber = sc.next();
+					aadharNumber = sc.nextLine();
 				} while (!Validations.validateAadhar(aadharNumber));
 
 				do {
 					System.out.println("Your Region:- ");
-					region = sc.next();
+					region = sc.nextLine();
 				} while (!Validations.validateRegion(region));
 
 				System.out.println("Do you want to remain Anonymous(true/false)?");
 				Boolean isAnonymous = sc.nextBoolean();
-
+				sc.nextLine();
 				String confirmPassword = null;
 				
 				do {
 
 					System.out.println("Enter a Password:- ");
-					password = sc.next();
+					password = sc.nextLine();
 					System.out.println("Confirm password");
-					confirmPassword = sc.next();
+					confirmPassword = sc.nextLine();
 					if (!confirmPassword.equals(password)) {
 						System.out.println("Re-Enter password.");
 					}
@@ -87,47 +87,48 @@ public class Registration {
 				
 				do {
 					System.out.println("Your First Name:- ");
-					firstName = sc.next();
+					firstName = sc.nextLine();
 				} while (!Validations.validateName(firstName));
 
 				do {
 					System.out.println("Your Last Name:- ");
-					lastName = sc.next();
+					lastName = sc.nextLine();
 				} while (!Validations.validateName(lastName));
 
 				do {
 					System.out.println("Your Age:- ");
-					age = sc.next();
+					age = sc.nextLine();
 				} while (!Validations.validateAge(age));
 
 				do {
 					System.out.println("Your Email-ID:- ");
-					emailId = sc.next();
+					emailId = sc.nextLine();
 				} while (!Validations.validateEmail(emailId));
 
 				do {
 					System.out.println("Your Gender:- ");
-					gender = sc.next();
+					gender = sc.nextLine();
 				} while (!Validations.validateGender(gender));
 				do {
 					System.out.println("Your PoliticianId:- ");
-					politicianId = sc.next();
+					politicianId = sc.nextLine();
 				} while (!Validations.validatePoliticalID(politicianId));
 
 				do {
 					System.out.println("Your Region:- ");
-					region = sc.next();
+					region = sc.nextLine();
 				} while (!Validations.validateRegion(region));
 
 				System.out.println("Do you want to remain Anonymous(true/false)?");
 				isAnonymous = sc.nextBoolean();
+				sc.nextLine();
 				password = null;
 				confirmPassword = null;
 				do {
 					System.out.println("Enter a Password:- ");
-					password = sc.next();
+					password = sc.nextLine();
 					System.out.println("Confirm password");
-					confirmPassword = sc.next();
+					confirmPassword = sc.nextLine();
 					if (!confirmPassword.equals(password)) {
 						System.out.println("Reenter password.");
 					}

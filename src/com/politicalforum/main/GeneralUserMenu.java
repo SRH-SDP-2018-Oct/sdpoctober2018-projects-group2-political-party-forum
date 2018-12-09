@@ -15,6 +15,7 @@ public class GeneralUserMenu {
 		System.out.println("\t\tMenu\n\n1. Browse Groups \n2. My Groups");
 		System.out.println("Enter Option:- ");
 		choice = sc.nextInt();
+		sc.nextLine();
 		switch (choice) {
 		case 1:
 			CommonFeatures.joinGroup(user, politicalPartyServices);

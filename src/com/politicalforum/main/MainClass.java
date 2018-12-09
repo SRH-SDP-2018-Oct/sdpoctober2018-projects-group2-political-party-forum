@@ -18,6 +18,7 @@ public class MainClass {
 			System.out.println("\t\tMenu\n\n1.Register User \n\n2.Login\n\n\n");
 			System.out.println("Your choice: ");
 			choice = sc.nextInt();
+			sc.nextLine();
 			switch (choice) {
 			case 1:
 				Registration.userRegistration(politicalPartyServices);
