@@ -1,6 +1,7 @@
 package com.politicalforum.main;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -26,6 +27,7 @@ public class CommonFeatures {
 		}
 		System.out.println("Enter the group number to join:- ");
 		int groupNumber = sc.nextInt();
+		sc.nextLine();
 		if (map.containsKey(groupNumber)) {
 			user = politicalPartyServices.joinGroup(user, map.get(groupNumber));
 			user.setSelectedGroup(user.getGroups().get(user.getGroups().size() - 1));
@@ -48,6 +50,7 @@ public class CommonFeatures {
 		}
 		System.out.println("Your Choice:- ");
 		choice = sc.nextInt();
+		sc.nextLine();
 		user.setSelectedGroup(map.get(choice));
 		viewGroup(user, politicalPartyServices);
 
@@ -67,7 +70,7 @@ public class CommonFeatures {
 			}
 			System.out.println("\n\n Press 0 to go to home page.");
 			choice = sc.nextInt();
-
+			sc.nextLine();
 			switch (choice) {
 			case 1:
 				List<GroupDiscussion> discussions = politicalPartyServices
@@ -80,6 +83,7 @@ public class CommonFeatures {
 				}
 				System.out.println("Select Discussion:- ");
 				choice = sc.nextInt();
+				sc.nextLine();
 				user.getSelectedGroup().setSelectedGroupDiscussion(discussions.get(choice - 1));
 				viewDiscussion(user, politicalPartyServices);
 				break;
@@ -87,22 +91,42 @@ public class CommonFeatures {
 			case 3:
 			case 4:
 				System.out.println("Enter Discussion Name:- ");
-				String groupDiscussionName = sc.next();
+				String groupDiscussionName = sc.nextLine();
 				System.out.println("Enter Discusson Body:- ");
-				String groupDiscussionBody = sc.next();
+				String groupDiscussionBody = sc.nextLine();
 				politicalPartyServices.createDiscussion(user, groupDiscussionName, groupDiscussionBody);
 				break;
 			case 5:
 			case 6:
 				if (!isUserPolitician) {
+					System.out.println("Wrong Option!");
 					break;
 				}
+//				private int groupProgressReportId;
+//				private String taskName;
+//				private String taskStartDate;
+//				private String taskEndDate;
+//				private String intendedCompletionDate;
+//				private String taskDescription;
+//				private double taskAllocatedFund;
+//				private String taskCreationTimestamp;
+//				private String contractorName;
+				System.out.println("\n------Create Project------------");
+				System.out.println("Enter Project Name:- ");
+				String taskName = sc.nextLine();
+				System.out.println("Enter Project Description:- ");
+				String taskDescription = sc.nextLine();
+				System.out.println("Enter Project Start Date(DD/MM/YYYY):- ");
+				//Date taskStartDate = sc.next();
 			case 7:
 				if (!isUserPolitician) {
+					System.out.println("Wrong Option!");
 					break;
 				}
 			case 0:
-			default:
+			default: 
+				System.out.println("Wrong Option!");
+				break;
 
 			}
 		} while (choice != 0);
@@ -134,6 +158,7 @@ public class CommonFeatures {
 		do {
 			System.out.println("\n1.Post Comment\n\n2.View Comments");
 			choice = sc.nextInt();
+			sc.nextLine();
 			switch (choice) {
 			case 1:
 				postComment(user, politicalPartyServices);
@@ -151,7 +176,7 @@ public class CommonFeatures {
 	private static void postComment(User user, PoliticalPartyServices politicalPartyServices) {
 
 		System.out.println("Write your comment here:- ");
-		String comment = sc.next();
+		String comment = sc.nextLine();
 		if (politicalPartyServices.postComment(user, comment)) {
 			System.out.println("Comment Posted!");
 			viewComments(user, politicalPartyServices);

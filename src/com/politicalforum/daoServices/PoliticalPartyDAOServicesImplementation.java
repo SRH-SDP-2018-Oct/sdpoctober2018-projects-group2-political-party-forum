@@ -111,7 +111,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		try {
 			preparedStatement = connection
 					.prepareStatement("select UPPER(groupdetailsname) from groupdetails where groupdetailsname like '%"
-							+ groupName + "%'");
+							+ groupName.toUpperCase() + "%'");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				groups.add(new Group(resultSet.getString(1)));
@@ -130,7 +130,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		try {
 			preparedStatement = connection.prepareStatement(
 					"insert into groupdetails(groupdetailsid, groupdetailsname, groupdetailsbody, userid, dateofcreation) values('GD' || groupdetail_sequence.nextval,?,?,?,?)");
-			preparedStatement.setString(1, group.getGroupName());
+			preparedStatement.setString(1, group.getGroupName().toUpperCase());
 			preparedStatement.setString(2, group.getGroupDescription());
 			preparedStatement.setString(3, group.getGroupOwnerId());
 			preparedStatement.setDate(4, group.getGroupCreationTime());
