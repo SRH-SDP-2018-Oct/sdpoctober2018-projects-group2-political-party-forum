@@ -17,8 +17,8 @@ public class Validations {
 			Pattern.CASE_INSENSITIVE);
 	public static final Pattern VALID_USER_REGION = Pattern.compile("(?i)(^[a-z]+)[a-z .,-]((?! .,-)$){1,10}$",
 			Pattern.CASE_INSENSITIVE);
-	public static final Pattern VALID_PASSWORD = Pattern
-			.compile("^.*(?=.{4,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$)");
+//	public static final Pattern VALID_PASSWORD = Pattern
+//			.compile("^.*(?=.{4,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$)");
 
 	public static boolean validateName(String name) {
 		Matcher matcher = VALID_USER_NAME.matcher(name);
@@ -84,13 +84,13 @@ public class Validations {
 		return flag;
 	}
 
-	public static boolean validatePassword(String password) {
-		Matcher matcher = VALID_PASSWORD.matcher(password);
-		boolean flag = matcher.find();
-		if (!flag) {
-			System.out.println("\n Please Enter 4 Didit Password");
-		}
-		return flag;
-	}
+//	public static boolean validatePassword(String password) {
+//		Matcher matcher = VALID_PASSWORD.matcher(password);
+//		boolean flag = matcher.find();
+//		if (!flag) {
+//			System.out.println("\n Please Enter 4 Didit Password");
+//		}
+//		return flag;
+//	}
 
 }

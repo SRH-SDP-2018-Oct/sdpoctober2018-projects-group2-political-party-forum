@@ -1,10 +1,12 @@
 package com.politicalforum.daoServices;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
+import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
@@ -30,4 +32,10 @@ public interface PoliticalPartyDAOServices {
 	
 	public List<GroupDiscussion> fetchAllDiscussions(String groupId);
 
+	public HashMap<String, Boolean> getPostedByDetails(String groupFollowersId);
+	
+	public Boolean postComment(User user, String comment);
+
+	public List<GroupComments> viewComments(String discussionId);
+	
 }

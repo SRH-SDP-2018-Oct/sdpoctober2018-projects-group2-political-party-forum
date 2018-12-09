@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.politicalforum.beans.Group;
+import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.User;
 import com.politicalforum.services.PoliticalPartyServices;
@@ -48,7 +49,6 @@ public class CommonFeatures {
 		System.out.println("Your Choice:- ");
 		choice = sc.nextInt();
 		user.setSelectedGroup(map.get(choice));
-		System.out.println("User selected group:- "+ user.getSelectedGroup().toString());
 		viewGroup(user, politicalPartyServices);
 
 	}
@@ -72,20 +72,25 @@ public class CommonFeatures {
 			case 1:
 				List<GroupDiscussion> discussions = politicalPartyServices
 						.viewAllDiscussions(user.getSelectedGroup().getGroupId());
+				HashMap<Integer, GroupDiscussion> map = new HashMap<>();
 				System.out.println("All Discussions:- ");
 				for (int i = 0; i < discussions.size(); i++) {
 					System.out.println((i + 1) + ". " + discussions.get(i).getGroupDiscussionName());
+					map.put((i + 1), discussions.get(i));
 				}
+				System.out.println("Select Discussion:- ");
+				choice = sc.nextInt();
+				user.getSelectedGroup().setSelectedGroupDiscussion(discussions.get(choice - 1));
+				viewDiscussion(user, politicalPartyServices);
 				break;
 			case 2:
 			case 3:
 			case 4:
 				System.out.println("Enter Discussion Name:- ");
-				String groupDiscussionName = sc.nextLine();
+				String groupDiscussionName = sc.next();
 				System.out.println("Enter Discusson Body:- ");
-				String groupDiscussionBody = sc.nextLine();
+				String groupDiscussionBody = sc.next();
 				politicalPartyServices.createDiscussion(user, groupDiscussionName, groupDiscussionBody);
-				System.out.println("User obj:- " + user.toString());
 				break;
 			case 5:
 			case 6:
@@ -102,6 +107,70 @@ public class CommonFeatures {
 			}
 		} while (choice != 0);
 
+	}
+
+	private static void viewDiscussion(User user, PoliticalPartyServices politicalPartyServices) {
+
+		System.out.println("****************Discussion*****************");
+
+		System.out.println(
+				"Disucssion Name:- " + user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionName());
+
+		System.out.println("\nAbout this Discussion:- "
+				+ user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionBody());
+
+		HashMap<String, Boolean> map = politicalPartyServices
+				.getPostedByDetails(user.getSelectedGroup().getSelectedGroupDiscussion().getGroupFollowersId());
+		String createdBy = null;
+		for (String key : map.keySet()) {
+			createdBy = map.get(key) ? "Anonymous" : key;
+		}
+
+		System.out.println("\nCreated By:- " + createdBy);
+
+		
+
+		int choice = 0;
+		do {
+			System.out.println("\n1.Post Comment\n\n2.View Comments");
+			choice = sc.nextInt();
+			switch (choice) {
+			case 1:
+				postComment(user, politicalPartyServices);
+				break;
+			case 2:
+				viewComments(user, politicalPartyServices);
+				break;
+			default:
+				break;
+			}
+		} while (choice != 0);
+
+	}
+
+	private static void postComment(User user, PoliticalPartyServices politicalPartyServices) {
+
+		System.out.println("Write your comment here:- ");
+		String comment = sc.next();
+		if (politicalPartyServices.postComment(user, comment)) {
+			System.out.println("Comment Posted!");
+			viewComments(user, politicalPartyServices);
+		}
+
+	}
+
+	private static void viewComments(User user, PoliticalPartyServices politicalPartyServices) {
+		List<GroupComments> comments = politicalPartyServices
+				.viewComments(user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionId());
+		if(comments.isEmpty()) {
+			System.out.println("No comments posted in this discussion.");
+		}
+		
+		for (int i = 0; i < comments.size(); i++) {
+			System.out.println((i + 1) + ". " + comments.get(i).getCommentBody());
+			System.out.println("Posted By:- " + comments.get(i).getCommentPostedBy() + "\t On "
+					+ comments.get(i).getCommentCreationTime());
+		}
 	}
 
 }

@@ -2,10 +2,12 @@ package com.politicalforum.services;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
+import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.User;
@@ -81,13 +83,28 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public User createDiscussion(User user, String groupDiscussionName, String groupDiscussionBody) {
 		user.setSelectedGroup(politicalPartyDaoServices.createDiscussion(user.getUserId(), user.getSelectedGroup(),
 				new GroupDiscussion(groupDiscussionName, groupDiscussionBody, Helper.getCurrentDateOfTypeJavaSql())));
-		System.out.println("User after creating discussion--- "+user.getSelectedGroup());
 		return user;
 	}
 
 	@Override
 	public List<GroupDiscussion> viewAllDiscussions(String groupId) {
 		return politicalPartyDaoServices.fetchAllDiscussions(groupId);
+	}
+
+	@Override
+	public HashMap<String, Boolean> getPostedByDetails(String groupFollowersId) {
+		return politicalPartyDaoServices.getPostedByDetails(groupFollowersId);
+	}
+
+	@Override
+	public Boolean postComment(User user, String comment) {
+		return politicalPartyDaoServices.postComment(user, comment) ;
+	}
+
+	@Override
+	public List<GroupComments> viewComments(String discussionId) {
+		
+		return politicalPartyDaoServices.viewComments(discussionId);
 	}
 
 }

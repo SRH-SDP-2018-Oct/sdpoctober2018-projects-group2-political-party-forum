@@ -1,31 +1,26 @@
 package com.politicalforum.beans;
 
+import java.util.Date;
+
 public class GroupComments {
-	private int commentId;
+	private String commentId;
 	private String commentBody;
-	private String commentCreationTime;
-
-	public GroupComments() {
-	}
-
-	public GroupComments(int commentId, String commentBody, String commentCreationTime) {
+	private Date commentCreationTime;
+	private String commentPostedBy;
+	
+	public GroupComments(String commentId, String commentBody, Date commentCreationTime, String commentPostedBy) {
 		super();
 		this.commentId = commentId;
 		this.commentBody = commentBody;
 		this.commentCreationTime = commentCreationTime;
+		this.commentPostedBy = commentPostedBy;
 	}
 
-	public GroupComments(String commentBody, String commentCreationTime) {
-		super();
-		this.commentBody = commentBody;
-		this.commentCreationTime = commentCreationTime;
-	}
-
-	public int getCommentId() {
+	public String getCommentId() {
 		return commentId;
 	}
 
-	public void setCommentId(int commentId) {
+	public void setCommentId(String commentId) {
 		this.commentId = commentId;
 	}
 
@@ -37,18 +32,26 @@ public class GroupComments {
 		this.commentBody = commentBody;
 	}
 
-	public String getCommentCreationTime() {
+	public Date getCommentCreationTime() {
 		return commentCreationTime;
 	}
 
-	public void setCommentCreationTime(String commentCreationTime) {
+	public void setCommentCreationTime(Date commentCreationTime) {
 		this.commentCreationTime = commentCreationTime;
+	}
+
+	public String getCommentPostedBy() {
+		return commentPostedBy;
+	}
+
+	public void setCommentPostedBy(String commentPostedBy) {
+		this.commentPostedBy = commentPostedBy;
 	}
 
 	@Override
 	public String toString() {
 		return "GroupComments [commentId=" + commentId + ", commentBody=" + commentBody + ", commentCreationTime="
-				+ commentCreationTime + "]";
+				+ commentCreationTime + ", commentPostedBy=" + commentPostedBy + "]";
 	}
 
 }
