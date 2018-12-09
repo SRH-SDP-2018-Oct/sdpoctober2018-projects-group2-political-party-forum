@@ -14,6 +14,8 @@ public class Group {
 	private List<GroupDiscussion> groupDiscussions = new ArrayList<>(); 
 	private GroupDiscussion selectedGroupDiscussion;
 	private String groupFollowersId;
+	private List<Project> projects = new ArrayList<>();
+	private Project selectedProject;
 	
 	public Group() {
 	}
@@ -110,11 +112,28 @@ public class Group {
 		this.groupFollowersId = groupFollowersId;
 	}
 
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
+
+	public Project getSelectedProject() {
+		return selectedProject;
+	}
+
+	public void setSelectedProject(Project selectedProject) {
+		this.selectedProject = selectedProject;
+	}
+
 	@Override
 	public String toString() {
 		return "Group [groupId=" + groupId + ", groupName=" + groupName + ", groupDescription=" + groupDescription
 				+ ", groupOwnerId=" + groupOwnerId + ", groupCreationTime=" + groupCreationTime + ", groupDiscussions="
-				+ groupDiscussions + ", selectedGroupDiscussion=" + selectedGroupDiscussion + "]";
+				+ groupDiscussions + ", selectedGroupDiscussion=" + selectedGroupDiscussion + ", groupFollowersId="
+				+ groupFollowersId + ", projects=" + projects + "]";
 	}
 
 }

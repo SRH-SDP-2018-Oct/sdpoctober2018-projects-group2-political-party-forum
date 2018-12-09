@@ -10,6 +10,7 @@ import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
+import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.daoServices.PoliticalPartyDAOServices;
 import com.politicalforum.exceptions.ServiceNotFoundException;
@@ -105,6 +106,12 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public List<GroupComments> viewComments(String discussionId) {
 		
 		return politicalPartyDaoServices.viewComments(discussionId);
+	}
+
+	@Override
+	public User createProject(User user, Project project) {
+		user.setSelectedGroup(politicalPartyDaoServices.createProject(user.getSelectedGroup(), project));
+		return user; 
 	}
 
 }

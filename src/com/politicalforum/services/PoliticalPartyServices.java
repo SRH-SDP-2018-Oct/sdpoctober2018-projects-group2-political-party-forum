@@ -7,6 +7,7 @@ import java.util.List;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
+import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.ServiceNotFoundException;
 
@@ -39,5 +40,7 @@ public interface PoliticalPartyServices {
 	public Boolean postComment(User user, String comment);
 	
 	public List<GroupComments> viewComments(String discussionId);
+	
+	public User createProject(User user, Project project);
 	
 }

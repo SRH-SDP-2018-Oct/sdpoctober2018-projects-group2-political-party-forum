@@ -9,6 +9,7 @@ import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
+import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 
 public interface PoliticalPartyDAOServices {
@@ -37,5 +38,7 @@ public interface PoliticalPartyDAOServices {
 	public Boolean postComment(User user, String comment);
 
 	public List<GroupComments> viewComments(String discussionId);
+
+	public Group createProject(Group group, Project project);
 	
 }

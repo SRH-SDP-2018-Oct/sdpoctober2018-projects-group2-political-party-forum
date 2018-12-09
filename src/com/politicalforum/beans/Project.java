@@ -1,22 +1,24 @@
 package com.politicalforum.beans;
 
+import java.sql.Date;
+
 public class Project {
-	private int groupProgressReportId;
+	private String groupProgressReportId;
 	private String taskName;
-	private String taskStartDate;
-	private String taskEndDate;
-	private String intendedCompletionDate;
+	private Date taskStartDate;
+	private Date taskEndDate;
+	private Date intendedCompletionDate;
 	private String taskDescription;
-	private double taskAllocatedFund;
-	private String taskCreationTimestamp;
+	private int taskAllocatedFund;
+	private Date taskCreationTimestamp;
 	private String contractorName;
 
 	public Project() {
 	}
 
-	public Project(int groupProgressReportId, String taskName, String taskStartDate, String taskEndDate,
-			String intendedCompletionDate, String taskDescription, double taskAllocatedFund,
-			String taskCreationTimestamp, String contractorName) {
+	public Project(String groupProgressReportId, String taskName, Date taskStartDate, Date taskEndDate,
+			Date intendedCompletionDate, String taskDescription, int taskAllocatedFund,
+			Date taskCreationTimestamp, String contractorName) {
 		super();
 		this.groupProgressReportId = groupProgressReportId;
 		this.taskName = taskName;
@@ -29,8 +31,8 @@ public class Project {
 		this.contractorName = contractorName;
 	}
 
-	public Project(String taskName, String taskStartDate, String taskEndDate, String intendedCompletionDate,
-			String taskDescription, double taskAllocatedFund, String taskCreationTimestamp, String contractorName) {
+	public Project(String taskName, Date taskStartDate, Date taskEndDate, Date intendedCompletionDate,
+			String taskDescription, int taskAllocatedFund, Date taskCreationTimestamp, String contractorName) {
 		super();
 		this.taskName = taskName;
 		this.taskStartDate = taskStartDate;
@@ -42,11 +44,11 @@ public class Project {
 		this.contractorName = contractorName;
 	}
 
-	public int getGroupProgressReportId() {
+	public String getGroupProgressReportId() {
 		return groupProgressReportId;
 	}
 
-	public void setGroupProgressReportId(int groupProgressReportId) {
+	public void setGroupProgressReportId(String groupProgressReportId) {
 		this.groupProgressReportId = groupProgressReportId;
 	}
 
@@ -58,27 +60,27 @@ public class Project {
 		this.taskName = taskName;
 	}
 
-	public String getTaskStartDate() {
+	public Date getTaskStartDate() {
 		return taskStartDate;
 	}
 
-	public void setTaskStartDate(String taskStartDate) {
+	public void setTaskStartDate(Date taskStartDate) {
 		this.taskStartDate = taskStartDate;
 	}
 
-	public String getTaskEndDate() {
+	public Date getTaskEndDate() {
 		return taskEndDate;
 	}
 
-	public void setTaskEndDate(String taskEndDate) {
+	public void setTaskEndDate(Date taskEndDate) {
 		this.taskEndDate = taskEndDate;
 	}
 
-	public String getIntendedCompletionDate() {
+	public Date getIntendedCompletionDate() {
 		return intendedCompletionDate;
 	}
 
-	public void setIntendedCompletionDate(String intendedCompletionDate) {
+	public void setIntendedCompletionDate(Date intendedCompletionDate) {
 		this.intendedCompletionDate = intendedCompletionDate;
 	}
 
@@ -90,19 +92,19 @@ public class Project {
 		this.taskDescription = taskDescription;
 	}
 
-	public double getTaskAllocatedFund() {
+	public int getTaskAllocatedFund() {
 		return taskAllocatedFund;
 	}
 
-	public void setTaskAllocatedFund(double taskAllocatedFund) {
+	public void setTaskAllocatedFund(int taskAllocatedFund) {
 		this.taskAllocatedFund = taskAllocatedFund;
 	}
 
-	public String getTaskCreationTimestamp() {
+	public Date getTaskCreationTimestamp() {
 		return taskCreationTimestamp;
 	}
 
-	public void setTaskCreationTimestamp(String taskCreationTimestamp) {
+	public void setTaskCreationTimestamp(Date taskCreationTimestamp) {
 		this.taskCreationTimestamp = taskCreationTimestamp;
 	}
 

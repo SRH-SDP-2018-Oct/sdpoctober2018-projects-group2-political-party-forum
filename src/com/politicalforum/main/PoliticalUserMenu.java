@@ -13,7 +13,7 @@ public class PoliticalUserMenu {
 
 	public static void menu(User user, PoliticalPartyServices politicalPartyServices) throws SQLException {
 		int choice = 0;
-		System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Browse Groups\n");
+		System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Browse Groups\n\n3.My Groups");
 		System.out.println("Enter Option:- ");
 		choice = sc.nextInt();
 		sc.nextLine();

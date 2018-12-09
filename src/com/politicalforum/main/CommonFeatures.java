@@ -1,7 +1,9 @@
 package com.politicalforum.main;
 
 import java.sql.SQLException;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -9,6 +11,7 @@ import java.util.Scanner;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
+import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.utils.Helper;
@@ -102,29 +105,46 @@ public class CommonFeatures {
 					System.out.println("Wrong Option!");
 					break;
 				}
-//				private int groupProgressReportId;
-//				private String taskName;
-//				private String taskStartDate;
-//				private String taskEndDate;
-//				private String intendedCompletionDate;
-//				private String taskDescription;
-//				private double taskAllocatedFund;
-//				private String taskCreationTimestamp;
-//				private String contractorName;
-				System.out.println("\n------Create Project------------");
+				System.out.println("\n-----------Create Project------------");
 				System.out.println("Enter Project Name:- ");
 				String taskName = sc.nextLine();
 				System.out.println("Enter Project Description:- ");
 				String taskDescription = sc.nextLine();
 				System.out.println("Enter Project Start Date(DD/MM/YYYY):- ");
-				//Date taskStartDate = sc.next();
+				String startDate = sc.nextLine();
+				SimpleDateFormat format = new SimpleDateFormat("DD/MM/YYYY");
+				Date taskStartDate = null, taskEndDate = null, intendedCompletionDate = null;
+				String endDate = null, tentativeComplete;
+				try {
+					taskStartDate = Helper.convertDateToSqlDate(format.parse(startDate));
+					System.out.println("Enter Project End Date(DD/MM/YYYY):-");
+					endDate = sc.nextLine();
+					taskEndDate = Helper.convertDateToSqlDate(format.parse(endDate));
+					System.out.println("Enter Intended Completion Date(DD/MM/YYYY)");
+					tentativeComplete = sc.nextLine();
+					intendedCompletionDate = Helper.convertDateToSqlDate(format.parse(tentativeComplete));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+
+				System.out.println("Enter Fund allocated for this project:- ");
+				int taskAllocatedFund = sc.nextInt();
+				sc.nextLine();
+				System.out.println("Enter Contractor Name:- ");
+				String contractorName = sc.nextLine();
+
+				user = politicalPartyServices.createProject(user,
+						new Project(taskName, taskStartDate, taskEndDate, intendedCompletionDate, taskDescription,
+								taskAllocatedFund, Helper.getCurrentDateOfTypeJavaSql(), contractorName));
+				System.out.println("Project Details:- "+ user.getSelectedGroup().getSelectedProject().toString());
+				break;
 			case 7:
 				if (!isUserPolitician) {
 					System.out.println("Wrong Option!");
 					break;
 				}
 			case 0:
-			default: 
+			default:
 				System.out.println("Wrong Option!");
 				break;
 
@@ -151,8 +171,6 @@ public class CommonFeatures {
 		}
 
 		System.out.println("\nCreated By:- " + createdBy);
-
-		
 
 		int choice = 0;
 		do {
@@ -187,10 +205,10 @@ public class CommonFeatures {
 	private static void viewComments(User user, PoliticalPartyServices politicalPartyServices) {
 		List<GroupComments> comments = politicalPartyServices
 				.viewComments(user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionId());
-		if(comments.isEmpty()) {
+		if (comments.isEmpty()) {
 			System.out.println("No comments posted in this discussion.");
 		}
-		
+
 		for (int i = 0; i < comments.size(); i++) {
 			System.out.println((i + 1) + ". " + comments.get(i).getCommentBody());
 			System.out.println("Posted By:- " + comments.get(i).getCommentPostedBy() + "\t On "

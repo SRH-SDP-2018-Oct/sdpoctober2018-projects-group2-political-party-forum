@@ -15,6 +15,10 @@ public class Helper {
 		return new Date(currentDate.getTime());
 	}
 
+	public static Date convertDateToSqlDate(java.util.Date date) {
+		return new Date(date.getTime());
+	}
+	
 	public static String generateHashPassword(String password) {
 		return BCrypt.hashpw(password, BCrypt.gensalt());
 	}

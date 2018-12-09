@@ -14,6 +14,7 @@ import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
+import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.ServiceNotFoundException;
 import com.politicalforum.providers.PoliticalPartyConnectionProvider;
@@ -418,6 +419,37 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			// TODO: handle exception
 		}
 		return comments;
+	}
+
+	@Override
+	public Group createProject(Group group, Project project) {
+		String groupProgressReportId = null;
+		try {
+			preparedStatement = connection.prepareStatement("insert into groupprogressreport(groupprogressreportid,workname,workbody,contractor,startdate,enddate,dateofcompletion,fund,groupdetailsid) values ('GPR'||groupprogress_sequence.nextval,?,?,?,?,?,?,?,?)");
+			preparedStatement.setString(1, project.getTaskName());
+			preparedStatement.setString(2, project.getTaskDescription());
+			preparedStatement.setString(3, project.getContractorName());
+			preparedStatement.setDate(4, project.getTaskStartDate());
+			preparedStatement.setDate(5, project.getTaskEndDate());
+			preparedStatement.setDate(6, project.getIntendedCompletionDate());
+			preparedStatement.setInt(7, project.getTaskAllocatedFund());
+			preparedStatement.setString(8, group.getGroupId());
+			preparedStatement.executeUpdate();
+			connection.commit();
+			preparedStatement.close();
+			preparedStatement = connection.prepareStatement("select max(groupprogressreportid) from groupprogressreport");
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()) 
+				groupProgressReportId = resultSet.getString(1);
+			project.setGroupProgressReportId(groupProgressReportId);
+			group.getProjects().add(project);
+			group.setSelectedProject(project);
+			return group;
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return null;
 	}
 
 }
