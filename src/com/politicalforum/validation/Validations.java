@@ -4,9 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validations {
-	public static final String ANSI_RED = "\u001B[31m";
-	public static final String ANSI_RESET = "\u001B[0m";
-
+	
 	public static final Pattern VALID_USER_NAME = Pattern.compile("^[A-Za-z, ]{1,10}$", Pattern.CASE_INSENSITIVE);
 	public static final Pattern VALID_EMAIL_ADDRESS = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
@@ -33,7 +31,7 @@ public class Validations {
 		Matcher matcher = VALID_EMAIL_ADDRESS.matcher(email);
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println(ANSI_RED + "\nPlease Enter Valid EmailID \n" + ANSI_RED);
+			System.out.println("\nPlease Enter Valid EmailID \n"  );
 		}
 		return flag;
 	}
@@ -42,8 +40,7 @@ public class Validations {
 		Matcher matcher = VALID_AGE_LIMIT.matcher(String.valueOf(age));
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println(ANSI_RED + "\n Please Enter Valid Age \n" + ANSI_RESET);
-			System.out.println("\033[0m BLABLA \033[0m\n");
+			System.out.println("\n Please Enter Valid Age \n");
 		}
 		return flag;
 	}
@@ -52,7 +49,7 @@ public class Validations {
 		Matcher matcher = VALID_AADHAR_LENGTH.matcher(aadhar);
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println(ANSI_RED + "\nPlease Enter Valid 12 Digit Aadhar Number \n" + ANSI_RED);
+			System.out.println("\nPlease Enter Valid 12 Digit Aadhar Number \n" );
 		}
 		return flag;
 	}
@@ -61,7 +58,7 @@ public class Validations {
 		Matcher matcher = VALID_POLITICALID_LENGTH.matcher(politicalId);
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println(ANSI_RED + "\n Please Enter Valid 6 Digit Political Number \n" + ANSI_RED);
+			System.out.println( "\n Please Enter Valid 6 Digit Political Number \n" );
 		}
 		return flag;
 	}
