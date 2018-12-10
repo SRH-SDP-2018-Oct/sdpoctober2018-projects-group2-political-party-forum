@@ -1,6 +1,5 @@
 package com.politicalforum.services;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,25 +8,27 @@ import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
-import com.politicalforum.exceptions.ServiceNotFoundException;
+import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.InvalidCredentialsException;
+import com.politicalforum.exceptions.UserAlreadyExistsException;
 
 public interface PoliticalPartyServices {
 
 	public User registerUserDetails(String firstName, String lastName, int age, String emailId, String gender,
 			String aadharNumber, Boolean isAnonymous, String region, String password)
-			throws ServiceNotFoundException, SQLException;
+			throws UserAlreadyExistsException;
 
 	public User registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId,
 			String gender, String politicianId, Boolean isAnonymous, String region, String password)
-			throws ServiceNotFoundException, SQLException;
+			throws UserAlreadyExistsException;
 
-	public User login(String emailId, String password) throws SQLException;
+	public User login(String emailId, String password) throws InvalidCredentialsException;
 
-	public User createGroup(String groupName, String groupDescription, User user);
+	public User createGroup(String groupName, String groupDescription, User user) throws GroupAlreadyExistException;
 
-	public List<Group> browseGroups() throws SQLException;
+	public List<Group> browseGroups();
 
-	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) throws SQLException;
+	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName);
 
 	public User joinGroup(User user, Group group);
 	

@@ -2,6 +2,8 @@ package com.politicalforum.main;
 
 import java.util.Scanner;
 
+import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.validation.Validations;
 
@@ -141,8 +143,13 @@ public class Registration {
 			default:
 				System.out.println("Wrong option!");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (UserAlreadyExistsException e) {
+			System.out.println(e.getMessage());
+		}
+		catch (GroupAlreadyExistException e) {
+			System.out.println(e.getMessage());
+			
+			//e.printStackTrace();
 		} finally {
 			sc.close();
 		}

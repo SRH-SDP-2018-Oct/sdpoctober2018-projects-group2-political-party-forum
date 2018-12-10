@@ -1,6 +1,5 @@
 package com.politicalforum.services;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,21 +12,24 @@ import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.daoServices.PoliticalPartyDAOServices;
+import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.InvalidCredentialsException;
 import com.politicalforum.exceptions.ServiceNotFoundException;
+import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.providers.PoliticalPartyDAOServicesProvider;
 import com.politicalforum.utils.Helper;
 
 public class PoliticalPartyServicesImplementation implements PoliticalPartyServices {
 	PoliticalPartyDAOServices politicalPartyDaoServices;
 
-	public PoliticalPartyServicesImplementation() throws ServiceNotFoundException {
+	public PoliticalPartyServicesImplementation() throws ServiceNotFoundException{
 		politicalPartyDaoServices = PoliticalPartyDAOServicesProvider.getPoliticalPartyDAOServicesImplementor();
 	}
 
 	@Override
 	public User registerUserDetails(String firstName, String lastName, int age, String emailId, String gender,
 			String aadharNumber, Boolean isAnonymous, String region, String password)
-			throws ServiceNotFoundException, SQLException {
+			throws UserAlreadyExistsException {
 		return politicalPartyDaoServices.insertUserDetails(new GeneralUser(firstName, lastName, age, emailId, gender,
 				isAnonymous, region, password, new ArrayList<>(), aadharNumber));
 	}
@@ -35,18 +37,18 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	@Override
 	public User registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId, String gender,
 			String politicianId, Boolean isAnonymous, String region, String password)
-			throws ServiceNotFoundException, SQLException {
+			throws UserAlreadyExistsException {
 		return politicalPartyDaoServices.insertPoliticalUserDetails(new PoliticalUser(firstName, lastName, age, emailId,
 				gender, isAnonymous, region, password, new ArrayList<>(), politicianId));
 	}
 
 	@Override
-	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) throws SQLException {
+	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) {
 		return politicalPartyDaoServices.checkIfGroupWithSimilarNameExists(groupName);
 	}
 
 	@Override
-	public User createGroup(String groupName, String groupDescription, User user) {
+	public User createGroup(String groupName, String groupDescription, User user)throws GroupAlreadyExistException {
 		if (Helper.checkIfUserIsPolitician(user.getUserId())) {
 			Group group = politicalPartyDaoServices.insertGroupDetails(
 					new Group(groupName, groupDescription, user.getUserId(), Helper.getCurrentDateOfTypeJavaSql()));
@@ -56,18 +58,18 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 				return user;
 			}
 		}
-		return null; // Throw Error
+		return user;
 	}
 
 	@Override
-	public User login(String emailId, String password) throws SQLException {
+	public User login(String emailId, String password) throws InvalidCredentialsException {
 		User user = politicalPartyDaoServices.getUser(emailId, password);
 		user.setGroups(politicalPartyDaoServices.getUserGroups(user.getUserId()));
 		return user;
 	}
 
 	@Override
-	public List<Group> browseGroups() throws SQLException {
+	public List<Group> browseGroups() {
 		return politicalPartyDaoServices.retrieveGroupDetails();
 	}
 
@@ -77,7 +79,7 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 			user.getGroups().add(group);
 			return user;
 		}
-		return null;
+		return user;
 	}
 
 	@Override

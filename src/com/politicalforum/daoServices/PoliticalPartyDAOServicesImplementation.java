@@ -16,7 +16,10 @@ import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
+import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.InvalidCredentialsException;
 import com.politicalforum.exceptions.ServiceNotFoundException;
+import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.providers.PoliticalPartyConnectionProvider;
 import com.politicalforum.utils.Helper;
 
@@ -31,7 +34,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public User insertUserDetails(GeneralUser user) throws SQLException {
+	public User insertUserDetails(GeneralUser user) throws UserAlreadyExistsException {
 		String userId = null;
 		String hashPassword = null;
 		try {
@@ -59,16 +62,13 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			preparedStatement.close();
-			resultSet.close();
+			throw new UserAlreadyExistsException("User already exist please try again with a different Email ID or Adhaar Card");
 		}
 		return getUserDetails(userId);
 	}
 
 	@Override
-	public PoliticalUser insertPoliticalUserDetails(PoliticalUser politicalUser) throws SQLException {
+	public PoliticalUser insertPoliticalUserDetails(PoliticalUser politicalUser) throws UserAlreadyExistsException {
 		String politicalUserId = null;
 		String hashPassword = null;
 		try {
@@ -98,16 +98,14 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			preparedStatement.close();
-			resultSet.close();
+			throw new UserAlreadyExistsException("User already exist please try again with a different Email or Political ID");
+
 		}
 		return getPoliticalUserDetails(politicalUserId);
 	}
 
 	@Override
-	public List<Group> checkIfGroupWithSimilarNameExists(String groupName) throws SQLException {
+	public List<Group> checkIfGroupWithSimilarNameExists(String groupName) {
 		List<Group> groups = new ArrayList<>();
 		try {
 			preparedStatement = connection
@@ -119,14 +117,12 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			resultSet.close();
 		}
 		return groups;
 	}
 
 	@Override
-	public Group insertGroupDetails(Group group) {
+	public Group insertGroupDetails(Group group)throws GroupAlreadyExistException {
 		String groupId = null;
 		try {
 			preparedStatement = connection.prepareStatement(
@@ -139,19 +135,21 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.close();
 			preparedStatement = connection.prepareStatement("select max(groupdetailsId) from groupdetails");
 			resultSet = preparedStatement.executeQuery();
-			if (resultSet.next()) 
+			if (resultSet.next())
 				groupId = resultSet.getString(1);
 			preparedStatement.close();
 			resultSet.close();
 			connection.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new GroupAlreadyExistException("This group already exists please create another group or join that group");
+			//e.printStackTrace();
 		}
-		return new Group(groupId, group.getGroupName(), group.getGroupDescription(), group.getGroupOwnerId(), group.getGroupCreationTime());
+		return new Group(groupId, group.getGroupName(), group.getGroupDescription(), group.getGroupOwnerId(),
+				group.getGroupCreationTime());
 	}
 
 	@Override
-	public User getUser(String emailId, String password) throws SQLException {
+	public User getUser(String emailId, String password) throws InvalidCredentialsException {
 		try {
 			connection.setAutoCommit(false);
 			String userId = getUserId(emailId);
@@ -161,9 +159,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 						: getUserDetails(userId);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			resultSet.close();
+			throw new InvalidCredentialsException(e);
 		}
 		return null;
 	}
@@ -187,17 +183,19 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		return false;
 	}
 
-	private String getUserId(String emailId) throws SQLException {
+	private String getUserId(String emailId) throws SQLException, InvalidCredentialsException {
 		preparedStatement = connection
 				.prepareStatement("select userid from userdetails where emailid='" + emailId + "'");
 		resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
 			return resultSet.getString(1);
+		} else {
+			throw new InvalidCredentialsException("This ID is not registered with us. Please register first.");
 		}
-		return null; // Throw User with this ID does not exists.
 	}
 
-	private User getUserDetails(String userId) throws SQLException {
+	private User getUserDetails(String userId) {
+		try {
 		preparedStatement = connection.prepareStatement("select * from userdetails where userid='" + userId + "'");
 		resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
@@ -212,28 +210,14 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			return new GeneralUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region,
 					new ArrayList<>(), aadharNumber);
 		}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
-//	private List<Group> getGroupDetails(String politicalUserId) {
-//		List<Group> groups = new ArrayList<>();
-//		try {
-//			preparedStatement = connection
-//					.prepareStatement("select * from groupdetails where userid='" + politicalUserId + "'");
-//			resultSet = preparedStatement.executeQuery();
-//			while (resultSet.next()) {
-//				groups.add(new Group(resultSet.getString("groupdetailsid"), resultSet.getString("groupdetailsname"),
-//						resultSet.getString("groupdetailsbody"), resultSet.getString("userid"),
-//						resultSet.getDate("dateofcreation")));
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return groups;
-//	}
-
-	private PoliticalUser getPoliticalUserDetails(String userId) throws SQLException {
+	private PoliticalUser getPoliticalUserDetails(String userId) {
+		try {
 		preparedStatement = connection.prepareStatement("select * from userdetails where userid='" + userId + "'");
 		resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
@@ -248,14 +232,18 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			return new PoliticalUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region,
 					new ArrayList<>(), politicianId);
 		}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
-	public List<Group> retrieveGroupDetails() throws SQLException {
+	public List<Group> retrieveGroupDetails() {
+		List<Group> group = new ArrayList<>();
+		try {
 		preparedStatement = connection.prepareStatement("select * from groupdetails");
 		resultSet = preparedStatement.executeQuery();
-		List<Group> group = new ArrayList<>();
 		while (resultSet.next()) {
 			String groupId = resultSet.getString(1);
 			String groupName = resultSet.getString(2);
@@ -264,16 +252,22 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			Date groupCreationTime = resultSet.getDate(5);
 			group.add(new Group(groupId, groupName, groupDescription, groupOwnerId, groupCreationTime));
 		}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return group;
 	}
 
-	private Boolean checkCredentialsForUser(String id, String password) throws SQLException {
+	private Boolean checkCredentialsForUser(String id, String password)
+			throws SQLException, InvalidCredentialsException {
 		resultSet = connection.prepareStatement("select hashpassword from usercredentials where userid='" + id + "'")
 				.executeQuery();
-		if (resultSet.next()) {
-			return Helper.isPasswordCorrect(password, resultSet.getString(1));
+		resultSet.next();
+		if(Helper.isPasswordCorrect(password, resultSet.getString(1))) {
+			return true;
+		} else {
+			throw new InvalidCredentialsException("Invalid Username/Password.");
 		}
-		return false; // Throw invalid password exception
 	}
 
 	@Override
@@ -284,7 +278,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 					"select groupdetailsid, groupdetailsname, groupdetailsbody, dateofcreation, userid from groupdetails where groupdetailsid in (select groupdetailsid from groupfollowers where userid='"
 							+ userId + "')");
 			resultSet = preparedStatement.executeQuery();
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				String groupId = resultSet.getString(1);
 				String groupName = resultSet.getString(2);
 				String groupDescription = resultSet.getString(3);
@@ -304,7 +298,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public Group createDiscussion(String userId, Group group, GroupDiscussion groupDiscussion) {
 		try {
 			String groupFollowersId = fetchGroupFollowerId(userId, group.getGroupId());
-			preparedStatement = connection.prepareStatement("insert into discussion(discussionid, discussionname, discussionbody, groupfollowersid, dateofdiscussion, groupdetailsid) values('D'||discussion_sequence.nextval,?,?,?,?,?)");
+			preparedStatement = connection.prepareStatement(
+					"insert into discussion(discussionid, discussionname, discussionbody, groupfollowersid, dateofdiscussion, groupdetailsid) values('D'||discussion_sequence.nextval,?,?,?,?,?)");
 			preparedStatement.setString(1, groupDiscussion.getGroupDiscussionName());
 			preparedStatement.setString(2, groupDiscussion.getGroupDiscussionBody());
 			preparedStatement.setString(3, groupFollowersId);
@@ -323,17 +318,16 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			e.printStackTrace();
 			// TODO: handle exception
 		}
-		
+
 		return null;
 	}
-	
-	
-	
+
 	private String fetchGroupFollowerId(String userId, String groupId) {
 		try {
-			preparedStatement = connection.prepareStatement("select groupfollowersid from groupfollowers where userid='"+userId+"' and groupdetailsid='"+groupId+"'");
+			preparedStatement = connection.prepareStatement("select groupfollowersid from groupfollowers where userid='"
+					+ userId + "' and groupdetailsid='" + groupId + "'");
 			resultSet = preparedStatement.executeQuery();
-			if(resultSet.next()) {
+			if (resultSet.next()) {
 				return resultSet.getString(1);
 			}
 		} catch (Exception e) {
@@ -347,15 +341,17 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public List<GroupDiscussion> fetchAllDiscussions(String groupId) {
 		List<GroupDiscussion> discussions = new ArrayList<>();
 		try {
-			preparedStatement = connection.prepareStatement("select * from discussion where groupdetailsid='"+groupId+"'");
+			preparedStatement = connection
+					.prepareStatement("select * from discussion where groupdetailsid='" + groupId + "'");
 			resultSet = preparedStatement.executeQuery();
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				String discussionId = resultSet.getString(1);
 				String discussionName = resultSet.getString(2);
 				String discussionBody = resultSet.getString(3);
 				String groupFollowersId = resultSet.getString(4);
 				Date dateOfDiscussion = resultSet.getDate("dateOfDiscussion");
-				discussions.add(new GroupDiscussion(discussionId, discussionName, discussionBody, dateOfDiscussion, groupFollowersId));
+				discussions.add(new GroupDiscussion(discussionId, discussionName, discussionBody, dateOfDiscussion,
+						groupFollowersId));
 			}
 			return discussions;
 		} catch (Exception e) {
@@ -369,14 +365,16 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public HashMap<String, Boolean> getPostedByDetails(String groupFollowersId) {
 		HashMap<String, Boolean> map = new HashMap<>();
 		try {
-			preparedStatement = connection.prepareStatement("select firstname, isanonymous from userdetails where userid in (select userid from groupfollowers where groupfollowersid='"+groupFollowersId+"')");
+			preparedStatement = connection.prepareStatement(
+					"select firstname, isanonymous from userdetails where userid in (select userid from groupfollowers where groupfollowersid='"
+							+ groupFollowersId + "')");
 			resultSet = preparedStatement.executeQuery();
-			if(resultSet.next()) {
-				map.put(resultSet.getString(1), Integer.parseInt(resultSet.getString(2))>0?true:false );
+			if (resultSet.next()) {
+				map.put(resultSet.getString(1), Integer.parseInt(resultSet.getString(2)) > 0 ? true : false);
 			}
 			return map;
 		} catch (Exception e) {
-			
+
 		}
 		return map;
 	}
@@ -384,11 +382,12 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public Boolean postComment(User user, String comment) {
 		try {
-			preparedStatement = connection.prepareStatement("insert into comments(commentsid,commentsbody,discussionid,dateofcomment,postedByName) values('C'||comments_sequence.nextval,?,?,?,?)");
+			preparedStatement = connection.prepareStatement(
+					"insert into comments(commentsid,commentsbody,discussionid,dateofcomment,postedByName) values('C'||comments_sequence.nextval,?,?,?,?)");
 			preparedStatement.setString(1, comment);
 			preparedStatement.setString(2, user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionId());
 			preparedStatement.setDate(3, Helper.getCurrentDateOfTypeJavaSql());
-			preparedStatement.setString(4, user.getIsAnonymous()?"Anonymous":user.getFirstName());
+			preparedStatement.setString(4, user.getIsAnonymous() ? "Anonymous" : user.getFirstName());
 			preparedStatement.executeQuery();
 			connection.commit();
 			preparedStatement.close();
@@ -404,9 +403,10 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public List<GroupComments> viewComments(String discussionId) {
 		List<GroupComments> comments = new ArrayList<>();
 		try {
-			preparedStatement = connection.prepareStatement("select * from comments where discussionid='"+discussionId+"'");
+			preparedStatement = connection
+					.prepareStatement("select * from comments where discussionid='" + discussionId + "'");
 			resultSet = preparedStatement.executeQuery();
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				String commentId = resultSet.getString("commentsid");
 				String commentBody = resultSet.getString("commentsbody");
 				Date commentCreationTime = resultSet.getDate("dateofcomment");
@@ -425,7 +425,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public Group createProject(Group group, Project project) {
 		String groupProgressReportId = null;
 		try {
-			preparedStatement = connection.prepareStatement("insert into groupprogressreport(groupprogressreportid,workname,workbody,contractor,startdate,enddate,dateofcompletion,fund,groupdetailsid) values ('GPR'||groupprogress_sequence.nextval,?,?,?,?,?,?,?,?)");
+			preparedStatement = connection.prepareStatement(
+					"insert into groupprogressreport(groupprogressreportid,workname,workbody,contractor,startdate,enddate,dateofcompletion,fund,groupdetailsid) values ('GPR'||groupprogress_sequence.nextval,?,?,?,?,?,?,?,?)");
 			preparedStatement.setString(1, project.getTaskName());
 			preparedStatement.setString(2, project.getTaskDescription());
 			preparedStatement.setString(3, project.getContractorName());
@@ -437,9 +438,10 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.executeUpdate();
 			connection.commit();
 			preparedStatement.close();
-			preparedStatement = connection.prepareStatement("select max(groupprogressreportid) from groupprogressreport");
+			preparedStatement = connection
+					.prepareStatement("select max(groupprogressreportid) from groupprogressreport");
 			resultSet = preparedStatement.executeQuery();
-			if(resultSet.next()) 
+			if (resultSet.next())
 				groupProgressReportId = resultSet.getString(1);
 			project.setGroupProgressReportId(groupProgressReportId);
 			group.getProjects().add(project);

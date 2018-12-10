@@ -1,6 +1,5 @@
 package com.politicalforum.daoServices;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,19 +10,22 @@ import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
+import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.InvalidCredentialsException;
+import com.politicalforum.exceptions.UserAlreadyExistsException;
 
 public interface PoliticalPartyDAOServices {
-	public User insertUserDetails(GeneralUser user) throws SQLException;
+	public User insertUserDetails(GeneralUser user) throws UserAlreadyExistsException;
 
-	public User insertPoliticalUserDetails(PoliticalUser politicalUser) throws SQLException;
+	public User insertPoliticalUserDetails(PoliticalUser politicalUser) throws UserAlreadyExistsException;
 
-	public List<Group> checkIfGroupWithSimilarNameExists(String groupName) throws SQLException;
+	public List<Group> checkIfGroupWithSimilarNameExists(String groupName);
 
-	public Group insertGroupDetails(Group group);
+	public Group insertGroupDetails(Group group)throws GroupAlreadyExistException;
 
-	public User getUser(String emailId, String password) throws SQLException;
+	public User getUser(String emailId, String password) throws InvalidCredentialsException;
 
-	public List<Group> retrieveGroupDetails() throws SQLException;
+	public List<Group> retrieveGroupDetails();
 	
 	Boolean addFollowerToAGroup(String userId, Group group);
 	

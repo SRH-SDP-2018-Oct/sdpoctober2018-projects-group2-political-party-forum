@@ -3,6 +3,7 @@ package com.politicalforum.main;
 import java.util.Scanner;
 
 import com.politicalforum.beans.User;
+import com.politicalforum.exceptions.InvalidCredentialsException;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.utils.Helper;
 
@@ -23,6 +24,8 @@ public class Login {
 			} else {
 				GeneralUserMenu.menu(user, politicalPartyServices);
 			}
+		} catch (InvalidCredentialsException e) {
+			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

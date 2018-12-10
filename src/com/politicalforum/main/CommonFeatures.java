@@ -1,6 +1,5 @@
 package com.politicalforum.main;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
@@ -20,7 +19,7 @@ public class CommonFeatures {
 
 	private static Scanner sc = new Scanner(System.in);
 
-	public static User joinGroup(User user, PoliticalPartyServices politicalPartyServices) throws SQLException {
+	public static User joinGroup(User user, PoliticalPartyServices politicalPartyServices) {
 		System.out.println("Available groups to join");
 		List<Group> groups = politicalPartyServices.browseGroups();
 		HashMap<Integer, Group> map = new HashMap<>();
@@ -44,19 +43,21 @@ public class CommonFeatures {
 	public static void myGroups(User user, PoliticalPartyServices politicalPartyServices) {
 		int choice = 0;
 		HashMap<Integer, Group> map = new HashMap<>();
-
 		System.out.println("\n********MY GROUPS*************");
-
-		for (int i = 0; i < user.getGroups().size(); i++) {
-			System.out.println((i + 1) + ". " + user.getGroups().get(i).getGroupName());
-			map.put((i + 1), user.getGroups().get(i));
+		if(user.getGroups().isEmpty()) {
+			System.out.println("\nYou haven't join any group.");
+			joinGroup(user, politicalPartyServices);
+		} else {
+			for (int i = 0; i < user.getGroups().size(); i++) {
+				System.out.println((i + 1) + ". " + user.getGroups().get(i).getGroupName());
+				map.put((i + 1), user.getGroups().get(i));
+			}
+			System.out.println("Your Choice:- ");
+			choice = sc.nextInt();
+			sc.nextLine();
+			user.setSelectedGroup(map.get(choice));
+			viewGroup(user, politicalPartyServices);
 		}
-		System.out.println("Your Choice:- ");
-		choice = sc.nextInt();
-		sc.nextLine();
-		user.setSelectedGroup(map.get(choice));
-		viewGroup(user, politicalPartyServices);
-
 	}
 
 	public static void viewGroup(User user, PoliticalPartyServices politicalPartyServices) {
