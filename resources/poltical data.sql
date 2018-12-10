@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Sunday-December-09-2018   
+--  File created - Monday-December-10-2018   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Sequence COMMENTS_SEQUENCE
@@ -30,7 +30,7 @@
 --  DDL for Sequence GROUPFOLLOWERS_SEQUENCE
 --------------------------------------------------------
 
-   CREATE SEQUENCE  "RAHUL"."GROUPFOLLOWERS_SEQUENCE"  MINVALUE 1 MAXVALUE 100000 INCREMENT BY 1 START WITH 160 CACHE 20 NOORDER  NOCYCLE ;
+   CREATE SEQUENCE  "RAHUL"."GROUPFOLLOWERS_SEQUENCE"  MINVALUE 1 MAXVALUE 100000 INCREMENT BY 1 START WITH 180 CACHE 20 NOORDER  NOCYCLE ;
 --------------------------------------------------------
 --  DDL for Sequence GROUPPROGRESS_SEQUENCE
 --------------------------------------------------------
@@ -65,12 +65,12 @@
 --  DDL for Sequence POLL_SEQUENCE
 --------------------------------------------------------
 
-   CREATE SEQUENCE  "RAHUL"."POLL_SEQUENCE"  MINVALUE 1 MAXVALUE 100000 INCREMENT BY 1 START WITH 100 CACHE 20 NOORDER  NOCYCLE ;
+   CREATE SEQUENCE  "RAHUL"."POLL_SEQUENCE"  MINVALUE 1 MAXVALUE 100000 INCREMENT BY 1 START WITH 120 CACHE 20 NOORDER  NOCYCLE ;
 --------------------------------------------------------
 --  DDL for Sequence USER_SEQUENCE
 --------------------------------------------------------
 
-   CREATE SEQUENCE  "RAHUL"."USER_SEQUENCE"  MINVALUE 1 MAXVALUE 100000 INCREMENT BY 1 START WITH 1314 CACHE 20 NOORDER  NOCYCLE ;
+   CREATE SEQUENCE  "RAHUL"."USER_SEQUENCE"  MINVALUE 1 MAXVALUE 100000 INCREMENT BY 1 START WITH 1334 CACHE 20 NOORDER  NOCYCLE ;
 --------------------------------------------------------
 --  DDL for Table COMMENTS
 --------------------------------------------------------
@@ -134,14 +134,14 @@
 --------------------------------------------------------
 
   CREATE TABLE "RAHUL"."GROUPPROGRESSREPORT" 
-   (	"GROUPPROGRESSREPORTID" NUMBER, 
+   (	"GROUPPROGRESSREPORTID" VARCHAR2(50 BYTE), 
 	"WORKNAME" VARCHAR2(255 BYTE), 
 	"WORKBODY" LONG, 
 	"CONTRACTOR" VARCHAR2(255 BYTE), 
 	"STARTDATE" DATE, 
 	"ENDDATE" DATE, 
 	"DATEOFCOMPLETION" DATE, 
-	"FUND" VARCHAR2(255 BYTE), 
+	"FUND" NUMBER, 
 	"REPORTDATE" DATE, 
 	"DATEOFREPORT" DATE, 
 	"GROUPDETAILSID" VARCHAR2(50 BYTE)

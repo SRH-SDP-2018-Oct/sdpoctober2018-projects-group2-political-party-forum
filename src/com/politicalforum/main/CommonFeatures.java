@@ -10,6 +10,7 @@ import java.util.Scanner;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
+import com.politicalforum.beans.Poll;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.services.PoliticalPartyServices;
@@ -101,6 +102,38 @@ public class CommonFeatures {
 				politicalPartyServices.createDiscussion(user, groupDiscussionName, groupDiscussionBody);
 				break;
 			case 5:
+				System.out.println("****************Poll*****************");
+				System.out.println("Enter Poll Name :");
+				String pollName = sc.nextLine();
+				System.out.println("\n\n 1.Two Option\n 2.Three");
+				System.out.println("Number of Options ? 2 or 3 :");
+				int numberOfOptions = sc.nextInt();
+				sc.nextLine();
+				String optionOne = null;
+				String optionTwo = null;
+				String optionThree = null;
+				switch (numberOfOptions) {
+				case 1:
+					System.out.println("Enter Option One");
+					optionOne = sc.nextLine();
+					System.out.println("Enter Option Two");
+					optionTwo = sc.nextLine();
+					break;
+				case 2:
+					System.out.println("Enter Option One");
+					optionOne = sc.nextLine();
+					System.out.println("Enter Option Two");
+					optionTwo = sc.nextLine();
+					System.out.println("Enter Option Three");
+					optionThree = sc.nextLine();
+					break;
+				default:
+					System.out.println("Wrong option!");
+				}
+				user = politicalPartyServices.CreatePoll(user, new Poll(pollName, Helper.getCurrentDateOfTypeJavaSql(), optionOne, optionTwo, optionThree, user.getUserId(), user.getSelectedGroup().getGroupId(), user.getSelectedGroup().getGroupFollowersId()));
+				System.out.println("Poll created:- "+ user.getSelectedGroup().getSelectedPoll().toString());
+				break;
+
 			case 6:
 				if (!isUserPolitician) {
 					System.out.println("Wrong Option!");
@@ -137,7 +170,7 @@ public class CommonFeatures {
 				user = politicalPartyServices.createProject(user,
 						new Project(taskName, taskStartDate, taskEndDate, intendedCompletionDate, taskDescription,
 								taskAllocatedFund, Helper.getCurrentDateOfTypeJavaSql(), contractorName));
-				System.out.println("Project Details:- "+ user.getSelectedGroup().getSelectedProject().toString());
+				System.out.println("Project Details:- " + user.getSelectedGroup().getSelectedProject().toString());
 				break;
 			case 7:
 				if (!isUserPolitician) {

@@ -14,6 +14,7 @@ import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
+import com.politicalforum.beans.Poll;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
@@ -454,4 +455,35 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		return null;
 	}
 
+	@Override
+	public Group createPoll(String userId, Group group, Poll poll) {
+		try {
+			String groupFollowersId = fetchGroupFollowerId(userId, group.getGroupId());
+			preparedStatement = connection.prepareStatement(
+					"insert into poll(pollid, polltopic, dateofpoll, option1, option2, option3, userid, groupdetailsid, groupfollowersid ) values('POLL' || POLL_SEQUENCE.nextval,?,?,?,?,?,?,?,?)");
+			preparedStatement.setString(1, poll.getPollTopic());
+			preparedStatement.setDate(2, Helper.getCurrentDateOfTypeJavaSql());
+			preparedStatement.setString(3, poll.getOption1());
+			preparedStatement.setString(4, poll.getOption2());
+			preparedStatement.setString(5, poll.getOption3());
+			preparedStatement.setString(6, userId);
+			preparedStatement.setString(7, group.getGroupId());
+			preparedStatement.setString(8, groupFollowersId);
+			preparedStatement.execute();
+			connection.commit();
+			preparedStatement = connection.prepareStatement("select max(pollid) from poll");
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			String pollId = resultSet.getString(1);
+			poll.setPollId(pollId);
+			group.getPolls().add(poll);
+			group.setSelectedPoll(poll);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return group;
+
+	}
 }

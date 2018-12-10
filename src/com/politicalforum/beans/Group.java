@@ -15,6 +15,24 @@ public class Group {
 	private GroupDiscussion selectedGroupDiscussion;
 	private String groupFollowersId;
 	private List<Project> projects = new ArrayList<>();
+	public List<Poll> getPolls() {
+		return polls;
+	}
+
+	public void setPolls(List<Poll> polls) {
+		this.polls = polls;
+	}
+
+	public Poll getSelectedPoll() {
+		return selectedPoll;
+	}
+
+	public void setSelectedPoll(Poll selectedPoll) {
+		this.selectedPoll = selectedPoll;
+	}
+
+	private List<Poll> polls = new ArrayList<>();
+	private Poll selectedPoll;
 	private Project selectedProject;
 	
 	public Group() {

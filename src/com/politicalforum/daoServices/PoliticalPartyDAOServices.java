@@ -8,6 +8,7 @@ import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
+import com.politicalforum.beans.Poll;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
@@ -42,5 +43,7 @@ public interface PoliticalPartyDAOServices {
 	public List<GroupComments> viewComments(String discussionId);
 
 	public Group createProject(Group group, Project project);
+	
+	public Group createPoll(String userId, Group group, Poll poll);
 	
 }

@@ -9,6 +9,7 @@ import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
+import com.politicalforum.beans.Poll;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.daoServices.PoliticalPartyDAOServices;
@@ -114,6 +115,18 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public User createProject(User user, Project project) {
 		user.setSelectedGroup(politicalPartyDaoServices.createProject(user.getSelectedGroup(), project));
 		return user; 
+	}
+
+	@Override
+	public User CreatePoll(User user, Poll poll) {
+		user.setSelectedGroup(politicalPartyDaoServices.createPoll(user.getUserId(), user.getSelectedGroup(), poll));
+		return user;
+	}
+
+	@Override
+	public User AnswerPoll(User user, Poll poll) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

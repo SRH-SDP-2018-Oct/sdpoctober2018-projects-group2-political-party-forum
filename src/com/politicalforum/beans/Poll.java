@@ -1,76 +1,107 @@
 package com.politicalforum.beans;
 
+import java.sql.Date;
+
 public class Poll {
-	private int pollId;
-	private String pollName;
-	private String pollOption;
-	private String pollAnswer;
-	private String pollCreationTime;
 
-	public Poll() {
-	}
-
-	public Poll(int pollId, String pollName, String pollOption, String pollAnswer, String pollCreationTime) {
+	private String pollId;
+	private String pollTopic;
+	private Date dateOfPoll ;
+	private String option1;
+	private String option2;
+	private String option3;
+	private String userId;
+	private String GroupDetailsId;
+	private String GroupFollowersId;
+	
+	public Poll(String pollId, String pollTopic, Date dateOfPoll, String option1, String option2, String option3,
+			String userId, String groupDetailsId, String groupFollowersId) {
 		super();
 		this.pollId = pollId;
-		this.pollName = pollName;
-		this.pollOption = pollOption;
-		this.pollAnswer = pollAnswer;
-		this.pollCreationTime = pollCreationTime;
+		this.pollTopic = pollTopic;
+		this.dateOfPoll = dateOfPoll;
+		this.option1 = option1;
+		this.option2 = option2;
+		this.option3 = option3;
+		this.userId = userId;
+		GroupDetailsId = groupDetailsId;
+		GroupFollowersId = groupFollowersId;
 	}
-
-	public Poll(String pollName, String pollOption, String pollAnswer, String pollCreationTime) {
+	public Poll(String pollTopic, Date dateOfPoll, String option1, String option2, String option3, String userId,
+			String groupDetailsId, String groupFollowersId) {
 		super();
-		this.pollName = pollName;
-		this.pollOption = pollOption;
-		this.pollAnswer = pollAnswer;
-		this.pollCreationTime = pollCreationTime;
+		this.pollTopic = pollTopic;
+		this.dateOfPoll = dateOfPoll;
+		this.option1 = option1;
+		this.option2 = option2;
+		this.option3 = option3;
+		this.userId = userId;
+		GroupDetailsId = groupDetailsId;
+		GroupFollowersId = groupFollowersId;
 	}
-
-	public int getPollId() {
+	public String getPollId() {
 		return pollId;
 	}
-
-	public void setPollId(int pollId) {
+	public void setPollId(String pollId) {
 		this.pollId = pollId;
 	}
-
-	public String getPollName() {
-		return pollName;
+	public String getPollTopic() {
+		return pollTopic;
 	}
-
-	public void setPollName(String pollName) {
-		this.pollName = pollName;
+	public void setPollTopic(String pollTopic) {
+		this.pollTopic = pollTopic;
 	}
-
-	public String getPollOption() {
-		return pollOption;
+	public Date getDateOfPoll() {
+		return dateOfPoll;
 	}
-
-	public void setPollOption(String pollOption) {
-		this.pollOption = pollOption;
+	public void setDateOfPoll(Date dateOfPoll) {
+		this.dateOfPoll = dateOfPoll;
 	}
-
-	public String getPollAnswer() {
-		return pollAnswer;
+	public String getOption1() {
+		return option1;
 	}
-
-	public void setPollAnswer(String pollAnswer) {
-		this.pollAnswer = pollAnswer;
+	public void setOption1(String option1) {
+		this.option1 = option1;
 	}
-
-	public String getPollCreationTime() {
-		return pollCreationTime;
+	public String getOption2() {
+		return option2;
 	}
-
-	public void setPollCreationTime(String pollCreationTime) {
-		this.pollCreationTime = pollCreationTime;
+	public void setOption2(String option2) {
+		this.option2 = option2;
 	}
-
+	public String getOption3() {
+		return option3;
+	}
+	public void setOption3(String option3) {
+		this.option3 = option3;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getGroupDetailsId() {
+		return GroupDetailsId;
+	}
+	public void setGroupDetailsId(String groupDetailsId) {
+		GroupDetailsId = groupDetailsId;
+	}
+	public String getGroupFollowersId() {
+		return GroupFollowersId;
+	}
+	public void setGroupFollowersId(String groupFollowersId) {
+		GroupFollowersId = groupFollowersId;
+	}
 	@Override
 	public String toString() {
-		return "Poll [pollId=" + pollId + ", pollName=" + pollName + ", pollOption=" + pollOption + ", pollAnswer="
-				+ pollAnswer + ", pollCreationTime=" + pollCreationTime + "]";
+		return "Poll [pollId=" + pollId + ", pollTopic=" + pollTopic + ", dateOfPoll=" + dateOfPoll + ", option1="
+				+ option1 + ", option2=" + option2 + ", option3=" + option3 + ", userId=" + userId + ", GroupDetailsId="
+				+ GroupDetailsId + ", GroupFollowersId=" + GroupFollowersId + "]";
 	}
 
+	
+	
 }
+
+	

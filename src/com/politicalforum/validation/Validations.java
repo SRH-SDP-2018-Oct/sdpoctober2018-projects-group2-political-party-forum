@@ -22,7 +22,7 @@ public class Validations {
 		Matcher matcher = VALID_USER_NAME.matcher(name);
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println("\nPlease Enter Name \n");
+			System.err.println("\nPlease Enter Name \n");
 		}
 		return flag;
 	}
@@ -31,7 +31,7 @@ public class Validations {
 		Matcher matcher = VALID_EMAIL_ADDRESS.matcher(email);
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println("\nPlease Enter Valid EmailID \n"  );
+			System.err.println("\nPlease Enter Valid EmailID \n");
 		}
 		return flag;
 	}
@@ -40,7 +40,7 @@ public class Validations {
 		Matcher matcher = VALID_AGE_LIMIT.matcher(String.valueOf(age));
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println("\n Please Enter Valid Age \n");
+			System.err.println("\n Please Enter Valid Age \n");
 		}
 		return flag;
 	}
@@ -49,7 +49,7 @@ public class Validations {
 		Matcher matcher = VALID_AADHAR_LENGTH.matcher(aadhar);
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println("\nPlease Enter Valid 12 Digit Aadhar Number \n" );
+			System.err.println("\nPlease Enter Valid 12 Digit Aadhar Number \n" );
 		}
 		return flag;
 	}
@@ -58,7 +58,7 @@ public class Validations {
 		Matcher matcher = VALID_POLITICALID_LENGTH.matcher(politicalId);
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println( "\n Please Enter Valid 6 Digit Political Number \n" );
+			System.err.println( "\n Please Enter Valid 6 Digit Political Number \n" );
 		}
 		return flag;
 	}
@@ -67,7 +67,7 @@ public class Validations {
 		Matcher matcher = VALID_GENDER.matcher(gender);
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println("Please Enter Correct Gender");
+			System.err.println("Please Enter Correct Gender");
 		}
 		return flag;
 	}
@@ -76,7 +76,7 @@ public class Validations {
 		Matcher matcher = VALID_USER_REGION.matcher(region);
 		boolean flag = matcher.find();
 		if (!flag) {
-			System.out.println("\nPlease Enter Correct Region \n");
+			System.err.println("\nPlease Enter Correct Region \n");
 		}
 		return flag;
 	}
@@ -85,7 +85,7 @@ public class Validations {
 //		Matcher matcher = VALID_PASSWORD.matcher(password);
 //		boolean flag = matcher.find();
 //		if (!flag) {
-//			System.out.println("\n Please Enter 4 Didit Password");
+//			System.err.println("\n Please Enter 4 Didit Password");
 //		}
 //		return flag;
 //	}

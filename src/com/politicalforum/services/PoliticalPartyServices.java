@@ -6,6 +6,7 @@ import java.util.List;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
+import com.politicalforum.beans.Poll;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
@@ -44,4 +45,7 @@ public interface PoliticalPartyServices {
 	
 	public User createProject(User user, Project project);
 	
+	public User CreatePoll(User user, Poll poll);
+	
+	public User AnswerPoll(User user, Poll poll);
 }
