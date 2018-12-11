@@ -16,36 +16,43 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
-import java.sql.SQLException;
-
-
 public class PoliticalPartyServicesTest {
 
 	private static PoliticalPartyServices politicalServices;
-	private static User generalUser, politicalUser;
+	private static User politicalUser;
+
 	@BeforeClass
 	public static void setConnectionsBeforeAll() throws ServiceNotFoundException {
 		politicalServices = new PoliticalPartyServicesImplementation();
 	}
-	
+
 	@Test
-	public void testRegisterUserDetails() throws ServiceNotFoundException, UserAlreadyExistsException {
-		generalUser = politicalServices.registerUserDetails("asd", "cc", 25, "ak1@ada", "M", "17723", false, "aaa", "abc");
-		assertThat(generalUser.getUserId(), StringStartsWith.startsWith("U"));
+	public void testRegisterPoliticalUserDetails1() throws ServiceNotFoundException, UserAlreadyExistsException {
+		politicalUser = politicalServices.registerPoliticalUserDetails("mm", "bal", 25, "ac@j.com", "M", "126545", false,
+				"kol", "qweruz");
+		assertThat(politicalUser.getUserId(), StringStartsWith.startsWith("P"));
+	}
+
+	@Test
+	public void testlogin() throws InvalidCredentialsException {
+		assertThat(politicalServices.login("ac@j.com", "qweruz").getUserId(), StringStartsWith.startsWith("P"));
+	}
+
+	@Test
+	public void testCreateGroup() throws GroupAlreadyExistException {
+		politicalUser = politicalServices.createGroup("tm", "hum tum", politicalUser);
+		assertFalse(politicalUser.getGroups().isEmpty());
 	}
     @Test
     public void testRegisterPoliticalUserDetails() throws ServiceNotFoundException, UserAlreadyExistsException {
     	politicalUser = politicalServices.registerPoliticalUserDetails("mm", "bal", 25, "ac@hj", "M", "1245", false, "kol", "qweruz");
     	assertThat(politicalUser.getUserId(), StringStartsWith.startsWith("P"));
     }
-    @Test
-    public void testlogin() throws InvalidCredentialsException {
-    	assertThat(politicalServices.login("ak1@ada", "abc").getUserId(), StringStartsWith.startsWith("U")); 
-    }
+
     @Test
     public void testcreateGroup() throws GroupAlreadyExistException {
     	
-    	assertNull(politicalServices.createGroup("bjp", "the party", generalUser));
+    	assertNull(politicalServices.createGroup("bjp", "the party", politicalUser));
         assertFalse(politicalServices.createGroup("bjp", "the party", politicalUser).getGroups().isEmpty());
     }
     @Test
@@ -56,6 +63,4 @@ public class PoliticalPartyServicesTest {
     public void testcheckIfGroupExistsWithSimilarNames() {
     	assertFalse(politicalServices.checkIfGroupExistsWithSimilarNames("bjp").isEmpty()); 
     }
-    
 }
-
