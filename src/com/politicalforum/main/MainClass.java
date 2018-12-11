@@ -34,6 +34,7 @@ public class MainClass {
 					break;
 				default:
 					System.out.println("Wrong option! Select Again.");
+					break;
 				}
 			} catch (ServiceNotFoundException e) {
 				System.out.println(e.getMessage());
