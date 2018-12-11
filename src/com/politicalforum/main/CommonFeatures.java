@@ -15,6 +15,10 @@ public class CommonFeatures {
 	public static User joinGroup(User user, PoliticalPartyServices politicalPartyServices) {
 		System.out.println("Available groups to join");
 		List<Group> groups = politicalPartyServices.browseGroups();
+		if(groups.isEmpty()) {
+			System.out.println("No groups are available to join at the moment.");
+			return;
+		}
 		HashMap<Integer, Group> map = new HashMap<>();
 		for (int i = 0; i < groups.size(); i++) {
 			map.put((i + 1), groups.get(i));
