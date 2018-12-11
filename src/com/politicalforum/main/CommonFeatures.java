@@ -12,7 +12,7 @@ public class CommonFeatures {
 
 	private static Scanner sc = new Scanner(System.in);
 
-	public static User joinGroup(User user, PoliticalPartyServices politicalPartyServices) {
+	public static void joinGroup(User user, PoliticalPartyServices politicalPartyServices) {
 		System.out.println("Available groups to join");
 		List<Group> groups = politicalPartyServices.browseGroups();
 		if(groups.isEmpty()) {
@@ -33,8 +33,6 @@ public class CommonFeatures {
 			System.out.println(user.getSelectedGroup().getGroupName() + " Group joined");
 			GroupFeatures.viewGroup(user, politicalPartyServices);
 		}
-
-		return user;
 	}
 
 	public static void myGroups(User user, PoliticalPartyServices politicalPartyServices) {
