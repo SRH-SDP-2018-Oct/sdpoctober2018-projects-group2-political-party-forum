@@ -39,6 +39,5 @@ public class MainClass {
 				System.out.println(e.getMessage());
 			}
 		} while (choice != 3);
-		sc.close();
 	}
 }
