@@ -17,7 +17,7 @@ public class PoliticalUserMenu {
 			throws UserAlreadyExistsException, GroupAlreadyExistException {
 		int choice = 0;
 		do {
-			System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Browse Groups\n\n3.My Groups\n\n4.Logout");
+			System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Browse Groups\n\n3.My Groups\n\n4.Logout\n");
 			System.out.println("Enter Option:- ");
 			choice = sc.nextInt();
 			sc.nextLine();
@@ -44,7 +44,7 @@ public class PoliticalUserMenu {
 					user = politicalPartyServices.joinGroup(user, similarGroups.get(groupNumber));
 					user.setSelectedGroup(user.getGroups().get(user.getGroups().size() - 1));
 					System.out.println(user.getSelectedGroup().getGroupName() + " Group joined");
-					CommonFeatures.viewGroup(user, politicalPartyServices);
+					GroupFeatures.viewGroup(user, politicalPartyServices);
 				}
 
 				break;

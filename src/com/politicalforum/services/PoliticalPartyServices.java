@@ -1,5 +1,6 @@
 package com.politicalforum.services;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,4 +49,12 @@ public interface PoliticalPartyServices {
 	public User CreatePoll(User user, Poll poll);
 	
 	public User AnswerPoll(User user, Poll poll);
+	
+	public Boolean checkIfUserIsGroupOwner(String userId, String groupId);
+	
+	public List<Project> viewProjects(String groupId);
+	
+	public Group updateProject(Group group, Date newEndDate, String newContractorName);
+	
+	public void exit();
 }

@@ -56,6 +56,6 @@ public class PoliticalPartyServicesTest {
     public void testcheckIfGroupExistsWithSimilarNames() {
     	assertFalse(politicalServices.checkIfGroupExistsWithSimilarNames("bjp").isEmpty()); 
     }
-    }
+    
 }
 

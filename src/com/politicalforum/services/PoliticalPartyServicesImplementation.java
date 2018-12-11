@@ -1,5 +1,6 @@
 package com.politicalforum.services;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -127,6 +128,26 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public User AnswerPoll(User user, Poll poll) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void exit() {
+		politicalPartyDaoServices.closeServices();
+	}
+
+	@Override
+	public Boolean checkIfUserIsGroupOwner(String userId, String groupId) {
+		return politicalPartyDaoServices.getIfUserIsGroupOwner(userId, groupId);
+	}
+
+	@Override
+	public List<Project> viewProjects(String groupId) {
+		return politicalPartyDaoServices.viewProjects(groupId);
+	}
+
+	@Override
+	public Group updateProject(Group group, Date newEndDate, String newContractorName) {
+		return politicalPartyDaoServices.updateProject(group, newEndDate, newContractorName);
 	}
 
 }

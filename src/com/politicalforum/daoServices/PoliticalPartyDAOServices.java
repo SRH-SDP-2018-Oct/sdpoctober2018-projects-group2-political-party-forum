@@ -1,5 +1,6 @@
 package com.politicalforum.daoServices;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,5 +46,13 @@ public interface PoliticalPartyDAOServices {
 	public Group createProject(Group group, Project project);
 	
 	public Group createPoll(String userId, Group group, Poll poll);
+
+	public Boolean getIfUserIsGroupOwner(String userId, String groupId);
+	
+	public List<Project> viewProjects(String groupId);
+	
+	public Group updateProject(Group group, Date newEndDate, String newContractorName);
+	
+	public void closeServices();
 	
 }

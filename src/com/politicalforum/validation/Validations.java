@@ -1,5 +1,6 @@
 package com.politicalforum.validation;
 
+import java.sql.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -81,6 +82,14 @@ public class Validations {
 		return flag;
 	}
 
+	public static boolean validateIfDateToCompareIsGreater(Date toCompare, Date with) {
+		if(toCompare.after(with)) {
+			return false;
+		}
+		System.err.println("Date should be greater than current date/project end date.");
+		return true;
+	}
+	
 //	public static boolean validatePassword(String password) {
 //		Matcher matcher = VALID_PASSWORD.matcher(password);
 //		boolean flag = matcher.find();
