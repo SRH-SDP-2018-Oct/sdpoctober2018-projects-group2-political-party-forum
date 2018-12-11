@@ -48,9 +48,9 @@ public interface PoliticalPartyServices {
 	
 	public User createProject(User user, Project project);
 	
-	public User CreatePoll(User user, Poll poll);
+	public User createPoll(User user, Poll poll);
 	
-	public User AnswerPoll(User user, Poll poll);
+	public User answerPoll(User user, Poll poll);
 	
 	public Boolean checkIfUserIsGroupOwner(String userId, String groupId);
 	
@@ -58,5 +58,6 @@ public interface PoliticalPartyServices {
 	
 	public Group updateProject(Group group, Date newEndDate, String newContractorName);
 	
+	public List<Poll> listPolls(String groupId);
 	public void exit();
 }

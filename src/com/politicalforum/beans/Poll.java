@@ -11,11 +11,11 @@ public class Poll {
 	private String option2;
 	private String option3;
 	private String userId;
-	private String GroupDetailsId;
-	private String GroupFollowersId;
+	private String groupDetailsId;
+	private String groupFollowersId;
 	
 	public Poll(String pollId, String pollTopic, Date dateOfPoll, String option1, String option2, String option3,
-			String userId, String groupDetailsId, String groupFollowersId) {
+			String userId, String groupDetailsId) {
 		super();
 		this.pollId = pollId;
 		this.pollTopic = pollTopic;
@@ -24,11 +24,10 @@ public class Poll {
 		this.option2 = option2;
 		this.option3 = option3;
 		this.userId = userId;
-		GroupDetailsId = groupDetailsId;
-		GroupFollowersId = groupFollowersId;
+		this.groupDetailsId = groupDetailsId;
 	}
 	public Poll(String pollTopic, Date dateOfPoll, String option1, String option2, String option3, String userId,
-			String groupDetailsId, String groupFollowersId) {
+			String groupDetailsId) {
 		super();
 		this.pollTopic = pollTopic;
 		this.dateOfPoll = dateOfPoll;
@@ -36,8 +35,7 @@ public class Poll {
 		this.option2 = option2;
 		this.option3 = option3;
 		this.userId = userId;
-		GroupDetailsId = groupDetailsId;
-		GroupFollowersId = groupFollowersId;
+		this.groupDetailsId = groupDetailsId;
 	}
 	public String getPollId() {
 		return pollId;
@@ -82,22 +80,22 @@ public class Poll {
 		this.userId = userId;
 	}
 	public String getGroupDetailsId() {
-		return GroupDetailsId;
+		return this.groupDetailsId;
 	}
 	public void setGroupDetailsId(String groupDetailsId) {
-		GroupDetailsId = groupDetailsId;
+		this.groupDetailsId = groupDetailsId;
 	}
 	public String getGroupFollowersId() {
-		return GroupFollowersId;
+		return this.groupFollowersId;
 	}
 	public void setGroupFollowersId(String groupFollowersId) {
-		GroupFollowersId = groupFollowersId;
+		this.groupFollowersId = groupFollowersId;
 	}
 	@Override
 	public String toString() {
 		return "Poll [pollId=" + pollId + ", pollTopic=" + pollTopic + ", dateOfPoll=" + dateOfPoll + ", option1="
 				+ option1 + ", option2=" + option2 + ", option3=" + option3 + ", userId=" + userId + ", GroupDetailsId="
-				+ GroupDetailsId + ", GroupFollowersId=" + GroupFollowersId + "]";
+				+ groupDetailsId + ", GroupFollowersId=" + groupFollowersId + "]";
 	}
 
 	

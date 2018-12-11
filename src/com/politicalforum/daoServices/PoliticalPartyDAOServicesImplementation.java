@@ -572,4 +572,28 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		}
 		return group;
 	}
+
+	@Override
+	public List<Poll> viewPolls(String groupId) {
+		List<Poll> polls = new ArrayList<>();
+		try {
+			preparedStatement = connection.prepareStatement("select * from poll where groupdetailsid='"+groupId+"'");
+			resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				String pollId = resultSet.getString("POLLID");
+				String pollTopic = resultSet.getString("POLLTOPIC");
+				Date dateOfPoll = resultSet.getDate("DATEOFPOLL");
+				String option1 = resultSet.getString("OPTION1");
+				String option2 = resultSet.getString("OPTION2");
+				String option3 = resultSet.getString("OPTION3");
+				String userId = resultSet.getString("USERID");		
+				polls.add(new Poll(pollId, pollTopic, dateOfPoll, option1, option2, option3, userId, groupId));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return polls;
+	}
 }

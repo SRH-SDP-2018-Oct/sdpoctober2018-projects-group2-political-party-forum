@@ -35,6 +35,7 @@ public class GroupFeatures {
 					DiscussionFeatures.listAndSelectDiscussion(user, politicalPartyServices);
 					break;
 				case 2: // View Polls
+					PollFeatures.listPolls(user, politicalPartyServices);
 					break;
 				case 3: // View Projects
 					ProjectFeatures.listProjects(user, politicalPartyServices, isUserPoliticianAndGroupOwner);
@@ -43,42 +44,8 @@ public class GroupFeatures {
 					DiscussionFeatures.createDiscussion(user, politicalPartyServices);
 					break;
 				case 5: // Create Polls
-					System.out.println("****************Poll*****************");
-					System.out.println("Enter Poll Name :");
-					String pollName = sc.nextLine();
-					System.out.println("\n\n 1.Two Option\n 2.Three");
-					System.out.println("Number of Options ? 2 or 3 :");
-					int numberOfOptions = sc.nextInt();
-					sc.nextLine();
-					String optionOne = null;
-					String optionTwo = null;
-					String optionThree = null;
-					switch (numberOfOptions) {
-					case 1:
-						System.out.println("Enter Option One");
-						optionOne = sc.nextLine();
-						System.out.println("Enter Option Two");
-						optionTwo = sc.nextLine();
-						break;
-					case 2:
-						System.out.println("Enter Option One");
-						optionOne = sc.nextLine();
-						System.out.println("Enter Option Two");
-						optionTwo = sc.nextLine();
-						System.out.println("Enter Option Three");
-						optionThree = sc.nextLine();
-						break;
-					default:
-						System.out.println("Wrong option!");
-						break;
-					}
-					user = politicalPartyServices.CreatePoll(user,
-							new Poll(pollName, Helper.getCurrentDateOfTypeJavaSql(), optionOne, optionTwo, optionThree,
-									user.getUserId(), user.getSelectedGroup().getGroupId(),
-									user.getSelectedGroup().getGroupFollowersId()));
-					System.out.println("Poll created:- " + user.getSelectedGroup().getSelectedPoll().toString());
+					PollFeatures.createPoll(user, politicalPartyServices);
 					break;
-
 				case 6: // Create Project
 					if (!isUserPoliticianAndGroupOwner) {
 						System.out.println("Wrong Option!");

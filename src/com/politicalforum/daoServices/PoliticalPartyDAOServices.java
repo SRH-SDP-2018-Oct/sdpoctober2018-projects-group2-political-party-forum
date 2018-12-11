@@ -55,6 +55,8 @@ public interface PoliticalPartyDAOServices {
 	
 	public Group updateProject(Group group, Date newEndDate, String newContractorName);
 	
+	public List<Poll> viewPolls(String groupId);
+	
 	public void closeServices();
 	
 }

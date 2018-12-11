@@ -126,13 +126,13 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	}
 
 	@Override
-	public User CreatePoll(User user, Poll poll) {
+	public User createPoll(User user, Poll poll) {
 		user.setSelectedGroup(politicalPartyDaoServices.createPoll(user.getUserId(), user.getSelectedGroup(), poll));
 		return user;
 	}
 
 	@Override
-	public User AnswerPoll(User user, Poll poll) {
+	public User answerPoll(User user, Poll poll) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -155,6 +155,11 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	@Override
 	public Group updateProject(Group group, Date newEndDate, String newContractorName) {
 		return politicalPartyDaoServices.updateProject(group, newEndDate, newContractorName);
+	}
+
+	@Override
+	public List<Poll> listPolls(String groupId) {
+		return politicalPartyDaoServices.viewPolls(groupId);
 	}
 
 }
