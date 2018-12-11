@@ -15,8 +15,10 @@ import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.daoServices.PoliticalPartyDAOServices;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.exceptions.InvalidCredentialsException;
 import com.politicalforum.exceptions.ServiceNotFoundException;
+import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.providers.PoliticalPartyDAOServicesProvider;
 import com.politicalforum.utils.Helper;
@@ -55,9 +57,14 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 			Group group = politicalPartyDaoServices.insertGroupDetails(
 					new Group(groupName, groupDescription, user.getUserId(), Helper.getCurrentDateOfTypeJavaSql()));
 			
-			if (politicalPartyDaoServices.addFollowerToAGroup(user.getUserId(), group)) {
-				user.getGroups().add(group);
-				return user;
+			try {
+				if (politicalPartyDaoServices.addFollowerToAGroup(user.getUserId(), group)) {
+					user.getGroups().add(group);
+					return user;
+				}
+			} catch (GroupAlreadyJoinedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		return user;
@@ -76,7 +83,7 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	}
 
 	@Override
-	public User joinGroup(User user, Group group) {
+	public User joinGroup(User user, Group group) throws GroupAlreadyJoinedException {
 		if (politicalPartyDaoServices.addFollowerToAGroup(user.getUserId(), group)) {
 			user.getGroups().add(group);
 			return user;

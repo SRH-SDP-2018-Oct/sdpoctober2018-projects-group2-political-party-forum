@@ -3,6 +3,8 @@ package com.politicalforum.main;
 import java.util.Scanner;
 
 import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.GroupAlreadyJoinedException;
+import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.validation.Validations;
@@ -34,11 +36,13 @@ public class Registration {
 					do {
 						System.out.println("Your First Name:- ");
 						firstName = sc.nextLine();
+						firstName.trim();
 					} while (!Validations.validateName(firstName));
 
 					do {
 						System.out.println("Your Last Name:- ");
 						lastName = sc.nextLine();
+						lastName.trim();
 					} while (!Validations.validateName(lastName));
 
 					do {
@@ -49,11 +53,13 @@ public class Registration {
 					do {
 						System.out.println("Your Email-ID:- ");
 						emailId = sc.nextLine();
+						emailId.trim();
 					} while (!Validations.validateEmail(emailId));
 
 					do {
 						System.out.println("Your Gender:- ");
 						gender = sc.nextLine();
+						gender.trim();
 					} while (!Validations.validateGender(gender));
 
 					do {
@@ -64,6 +70,7 @@ public class Registration {
 					do {
 						System.out.println("Your Region:- ");
 						region = sc.nextLine();
+						region.trim();
 					} while (!Validations.validateRegion(region));
 
 					System.out.println("Do you want to remain Anonymous(true/false)?");
@@ -82,8 +89,13 @@ public class Registration {
 						}
 					} while (!confirmPassword.equals(password));
 
-					GeneralUserMenu.menu(politicalPartyServices.registerUserDetails(firstName, lastName, 0, emailId,
-							gender, aadharNumber, isAnonymous, region, password), politicalPartyServices);
+					try {
+						GeneralUserMenu.menu(politicalPartyServices.registerUserDetails(firstName, lastName, 0, emailId,
+								gender, aadharNumber, isAnonymous, region, password), politicalPartyServices);
+					} catch (GroupAlreadyJoinedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					break;
 
 				// Political User Registration
@@ -92,11 +104,14 @@ public class Registration {
 					do {
 						System.out.println("Your First Name:- ");
 						firstName = sc.nextLine();
+						firstName.trim();
+						
 					} while (!Validations.validateName(firstName));
 
 					do {
 						System.out.println("Your Last Name:- ");
 						lastName = sc.nextLine();
+						lastName.trim();
 					} while (!Validations.validateName(lastName));
 
 					do {
@@ -107,11 +122,14 @@ public class Registration {
 					do {
 						System.out.println("Your Email-ID:- ");
 						emailId = sc.nextLine();
+						emailId.trim();
+						
 					} while (!Validations.validateEmail(emailId));
 
 					do {
 						System.out.println("Your Gender:- ");
 						gender = sc.nextLine();
+						gender.trim();
 					} while (!Validations.validateGender(gender));
 					do {
 						System.out.println("Your PoliticianId:- ");
@@ -121,6 +139,8 @@ public class Registration {
 					do {
 						System.out.println("Your Region:- ");
 						region = sc.nextLine();
+						region.trim();
+						
 					} while (!Validations.validateRegion(region));
 
 					System.out.println("Do you want to remain Anonymous(true/false)?");
@@ -149,7 +169,7 @@ public class Registration {
 				System.out.println(e.getMessage());
 			} catch (GroupAlreadyExistException e) {
 				System.out.println(e.getMessage());
-			}
+			} 
 		} while (choice != 3);
 	}
 

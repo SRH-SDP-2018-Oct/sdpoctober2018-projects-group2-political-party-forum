@@ -15,6 +15,7 @@ public class CommentFeatures {
 
 		System.out.println("Write your comment here:- ");
 		String comment = sc.nextLine();
+		comment.trim();
 		if (politicalPartyServices.postComment(user, comment)) {
 			System.out.println("Comment Posted!");
 			viewComments(user, politicalPartyServices);

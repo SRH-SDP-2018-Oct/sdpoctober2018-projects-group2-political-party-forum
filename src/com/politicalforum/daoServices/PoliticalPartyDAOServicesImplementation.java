@@ -18,8 +18,10 @@ import com.politicalforum.beans.Poll;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.exceptions.InvalidCredentialsException;
 import com.politicalforum.exceptions.ServiceNotFoundException;
+import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.providers.PoliticalPartyConnectionProvider;
 import com.politicalforum.utils.Helper;
@@ -169,7 +171,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public Boolean addFollowerToAGroup(String userId, Group group) {
+	public Boolean addFollowerToAGroup(String userId, Group group)throws GroupAlreadyJoinedException {
 		try {
 			preparedStatement = connection.prepareStatement(
 					"insert into groupfollowers(groupfollowersid, groupdetailsid, userid) values('GF'||groupfollowers_sequence.nextval,?,?)");
@@ -180,11 +182,11 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			connection.commit();
 			preparedStatement.close();
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
+		} catch (SQLException e) {
+			throw new GroupAlreadyJoinedException("You are already in the group");
+			
 		}
-		return false;
+		
 	}
 
 	private String getUserId(String emailId) throws SQLException, InvalidCredentialsException {
@@ -452,11 +454,12 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			group.getProjects().add(project);
 			group.setSelectedProject(project);
 			return group;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			// TODO: handle exception
 		}
-		return null;
+		return group;
+		
 	}
 
 	@Override

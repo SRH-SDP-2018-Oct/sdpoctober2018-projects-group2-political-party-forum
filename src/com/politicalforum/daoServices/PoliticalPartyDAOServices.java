@@ -13,7 +13,9 @@ import com.politicalforum.beans.Poll;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.exceptions.InvalidCredentialsException;
+import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 
 public interface PoliticalPartyDAOServices {
@@ -29,7 +31,7 @@ public interface PoliticalPartyDAOServices {
 
 	public List<Group> retrieveGroupDetails();
 	
-	Boolean addFollowerToAGroup(String userId, Group group);
+	Boolean addFollowerToAGroup(String userId, Group group)throws GroupAlreadyJoinedException;
 	
 	public List<Group> getUserGroups(String userId);
 	

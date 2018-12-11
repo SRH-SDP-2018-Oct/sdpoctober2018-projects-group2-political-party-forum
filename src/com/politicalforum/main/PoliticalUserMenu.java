@@ -7,6 +7,8 @@ import java.util.Scanner;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
+import com.politicalforum.exceptions.GroupAlreadyJoinedException;
+import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.services.PoliticalPartyServices;
 
@@ -41,7 +43,12 @@ public class PoliticalUserMenu {
 					System.out.println("Enter the group number to join:- ");
 					int groupNumber = sc.nextInt();
 					sc.nextLine();
-					user = politicalPartyServices.joinGroup(user, similarGroups.get(groupNumber));
+					try {
+						user = politicalPartyServices.joinGroup(user, similarGroups.get(groupNumber));
+					} catch (GroupAlreadyJoinedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					user.setSelectedGroup(user.getGroups().get(user.getGroups().size() - 1));
 					System.out.println(user.getSelectedGroup().getGroupName() + " Group joined");
 					GroupFeatures.viewGroup(user, politicalPartyServices);
@@ -49,10 +56,20 @@ public class PoliticalUserMenu {
 
 				break;
 			case 2:
-				CommonFeatures.joinGroup(user, politicalPartyServices);
+				try {
+					CommonFeatures.joinGroup(user, politicalPartyServices);
+				} catch (GroupAlreadyJoinedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 			case 3:
-				CommonFeatures.myGroups(user, politicalPartyServices);
+				try {
+					CommonFeatures.myGroups(user, politicalPartyServices);
+				} catch (GroupAlreadyJoinedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 			case 4:
 				break;

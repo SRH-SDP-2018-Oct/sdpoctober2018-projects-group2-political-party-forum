@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import com.politicalforum.exceptions.UnknownDateFormatException;
+
 public class Helper {
 
 	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("DD/MM/YYYY");
@@ -19,13 +21,13 @@ public class Helper {
 		return new Date(currentDate.getTime());
 	}
 
-	public static Date convertDateToSqlDate(String date) {
+	public static Date convertDateToSqlDate(String date) throws UnknownDateFormatException {
 		try {
 			return new Date(DATE_FORMAT.parse(date).getTime());
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new UnknownDateFormatException("Please enter the correct date format - DD/MM/YYYY");
 		}
-		return null;
+		//return null;
 	}
 	
 	public static String generateHashPassword(String password) {

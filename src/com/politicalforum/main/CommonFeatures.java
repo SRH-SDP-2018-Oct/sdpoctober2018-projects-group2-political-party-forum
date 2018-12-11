@@ -6,13 +6,14 @@ import java.util.Scanner;
 
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.User;
+import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.services.PoliticalPartyServices;
 
 public class CommonFeatures {
 
 	private static Scanner sc = new Scanner(System.in);
 
-	public static void joinGroup(User user, PoliticalPartyServices politicalPartyServices) {
+	public static void joinGroup(User user, PoliticalPartyServices politicalPartyServices) throws GroupAlreadyJoinedException{
 		System.out.println("Available groups to join");
 		List<Group> groups = politicalPartyServices.browseGroups();
 		if(groups.isEmpty()) {
@@ -35,7 +36,7 @@ public class CommonFeatures {
 		}
 	}
 
-	public static void myGroups(User user, PoliticalPartyServices politicalPartyServices) {
+	public static void myGroups(User user, PoliticalPartyServices politicalPartyServices)throws GroupAlreadyJoinedException {
 		int choice = 0;
 		HashMap<Integer, Group> map = new HashMap<>();
 		System.out.println("\n********MY GROUPS*************");

@@ -83,7 +83,10 @@ public class Validations {
 	}
 
 	public static boolean validateIfDateToCompareIsGreater(Date toCompare, Date with) {
-		if(toCompare.after(with)) {
+		if(toCompare == null) {
+			return true;
+		}
+		if(toCompare !=null && toCompare.after(with)) {
 			return false;
 		}
 		System.err.println("Date should be greater than current date/project end date.");

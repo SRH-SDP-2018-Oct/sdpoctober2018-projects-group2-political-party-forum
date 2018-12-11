@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
+import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.utils.Helper;
 import com.politicalforum.validation.Validations;
@@ -22,30 +23,43 @@ public class ProjectFeatures {
 		System.out.println("\n-----------Create Project------------");
 		System.out.println("Enter Project Name:- ");
 		String taskName = sc.nextLine();
+		taskName.trim();
 		System.out.println("Enter Project Description:- ");
 		String taskDescription = sc.nextLine();
+		taskDescription.trim();
 		String startDate = null;
 		do {
-			System.out.println("Enter Project Start Date(DD/MM/YYYY):- ");
-			startDate = sc.nextLine();
-			taskStartDate = Helper.convertDateToSqlDate(startDate);
+			try {
+				System.out.println("Enter Project Start Date(DD/MM/YYYY):- ");
+				startDate = sc.nextLine();
+				taskStartDate = Helper.convertDateToSqlDate(startDate);
+			} catch (UnknownDateFormatException e) {
+				System.out.println(e.getMessage());
+			}
 		} while (Validations.validateIfDateToCompareIsGreater(taskStartDate, Helper.getCurrentDateOfTypeJavaSql()));
 		do {
-			System.out.println("Enter Project End Date(DD/MM/YYYY):-");
-			endDate = sc.nextLine();
-			taskEndDate = Helper.convertDateToSqlDate(endDate);
+			try {
+				System.out.println("Enter Project End Date(DD/MM/YYYY):-");
+				endDate = sc.nextLine();
+				taskEndDate = Helper.convertDateToSqlDate(endDate);
+			} catch (UnknownDateFormatException e) {
+				System.out.println(e.getMessage());
+			}
 		} while (Validations.validateIfDateToCompareIsGreater(taskEndDate, taskStartDate));
 		do {
-			System.out.println("Enter Intended Completion Date(DD/MM/YYYY)");
-			tentativeComplete = sc.nextLine();
-			intendedCompletionDate = Helper.convertDateToSqlDate(tentativeComplete);
+			try {
+				System.out.println("Enter Intended Completion Date(DD/MM/YYYY)");
+				tentativeComplete = sc.nextLine();
+				intendedCompletionDate = Helper.convertDateToSqlDate(tentativeComplete);
+			} catch (UnknownDateFormatException e) {
+				System.out.println(e.getMessage());
+			}
 		} while (Validations.validateIfDateToCompareIsGreater(intendedCompletionDate, taskStartDate));
 		System.out.println("Enter Fund allocated for this project:- ");
 		int taskAllocatedFund = sc.nextInt();
 		sc.nextLine();
 		System.out.println("Enter Contractor Name:- ");
 		String contractorName = sc.nextLine();
-
 		user = politicalPartyServices.createProject(user,
 				new Project(taskName, taskStartDate, taskEndDate, intendedCompletionDate, taskDescription,
 						taskAllocatedFund, Helper.getCurrentDateOfTypeJavaSql(), contractorName));
@@ -68,7 +82,7 @@ public class ProjectFeatures {
 		do {
 			System.out.println("Generate Report?(y/n)");
 			choice = sc.nextLine();
-		} while (choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n"));
+		} while (!choice.equalsIgnoreCase("y") || !choice.equalsIgnoreCase("n"));
 		if (choice.equalsIgnoreCase("y")) {
 			// Generate Report
 		}
@@ -84,7 +98,7 @@ public class ProjectFeatures {
 	}
 
 	public static void listProjects(User user, PoliticalPartyServices politicalPartyServices,
-			Boolean isUserPoliticianAndGroupOwner) {
+			Boolean isUserPoliticianAndGroupOwner) throws UnknownDateFormatException {
 		int choice = 0;
 		System.out.println("\nProjects For Group " + user.getSelectedGroup().getGroupName());
 		List<Project> projects = politicalPartyServices.viewProjects(user.getSelectedGroup().getGroupId());
@@ -118,9 +132,13 @@ public class ProjectFeatures {
 			case 1:
 				Date newEndDate = null;
 				do {
-					System.out.println("Update Project End Date To(DD/MM/YYYY):- ");
-					String updateEndDate = sc.nextLine();
-					newEndDate = Helper.convertDateToSqlDate(updateEndDate);
+					try {
+						System.out.println("Update Project End Date To(DD/MM/YYYY):- ");
+						String updateEndDate = sc.nextLine();
+						newEndDate = Helper.convertDateToSqlDate(updateEndDate);
+					} catch (UnknownDateFormatException e) {
+						System.out.println(e.getMessage());
+					}
 				} while (Validations.validateIfDateToCompareIsGreater(newEndDate,
 						user.getSelectedGroup().getSelectedProject().getTaskStartDate()));
 				politicalPartyServices.updateProject(user.getSelectedGroup(), newEndDate, null);

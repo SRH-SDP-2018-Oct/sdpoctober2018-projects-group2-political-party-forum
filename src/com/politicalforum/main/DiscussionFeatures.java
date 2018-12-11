@@ -15,8 +15,10 @@ public class DiscussionFeatures {
 	public static void createDiscussion(User user, PoliticalPartyServices politicalPartyServices) {
 		System.out.println("Enter Discussion Name:- ");
 		String groupDiscussionName = sc.nextLine();
+		groupDiscussionName.trim();
 		System.out.println("Enter Discusson Body:- ");
 		String groupDiscussionBody = sc.nextLine();
+		groupDiscussionBody.trim();
 		politicalPartyServices.createDiscussion(user, groupDiscussionName, groupDiscussionBody);
 	}
 	
@@ -24,6 +26,10 @@ public class DiscussionFeatures {
 		int option = 0;
 		List<GroupDiscussion> discussions = politicalPartyServices
 				.viewAllDiscussions(user.getSelectedGroup().getGroupId());
+		if(discussions.isEmpty()) {
+			System.out.println("There are no discussions for this group.");
+			return;
+		}
 		HashMap<Integer, GroupDiscussion> map = new HashMap<>();
 		System.out.println("All Discussions:- ");
 		for (int i = 0; i < discussions.size(); i++) {
