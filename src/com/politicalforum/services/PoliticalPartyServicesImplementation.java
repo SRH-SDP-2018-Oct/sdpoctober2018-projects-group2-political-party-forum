@@ -11,12 +11,14 @@ import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.Poll;
+import com.politicalforum.beans.PollAnswer;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.daoServices.PoliticalPartyDAOServices;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
 import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.exceptions.InvalidCredentialsException;
+import com.politicalforum.exceptions.PollAlreadyAnsweredException;
 import com.politicalforum.exceptions.ServiceNotFoundException;
 import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
@@ -132,9 +134,9 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	}
 
 	@Override
-	public User answerPoll(User user, Poll poll) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean answerPoll(User user, PollAnswer pollAnswer) throws PollAlreadyAnsweredException {
+
+		return politicalPartyDaoServices.answerPoll(user, pollAnswer);
 	}
 
 	@Override

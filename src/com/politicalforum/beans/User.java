@@ -15,6 +15,7 @@ public class User {
 	private String password;
 	private List<Group> groups = new ArrayList<>();
 	private Group selectedGroup = null;
+	private List<Notification> notifications = new ArrayList<>();
 	
 	public User() {
 		super();
@@ -132,11 +133,20 @@ public class User {
 		this.selectedGroup = selectedGroup;
 	}
 
+	public List<Notification> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age
 				+ ", emailId=" + emailId + ", gender=" + gender + ", isAnonymous=" + isAnonymous + ", region=" + region
-				+ ", groups=" + groups + "]";
+				+ ", password=" + password + ", groups=" + groups + ", selectedGroup=" + selectedGroup
+				+ ", notifications=" + notifications + "]";
 	}
 
 }

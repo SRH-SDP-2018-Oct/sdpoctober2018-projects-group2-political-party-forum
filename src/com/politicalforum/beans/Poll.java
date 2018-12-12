@@ -15,7 +15,7 @@ public class Poll {
 	private String groupFollowersId;
 	
 	public Poll(String pollId, String pollTopic, Date dateOfPoll, String option1, String option2, String option3,
-			String userId, String groupDetailsId) {
+			String userId, String groupDetailsId, String groupFollowersId) {
 		super();
 		this.pollId = pollId;
 		this.pollTopic = pollTopic;
@@ -25,6 +25,7 @@ public class Poll {
 		this.option3 = option3;
 		this.userId = userId;
 		this.groupDetailsId = groupDetailsId;
+		this.groupFollowersId = groupFollowersId;
 	}
 	public Poll(String pollTopic, Date dateOfPoll, String option1, String option2, String option3, String userId,
 			String groupDetailsId) {

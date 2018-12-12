@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.politicalforum.beans.Poll;
+import com.politicalforum.beans.PollAnswer;
 import com.politicalforum.beans.User;
+import com.politicalforum.exceptions.PollAlreadyAnsweredException;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.utils.Helper;
 
@@ -50,30 +52,60 @@ public class PollFeatures {
 	}
 
 	public static void listPolls(User user, PoliticalPartyServices politicalPartyServices) {
-		System.out.println("\nAvailable Polls\n");
+		System.out.println("\n---------------Available Polls---------------\n");
 		List<Poll> polls = politicalPartyServices.listPolls(user.getSelectedGroup().getGroupId());
-		if(polls.isEmpty()) {
+		if (polls.isEmpty()) {
 			System.out.println("No Polls created for this group.");
 			return;
 		}
 		HashMap<Integer, Poll> map = new HashMap<>();
-		for(int i=0;i<polls.size();i++) {
-			System.out.println((i+1)+". "+ polls.get(i).getPollTopic());
-			map.put(i+1, polls.get(i));
+		for (int i = 0; i < polls.size(); i++) {
+			System.out.println((i + 1) + ". " + polls.get(i).getPollTopic());
+			map.put(i + 1, polls.get(i));
 		}
+		int choice = 0;
+
 		System.out.println("Select Poll option:- ");
-		int choice = sc.nextInt();
+		choice = sc.nextInt();
 		sc.nextLine();
-		user.getSelectedGroup().setSelectedPoll(polls.get(choice));
+
+		user.getSelectedGroup().setSelectedPoll(polls.get(choice - 1));
 		viewPoll(user, politicalPartyServices);
 	}
 
 	private static void viewPoll(User user, PoliticalPartyServices politicalPartyServices) {
-
-	}
-
-	private static void answerPoll(User user, PoliticalPartyServices politicalPartyServices) {
-
+		Poll selectedPoll = user.getSelectedGroup().getSelectedPoll();
+		HashMap<Integer, String> map = new HashMap<>();
+		HashMap<String, Boolean> postedBy = new HashMap<>();
+		postedBy = politicalPartyServices.getPostedByDetails(selectedPoll.getGroupFollowersId());
+		String createdBy = null;
+		for (String key : postedBy.keySet()) {
+			createdBy = postedBy.get(key) ? "Anonymous" : key;
+		}
+		System.out.println("\n----------------View Poll-------------------");
+		System.out.println("\nPoll Topic:- " + selectedPoll.getPollTopic());
+		System.out.println("\nPoll Created By:- " + createdBy);
+		System.out.println("\nPoll Created On:- " + selectedPoll.getDateOfPoll());
+		System.out.println("\nOptions:-");
+		System.out.println("\n1. " + selectedPoll.getOption1());
+		map.put(1, selectedPoll.getOption1());
+		System.out.println("2. " + selectedPoll.getOption2());
+		map.put(2, selectedPoll.getOption2());
+		if (selectedPoll.getOption3() != null) {
+			System.out.println("3. " + selectedPoll.getOption3());
+			map.put(3, selectedPoll.getOption3());
+		}
+		System.out.println("\nEnter Option to answer Poll:-");
+		int option = sc.nextInt();
+		sc.nextLine();
+		try {
+			if (politicalPartyServices.answerPoll(user,
+					new PollAnswer(selectedPoll.getPollId(), user.getUserId(), map.get(option)))) {
+				System.out.println("Thank you for answering.");
+			}
+		} catch (PollAlreadyAnsweredException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 }

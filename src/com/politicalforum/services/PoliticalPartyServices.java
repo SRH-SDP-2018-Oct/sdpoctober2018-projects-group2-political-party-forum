@@ -8,11 +8,13 @@ import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
 import com.politicalforum.beans.Poll;
+import com.politicalforum.beans.PollAnswer;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
 import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.exceptions.InvalidCredentialsException;
+import com.politicalforum.exceptions.PollAlreadyAnsweredException;
 import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 
@@ -50,7 +52,7 @@ public interface PoliticalPartyServices {
 	
 	public User createPoll(User user, Poll poll);
 	
-	public User answerPoll(User user, Poll poll);
+	public Boolean answerPoll(User user, PollAnswer pollAnswer) throws PollAlreadyAnsweredException;
 	
 	public Boolean checkIfUserIsGroupOwner(String userId, String groupId);
 	
@@ -58,6 +60,7 @@ public interface PoliticalPartyServices {
 	
 	public Group updateProject(Group group, Date newEndDate, String newContractorName);
 	
-	public List<Poll> listPolls(String groupId);
+	public List<Poll> listPolls(String groupId); 
+	
 	public void exit();
 }

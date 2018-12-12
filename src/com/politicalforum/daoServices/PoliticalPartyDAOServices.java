@@ -8,13 +8,16 @@ import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
+import com.politicalforum.beans.Notification;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.Poll;
+import com.politicalforum.beans.PollAnswer;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
 import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.exceptions.InvalidCredentialsException;
+import com.politicalforum.exceptions.PollAlreadyAnsweredException;
 import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 
@@ -56,6 +59,12 @@ public interface PoliticalPartyDAOServices {
 	public Group updateProject(Group group, Date newEndDate, String newContractorName);
 	
 	public List<Poll> viewPolls(String groupId);
+
+	public List<Notification> fetchNotifications(String userId);
+	
+	public void updateNotifications(String userId);
+	
+	public Boolean answerPoll(User user, PollAnswer pollAnswer) throws PollAlreadyAnsweredException;
 	
 	public void closeServices();
 	

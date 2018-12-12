@@ -13,15 +13,17 @@ import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
+import com.politicalforum.beans.Notification;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.Poll;
+import com.politicalforum.beans.PollAnswer;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
 import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.exceptions.InvalidCredentialsException;
+import com.politicalforum.exceptions.PollAlreadyAnsweredException;
 import com.politicalforum.exceptions.ServiceNotFoundException;
-import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.providers.PoliticalPartyConnectionProvider;
 import com.politicalforum.utils.Helper;
@@ -586,8 +588,9 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 				String option1 = resultSet.getString("OPTION1");
 				String option2 = resultSet.getString("OPTION2");
 				String option3 = resultSet.getString("OPTION3");
-				String userId = resultSet.getString("USERID");		
-				polls.add(new Poll(pollId, pollTopic, dateOfPoll, option1, option2, option3, userId, groupId));
+				String userId = resultSet.getString("USERID");
+				String groupFollowersId = resultSet.getString("GROUPFOLLOWERSID");
+				polls.add(new Poll(pollId, pollTopic, dateOfPoll, option1, option2, option3, userId, groupId, groupFollowersId));
 			}
 			
 		} catch (SQLException e) {
@@ -595,5 +598,39 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			// TODO: handle exception
 		}
 		return polls;
+	}
+
+	public List<Notification> fetchNotifications(String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updateNotifications(String userId) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void insertNotification(String userId, String notificationBody) {
+		try {
+			preparedStatement = connection.prepareStatement("");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public Boolean answerPoll(User user, PollAnswer pollAnswer) throws PollAlreadyAnsweredException {
+		try {
+			preparedStatement = connection.prepareStatement("insert into pollanswer(pollanswerid,pollid,userid,answer) values('PA'||pollanswer_sequence.nextval,?,?,?)");
+			preparedStatement.setString(1, pollAnswer.getPollId());
+			preparedStatement.setString(2, user.getUserId());
+			preparedStatement.setString(3, pollAnswer.getAnswer());
+			preparedStatement.executeUpdate();
+			connection.commit();
+			return true;
+		} catch (SQLException e) {
+			throw new PollAlreadyAnsweredException("You have already answered this poll.");
+		}
 	}
 }
