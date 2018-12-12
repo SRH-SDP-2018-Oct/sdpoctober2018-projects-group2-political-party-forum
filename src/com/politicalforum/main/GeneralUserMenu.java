@@ -4,15 +4,13 @@ import java.util.Scanner;
 
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyJoinedException;
-import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.services.PoliticalPartyServices;
 
 public class GeneralUserMenu {
 
 	private static Scanner sc = new Scanner(System.in);
 
-	public static void menu(User user, PoliticalPartyServices politicalPartyServices)
-			throws UserAlreadyExistsException {
+	public static void menu(User user, PoliticalPartyServices politicalPartyServices) {
 		int choice = 0;
 		do {
 			try {

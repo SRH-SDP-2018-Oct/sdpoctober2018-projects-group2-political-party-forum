@@ -21,25 +21,25 @@ import com.politicalforum.exceptions.PollAlreadyAnsweredException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 
 public interface PoliticalPartyDAOServices {
-	public User insertUserDetails(GeneralUser user) throws UserAlreadyExistsException;
+	public User registerUserDetails(GeneralUser user) throws UserAlreadyExistsException;
 
-	public User insertPoliticalUserDetails(PoliticalUser politicalUser) throws UserAlreadyExistsException;
+	public User registerPoliticalUserDetails(PoliticalUser politicalUser) throws UserAlreadyExistsException;
 
-	public List<Group> checkIfGroupWithSimilarNameExists(String groupName);
+	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName);
 
-	public Group insertGroupDetails(Group group)throws GroupAlreadyExistException;
+	public Group createGroup(Group group)throws GroupAlreadyExistException;
 
-	public User getUser(String emailId, String password) throws InvalidCredentialsException;
+	public User login(String emailId, String password) throws InvalidCredentialsException;
 
-	public List<Group> retrieveGroupDetails();
+	public List<Group> browseGroups();
 	
-	Boolean addFollowerToAGroup(String userId, Group group)throws GroupAlreadyJoinedException;
+	Boolean joinGroup(String userId, Group group)throws GroupAlreadyJoinedException;
 	
 	public List<Group> getUserGroups(String userId);
 	
 	public Group createDiscussion(String userId, Group group, GroupDiscussion groupDiscussion);
 	
-	public List<GroupDiscussion> fetchAllDiscussions(String groupId);
+	public List<GroupDiscussion> viewAllDiscussions(String groupId);
 
 	public HashMap<String, Boolean> getPostedByDetails(String groupFollowersId);
 	
@@ -51,15 +51,15 @@ public interface PoliticalPartyDAOServices {
 	
 	public Group createPoll(String userId, Group group, Poll poll);
 
-	public Boolean getIfUserIsGroupOwner(String userId, String groupId);
+	public Boolean checkIfUserIsGroupOwner(String userId, String groupId);
 	
 	public List<Project> viewProjects(String groupId);
 	
 	public Group updateProject(Group group, Date newEndDate, String newContractorName);
 	
-	public List<Poll> viewPolls(String groupId);
+	public List<Poll> listPolls(String groupId);
 
-	public List<Notification> fetchNotifications(String userId);
+	public List<Notification> getNotifications(String userId);
 	
 	public void updateNotifications(String userId);
 	

@@ -19,21 +19,23 @@ public class PollFeatures {
 		System.out.println("****************Poll*****************");
 		System.out.println("Enter Poll Name :");
 		String pollName = sc.nextLine();
-		System.out.println("\n\n 1.Two Option\n 2.Three");
-		System.out.println("Number of Options ? 2 or 3 :");
-		int numberOfOptions = sc.nextInt();
+		int numberOfOptions = 0;
+		do {
+			System.out.println("Number of options in this poll(Min.2 and Max 3):- ");
+			numberOfOptions = sc.nextInt();
+		} while (numberOfOptions != 2 || numberOfOptions != 3);
 		sc.nextLine();
 		String optionOne = null;
 		String optionTwo = null;
 		String optionThree = null;
 		switch (numberOfOptions) {
-		case 1:
+		case 2:
 			System.out.println("Enter Option One");
 			optionOne = sc.nextLine();
 			System.out.println("Enter Option Two");
 			optionTwo = sc.nextLine();
 			break;
-		case 2:
+		case 3:
 			System.out.println("Enter Option One");
 			optionOne = sc.nextLine();
 			System.out.println("Enter Option Two");
@@ -55,7 +57,7 @@ public class PollFeatures {
 		System.out.println("\n---------------Available Polls---------------\n");
 		List<Poll> polls = politicalPartyServices.listPolls(user.getSelectedGroup().getGroupId());
 		if (polls.isEmpty()) {
-			System.out.println("No Polls created for this group.");
+			System.out.println("\nNo Polls created for this group.\n");
 			return;
 		}
 		HashMap<Integer, Poll> map = new HashMap<>();
@@ -64,9 +66,10 @@ public class PollFeatures {
 			map.put(i + 1, polls.get(i));
 		}
 		int choice = 0;
-
-		System.out.println("Select Poll option:- ");
-		choice = sc.nextInt();
+		do {
+			System.out.println("Select Poll option:- ");
+			choice = sc.nextInt();
+		} while (choice < 1 || choice > polls.size());
 		sc.nextLine();
 
 		user.getSelectedGroup().setSelectedPoll(polls.get(choice - 1));

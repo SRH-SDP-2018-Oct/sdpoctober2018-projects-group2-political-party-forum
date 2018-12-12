@@ -31,20 +31,23 @@ public class PoliticalUserMenu {
 				String groupDescription = sc.nextLine();
 				List<Group> similarGroups = politicalPartyServices.checkIfGroupExistsWithSimilarNames(groupName);
 				if (similarGroups.isEmpty()) {
-					System.out.println("Group Created ID:- "
-							+ politicalPartyServices.createGroup(groupName, groupDescription, user).toString());
+					System.out.println("Group Created");
+					politicalPartyServices.createGroup(groupName, groupDescription, user);
 				} else {
 					HashMap<Integer, Group> map = new HashMap<>();
+					int groupNumber = 0;
 					System.out.println("\nSimilar Groups Available to join:-\n");
 					for (int i = 0; i < similarGroups.size(); i++) {
 						System.out.println((i + 1) + ". " + similarGroups.get(i).getGroupName());
 						map.put(i + 1, similarGroups.get(i));
 					}
-					System.out.println("Enter the group number to join:- ");
-					int groupNumber = sc.nextInt();
+					do {
+						System.out.println("Enter the group number to join:- ");
+						groupNumber = sc.nextInt();
+					} while (groupNumber < 1 || groupNumber > similarGroups.size());
 					sc.nextLine();
 					try {
-						user = politicalPartyServices.joinGroup(user, similarGroups.get(groupNumber - 1));
+						user = politicalPartyServices.joinGroup(user, map.get(groupNumber));
 					} catch (GroupAlreadyJoinedException e) {
 						e.printStackTrace();
 					}

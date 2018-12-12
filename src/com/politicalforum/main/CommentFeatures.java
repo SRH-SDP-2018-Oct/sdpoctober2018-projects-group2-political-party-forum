@@ -17,7 +17,7 @@ public class CommentFeatures {
 		String comment = sc.nextLine();
 		comment.trim();
 		if (politicalPartyServices.postComment(user, comment)) {
-			System.out.println("Comment Posted!");
+			System.out.println("Comment Posted!\n");
 			viewComments(user, politicalPartyServices);
 		}
 
@@ -27,7 +27,7 @@ public class CommentFeatures {
 		List<GroupComments> comments = politicalPartyServices
 				.viewComments(user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionId());
 		if (comments.isEmpty()) {
-			System.out.println("No comments posted in this discussion.");
+			System.out.println("\nNo comments posted in this discussion.\n");
 		}
 
 		for (int i = 0; i < comments.size(); i++) {

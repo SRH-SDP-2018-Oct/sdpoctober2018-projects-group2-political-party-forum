@@ -39,7 +39,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public User insertUserDetails(GeneralUser user) throws UserAlreadyExistsException {
+	public User registerUserDetails(GeneralUser user) throws UserAlreadyExistsException {
 		String userId = null;
 		String hashPassword = null;
 		try {
@@ -49,7 +49,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.setString(1, user.getFirstName());
 			preparedStatement.setString(2, user.getLastName());
 			preparedStatement.setString(3, user.getRegion());
-			preparedStatement.setString(4, user.getEmailId());
+			preparedStatement.setString(4, user.getEmailId().toLowerCase());
 			preparedStatement.setString(5, user.getAadharNumber());
 			preparedStatement.setString(6, user.getGender());
 			preparedStatement.setString(7, String.valueOf(user.getAge()));
@@ -74,7 +74,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public PoliticalUser insertPoliticalUserDetails(PoliticalUser politicalUser) throws UserAlreadyExistsException {
+	public PoliticalUser registerPoliticalUserDetails(PoliticalUser politicalUser) throws UserAlreadyExistsException {
 		String politicalUserId = null;
 		String hashPassword = null;
 		try {
@@ -112,11 +112,11 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public List<Group> checkIfGroupWithSimilarNameExists(String groupName) {
+	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) {
 		List<Group> groups = new ArrayList<>();
 		try {
 			preparedStatement = connection
-					.prepareStatement("select UPPER(groupdetailsname) from groupdetails where groupdetailsname like '%"
+					.prepareStatement("select groupdetailsname from groupdetails where groupdetailsname like '%"
 							+ groupName.toUpperCase() + "%'");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
@@ -129,7 +129,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public Group insertGroupDetails(Group group) throws GroupAlreadyExistException {
+	public Group createGroup(Group group) throws GroupAlreadyExistException {
 		String groupId = null;
 		try {
 			preparedStatement = connection.prepareStatement(
@@ -156,7 +156,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public User getUser(String emailId, String password) throws InvalidCredentialsException {
+	public User login(String emailId, String password) throws InvalidCredentialsException {
 		try {
 			connection.setAutoCommit(false);
 			String userId = getUserId(emailId);
@@ -172,7 +172,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public Boolean addFollowerToAGroup(String userId, Group group) throws GroupAlreadyJoinedException {
+	public Boolean joinGroup(String userId, Group group) throws GroupAlreadyJoinedException {
 		try {
 			preparedStatement = connection.prepareStatement(
 					"insert into groupfollowers(groupfollowersid, groupdetailsid, userid) values('GF'||groupfollowers_sequence.nextval,?,?)");
@@ -192,7 +192,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 
 	private String getUserId(String emailId) throws SQLException, InvalidCredentialsException {
 		preparedStatement = connection
-				.prepareStatement("select userid from userdetails where emailid='" + emailId + "'");
+				.prepareStatement("select userid from userdetails where emailid='" + emailId.toLowerCase() + "'");
 		resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
 			return resultSet.getString(1);
@@ -246,8 +246,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public List<Group> retrieveGroupDetails() {
-		List<Group> group = new ArrayList<>();
+	public List<Group> browseGroups() {
+		List<Group> groups = new ArrayList<>();
 		try {
 			preparedStatement = connection.prepareStatement("select * from groupdetails");
 			resultSet = preparedStatement.executeQuery();
@@ -257,12 +257,12 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 				String groupDescription = resultSet.getString(3);
 				String groupOwnerId = resultSet.getString(4);
 				Date groupCreationTime = resultSet.getDate(5);
-				group.add(new Group(groupId, groupName, groupDescription, groupOwnerId, groupCreationTime));
+				groups.add(new Group(groupId, groupName, groupDescription, groupOwnerId, groupCreationTime));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return group;
+		return groups;
 	}
 
 	private Boolean checkCredentialsForUser(String id, String password)
@@ -344,7 +344,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public List<GroupDiscussion> fetchAllDiscussions(String groupId) {
+	public List<GroupDiscussion> viewAllDiscussions(String groupId) {
 		List<GroupDiscussion> discussions = new ArrayList<>();
 		try {
 			preparedStatement = connection
@@ -506,7 +506,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public Boolean getIfUserIsGroupOwner(String userId, String groupId) {
+	public Boolean checkIfUserIsGroupOwner(String userId, String groupId) {
 		try {
 			preparedStatement = connection
 					.prepareStatement("select userid from groupdetails where groupdetailsid='" + groupId + "'");
@@ -578,7 +578,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public List<Poll> viewPolls(String groupId) {
+	public List<Poll> listPolls(String groupId) {
 		List<Poll> polls = new ArrayList<>();
 		try {
 			preparedStatement = connection
@@ -604,7 +604,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public List<Notification> fetchNotifications(String userId) {
+	public List<Notification> getNotifications(String userId) {
 		List<String> notificationIds = getNotificationBody(userId);
 		List<Notification> notifications = new ArrayList<>();
 		for (String id : notificationIds) {

@@ -27,16 +27,16 @@ public class DiscussionFeatures {
 		List<GroupDiscussion> discussions = politicalPartyServices
 				.viewAllDiscussions(user.getSelectedGroup().getGroupId());
 		if(discussions.isEmpty()) {
-			System.out.println("There are no discussions for this group.");
+			System.out.println("\nThere are no discussions for this group.\n");
 			return;
 		}
 		HashMap<Integer, GroupDiscussion> map = new HashMap<>();
-		System.out.println("All Discussions:- ");
+		System.out.println("All Discussions:- \n");
 		for (int i = 0; i < discussions.size(); i++) {
 			System.out.println((i + 1) + ". " + discussions.get(i).getGroupDiscussionName());
 			map.put((i + 1), discussions.get(i));
 		}
-		System.out.println("Select Discussion:- ");
+		System.out.println("\nSelect Discussion:- ");
 		option = sc.nextInt();
 		sc.nextLine();
 		user.getSelectedGroup().setSelectedGroupDiscussion(discussions.get(option - 1));
@@ -65,6 +65,7 @@ public class DiscussionFeatures {
 		int choice = 0;
 		do {
 			System.out.println("\n1.Post Comment\n\n2.View Comments");
+			System.out.println("Press 0 to go back.");
 			choice = sc.nextInt();
 			sc.nextLine();
 			switch (choice) {

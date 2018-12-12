@@ -16,10 +16,10 @@ public class CommonFeatures {
 
 	public static void joinGroup(User user, PoliticalPartyServices politicalPartyServices)
 			throws GroupAlreadyJoinedException {
-		System.out.println("Available groups to join");
+		System.out.println("\nAvailable groups to join:-");
 		List<Group> groups = politicalPartyServices.browseGroups();
 		if (groups.isEmpty()) {
-			System.out.println("No groups are available to join at the moment.");
+			System.out.println("\nNo groups are available to join at the moment.\n");
 			return;
 		}
 		HashMap<Integer, Group> map = new HashMap<>();
@@ -27,13 +27,16 @@ public class CommonFeatures {
 			map.put((i + 1), groups.get(i));
 			System.out.println((i + 1) + ". " + groups.get(i).getGroupName());
 		}
-		System.out.println("Enter the group number to join:- ");
-		int groupNumber = sc.nextInt();
+		int groupNumber = 0;
+		do {
+			System.out.println("\nEnter the group number to join:- ");
+			groupNumber = sc.nextInt();
+		} while (groupNumber < 1 || groupNumber > groups.size());
 		sc.nextLine();
 		if (map.containsKey(groupNumber)) {
 			user = politicalPartyServices.joinGroup(user, map.get(groupNumber));
 			user.setSelectedGroup(user.getGroups().get(user.getGroups().size() - 1));
-			System.out.println(user.getSelectedGroup().getGroupName() + " Group joined");
+			System.out.println("\n" + user.getSelectedGroup().getGroupName() + " Group joined\n");
 			GroupFeatures.viewGroup(user, politicalPartyServices);
 		}
 	}
@@ -44,7 +47,7 @@ public class CommonFeatures {
 		HashMap<Integer, Group> map = new HashMap<>();
 		System.out.println("\n********MY GROUPS*************");
 		if (user.getGroups().isEmpty()) {
-			System.out.println("\nYou haven't join any group.");
+			System.out.println("\nYou haven't join any group.\n");
 			joinGroup(user, politicalPartyServices);
 		} else {
 			for (int i = 0; i < user.getGroups().size(); i++) {
@@ -63,12 +66,12 @@ public class CommonFeatures {
 		List<Notification> notifications = politicalPartyServices.getNotifications(user.getUserId());
 		System.out.println("***************Notifications*******************\n");
 		if (notifications.isEmpty()) {
-			System.out.println("No Notifications at the moment.");
+			System.out.println("\nNo Notifications at the moment.\n");
 			return;
 		}
 		for (int i = 0; i < notifications.size(); i++) {
 			System.out.println((i + 1) + ". " + notifications.get(i).getNotificationBody() + "::: dated:- "
-					+ notifications.get(i).getNotificationCreationTime()+"\n");
+					+ notifications.get(i).getNotificationCreationTime() + "\n");
 		}
 		return;
 	}

@@ -36,7 +36,7 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public User registerUserDetails(String firstName, String lastName, int age, String emailId, String gender,
 			String aadharNumber, Boolean isAnonymous, String region, String password)
 			throws UserAlreadyExistsException {
-		return politicalPartyDaoServices.insertUserDetails(new GeneralUser(firstName, lastName, age, emailId, gender,
+		return politicalPartyDaoServices.registerUserDetails(new GeneralUser(firstName, lastName, age, emailId, gender,
 				isAnonymous, region, password, new ArrayList<>(), aadharNumber));
 	}
 
@@ -44,23 +44,23 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	public User registerPoliticalUserDetails(String firstName, String lastName, int age, String emailId, String gender,
 			String politicianId, Boolean isAnonymous, String region, String password)
 			throws UserAlreadyExistsException {
-		return politicalPartyDaoServices.insertPoliticalUserDetails(new PoliticalUser(firstName, lastName, age, emailId,
+		return politicalPartyDaoServices.registerPoliticalUserDetails(new PoliticalUser(firstName, lastName, age, emailId,
 				gender, isAnonymous, region, password, new ArrayList<>(), politicianId));
 	}
 
 	@Override
 	public List<Group> checkIfGroupExistsWithSimilarNames(String groupName) {
-		return politicalPartyDaoServices.checkIfGroupWithSimilarNameExists(groupName);
+		return politicalPartyDaoServices.checkIfGroupExistsWithSimilarNames(groupName);
 	}
 
 	@Override
 	public User createGroup(String groupName, String groupDescription, User user)throws GroupAlreadyExistException {
 		if (Helper.checkIfUserIsPolitician(user.getUserId())) {
-			Group group = politicalPartyDaoServices.insertGroupDetails(
+			Group group = politicalPartyDaoServices.createGroup(
 					new Group(groupName, groupDescription, user.getUserId(), Helper.getCurrentDateOfTypeJavaSql()));
 			
 			try {
-				if (politicalPartyDaoServices.addFollowerToAGroup(user.getUserId(), group)) {
+				if (politicalPartyDaoServices.joinGroup(user.getUserId(), group)) {
 					user.getGroups().add(group);
 					return user;
 				}
@@ -73,19 +73,19 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 
 	@Override
 	public User login(String emailId, String password) throws InvalidCredentialsException {
-		User user = politicalPartyDaoServices.getUser(emailId, password);
+		User user = politicalPartyDaoServices.login(emailId, password);
 		user.setGroups(politicalPartyDaoServices.getUserGroups(user.getUserId()));
 		return user;
 	}
 
 	@Override
 	public List<Group> browseGroups() {
-		return politicalPartyDaoServices.retrieveGroupDetails();
+		return politicalPartyDaoServices.browseGroups();
 	}
 
 	@Override
 	public User joinGroup(User user, Group group) throws GroupAlreadyJoinedException {
-		if (politicalPartyDaoServices.addFollowerToAGroup(user.getUserId(), group)) {
+		if (politicalPartyDaoServices.joinGroup(user.getUserId(), group)) {
 			user.getGroups().add(group);
 			return user;
 		}
@@ -101,7 +101,7 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 
 	@Override
 	public List<GroupDiscussion> viewAllDiscussions(String groupId) {
-		return politicalPartyDaoServices.fetchAllDiscussions(groupId);
+		return politicalPartyDaoServices.viewAllDiscussions(groupId);
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 
 	@Override
 	public Boolean checkIfUserIsGroupOwner(String userId, String groupId) {
-		return politicalPartyDaoServices.getIfUserIsGroupOwner(userId, groupId);
+		return politicalPartyDaoServices.checkIfUserIsGroupOwner(userId, groupId);
 	}
 
 	@Override
@@ -160,12 +160,12 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 
 	@Override
 	public List<Poll> listPolls(String groupId) {
-		return politicalPartyDaoServices.viewPolls(groupId);
+		return politicalPartyDaoServices.listPolls(groupId);
 	}
 
 	@Override
 	public List<Notification> getNotifications(String userId) {
-		return politicalPartyDaoServices.fetchNotifications(userId);
+		return politicalPartyDaoServices.getNotifications(userId);
 	}
 
 }

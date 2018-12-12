@@ -24,7 +24,7 @@ public class GroupFeatures {
 						&& politicalPartyServices.checkIfUserIsGroupOwner(user.getUserId(),
 								user.getSelectedGroup().getGroupId());
 				if (isUserPoliticianAndGroupOwner) {
-					System.out.println("6. Create Project\n7. View Dashboard");
+					System.out.println("6. Create Project\n");
 				}
 				System.out.println("\n\nPress 0 to go to home page.");
 				choice = sc.nextInt();
