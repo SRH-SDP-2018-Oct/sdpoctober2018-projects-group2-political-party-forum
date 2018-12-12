@@ -65,6 +65,8 @@ public interface PoliticalPartyDAOServices {
 	
 	public Boolean answerPoll(User user, PollAnswer pollAnswer) throws PollAlreadyAnsweredException;
 	
+	public User updateProfile(User user);
+	
 	public void closeServices();
 	
 }

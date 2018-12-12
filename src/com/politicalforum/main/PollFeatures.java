@@ -16,7 +16,7 @@ public class PollFeatures {
 	private static Scanner sc = new Scanner(System.in);
 
 	public static void createPoll(User user, PoliticalPartyServices politicalPartyServices) {
-		System.out.println("****************Poll*****************");
+		System.out.println("---------------Poll-----------------");
 		System.out.println("Enter Poll Name :");
 		String pollName = sc.nextLine();
 		int numberOfOptions = 0;

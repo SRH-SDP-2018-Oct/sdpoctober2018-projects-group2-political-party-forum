@@ -15,7 +15,7 @@ public class GroupFeatures {
 		int choice = 0;
 		do {
 			try {
-				System.out.println("**********Group Menu************");
+				System.out.println("---------------Group Menu------------------");
 				System.out.println("\n" + user.getSelectedGroup().getGroupName());
 				System.out.println("\nAbout This Group:- " + user.getSelectedGroup().getGroupDescription());
 				System.out.println(

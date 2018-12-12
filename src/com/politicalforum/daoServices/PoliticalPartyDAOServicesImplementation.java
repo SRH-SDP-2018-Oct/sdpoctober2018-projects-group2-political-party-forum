@@ -319,8 +319,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			String groupDiscussionId = resultSet.getString(1);
 			groupDiscussion.setGroupDiscussionId(groupDiscussionId);
 			group.getGroupDiscussions().add(groupDiscussion);
-			insertNotification(userId, groupDiscussion.getGroupDiscussionName().toUpperCase() + " Discussion is Created in Group "
-					+ group.getGroupName().toUpperCase(), group.getGroupId());
+			insertNotification(userId, groupDiscussion.getGroupDiscussionName().toUpperCase()
+					+ " Discussion is Created in Group " + group.getGroupName().toUpperCase(), group.getGroupId());
 			return group;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -553,12 +553,14 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public Group updateProject(Group group, Date newEndDate, String newContractorName) {
 		try {
 			if (newContractorName != null) {
-				preparedStatement = connection.prepareStatement(
-						"update groupprogressreport set contractor='" + newContractorName + "' where groupprogressreportid='"
-								+ group.getSelectedProject().getGroupProgressReportId() + "'");
+				preparedStatement = connection.prepareStatement("update groupprogressreport set contractor='"
+						+ newContractorName + "' where groupprogressreportid='"
+						+ group.getSelectedProject().getGroupProgressReportId() + "'");
 
 			} else {
-				preparedStatement = connection.prepareStatement("update groupprogressreport set enddate=? where groupprogressreportid='" + group.getSelectedProject().getGroupProgressReportId() + "'");
+				preparedStatement = connection
+						.prepareStatement("update groupprogressreport set enddate=? where groupprogressreportid='"
+								+ group.getSelectedProject().getGroupProgressReportId() + "'");
 				preparedStatement.setDate(1, newEndDate);
 			}
 			preparedStatement.executeUpdate();
@@ -717,6 +719,20 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public User updateProfile(User user) {
+		try {
+			preparedStatement = connection.prepareStatement("update userdetails set isanonymous="
+					+ (!user.getIsAnonymous() ? 1 : 0) + " where userid='" + user.getUserId() + "'");
+			preparedStatement.executeQuery();
+			connection.commit();
+			user.setIsAnonymous(!user.getIsAnonymous());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 }

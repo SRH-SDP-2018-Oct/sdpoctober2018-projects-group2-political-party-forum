@@ -19,7 +19,7 @@ public class PoliticalUserMenu {
 		int choice = 0;
 		do {
 			System.out.println(
-					"\t\tMenu\n\n1. Create Group \n2. Browse Groups\n3. My Groups\n4. Notifications\n5. Logout\n");
+					"\t\tMenu\n\n1. Create Group \n2. Browse Groups\n3. My Groups\n4. Notifications\n5. Update Profile\n6. Logout\n");
 			System.out.println("Enter Option:- ");
 			choice = sc.nextInt();
 			sc.nextLine();
@@ -75,12 +75,15 @@ public class PoliticalUserMenu {
 				CommonFeatures.notificationView(user, politicalPartyServices);
 				break;
 			case 5:
+				CommonFeatures.updateProfile(user, politicalPartyServices);
+				break;
+			case 6:
 				break;
 			default:
 				System.out.println("Wrong Option!");
 				break;
 
 			}
-		} while (choice != 5);
+		} while (choice !=6);
 	}
 }

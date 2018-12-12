@@ -45,7 +45,7 @@ public class CommonFeatures {
 			throws GroupAlreadyJoinedException {
 		int choice = 0;
 		HashMap<Integer, Group> map = new HashMap<>();
-		System.out.println("\n********MY GROUPS*************");
+		System.out.println("\n--------------MY GROUPS-----------------");
 		if (user.getGroups().isEmpty()) {
 			System.out.println("\nYou haven't join any group.\n");
 			joinGroup(user, politicalPartyServices);
@@ -64,7 +64,7 @@ public class CommonFeatures {
 
 	public static void notificationView(User user, PoliticalPartyServices politicalPartyServices) {
 		List<Notification> notifications = politicalPartyServices.getNotifications(user.getUserId());
-		System.out.println("***************Notifications*******************\n");
+		System.out.println("----------------------Notifications-----------------------\n");
 		if (notifications.isEmpty()) {
 			System.out.println("\nNo Notifications at the moment.\n");
 			return;
@@ -74,6 +74,21 @@ public class CommonFeatures {
 					+ notifications.get(i).getNotificationCreationTime() + "\n");
 		}
 		return;
+	}
+
+	public static void updateProfile(User user, PoliticalPartyServices politicalPartyServices) {
+		System.out.println("\n--------------Update Profile-------------------");
+		String choice = null;
+		do {
+			System.out.println("\nChange your current anonymous to " + !user.getIsAnonymous() + "?(y/n)");
+			choice = sc.nextLine();
+		} while (!(choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n")));
+		if(choice.equalsIgnoreCase("y")) {
+			user = politicalPartyServices.updateProfile(user);
+			System.out.println("Profile Updated!");
+		} else {
+			return;
+		}
 	}
 
 }

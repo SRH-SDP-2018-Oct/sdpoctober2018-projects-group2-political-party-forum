@@ -168,4 +168,9 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 		return politicalPartyDaoServices.getNotifications(userId);
 	}
 
+	@Override
+	public User updateProfile(User user) {
+		return politicalPartyDaoServices.updateProfile(user);
+	}
+
 }

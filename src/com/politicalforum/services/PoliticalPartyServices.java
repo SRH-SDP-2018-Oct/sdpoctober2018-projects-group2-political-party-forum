@@ -64,5 +64,7 @@ public interface PoliticalPartyServices {
 	
 	public List<Notification> getNotifications(String userId);
 	
+	public User updateProfile(User user);
+	
 	public void exit();
 }

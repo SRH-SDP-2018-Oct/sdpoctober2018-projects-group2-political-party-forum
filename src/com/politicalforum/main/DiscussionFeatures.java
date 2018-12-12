@@ -45,7 +45,7 @@ public class DiscussionFeatures {
 	
 	public static void viewDiscussion(User user, PoliticalPartyServices politicalPartyServices) {
 
-		System.out.println("****************Discussion*****************");
+		System.out.println("-----------------Discussion------------------");
 
 		System.out.println(
 				"Disucssion Name:- " + user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionName());
