@@ -18,7 +18,6 @@ import com.politicalforum.exceptions.GroupAlreadyExistException;
 import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.exceptions.InvalidCredentialsException;
 import com.politicalforum.exceptions.PollAlreadyAnsweredException;
-import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 
 public interface PoliticalPartyDAOServices {
@@ -48,7 +47,7 @@ public interface PoliticalPartyDAOServices {
 
 	public List<GroupComments> viewComments(String discussionId);
 
-	public Group createProject(Group group, Project project);
+	public Group createProject(String userId, Group group, Project project);
 	
 	public Group createPoll(String userId, Group group, Poll poll);
 

@@ -8,7 +8,6 @@ import com.politicalforum.beans.Group;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyExistException;
 import com.politicalforum.exceptions.GroupAlreadyJoinedException;
-import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.services.PoliticalPartyServices;
 
@@ -19,7 +18,7 @@ public class PoliticalUserMenu {
 			throws UserAlreadyExistsException, GroupAlreadyExistException {
 		int choice = 0;
 		do {
-			System.out.println("\t\tMenu\n\n1.Create Group \n\n2.Browse Groups\n\n3.My Groups\n\n4.Logout\n");
+			System.out.println("\t\tMenu\n\n1. Create Group \n2. Browse Groups\n3. My Groups\n4. Notifications\n5. Logout\n");
 			System.out.println("Enter Option:- ");
 			choice = sc.nextInt();
 			sc.nextLine();
@@ -46,7 +45,6 @@ public class PoliticalUserMenu {
 					try {
 						user = politicalPartyServices.joinGroup(user, similarGroups.get(groupNumber));
 					} catch (GroupAlreadyJoinedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					user.setSelectedGroup(user.getGroups().get(user.getGroups().size() - 1));
@@ -59,7 +57,6 @@ public class PoliticalUserMenu {
 				try {
 					CommonFeatures.joinGroup(user, politicalPartyServices);
 				} catch (GroupAlreadyJoinedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -67,17 +64,19 @@ public class PoliticalUserMenu {
 				try {
 					CommonFeatures.myGroups(user, politicalPartyServices);
 				} catch (GroupAlreadyJoinedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 			case 4:
+				CommonFeatures.notificationView(user, politicalPartyServices);
+				break;
+			case 5:
 				break;
 			default:
 				System.out.println("Wrong Option!");
 				break;
 
 			}
-		} while (choice != 4);
+		} while (choice != 5);
 	}
 }

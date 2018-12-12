@@ -1,31 +1,33 @@
 package com.politicalforum.beans;
 
+import java.sql.Date;
+
 public class Notification {
-	private int notificationId;
+	private String notificationId;
 	private String notificationBody;
-	private String notificationCreationTime;
+	private Date notificationCreationTime;
 
 	public Notification() {
 	}
 
-	public Notification(int notificationId, String notificationBody, String notificationCreationTime) {
+	public Notification(String notificationId, String notificationBody, Date notificationCreationTime) {
 		super();
 		this.notificationId = notificationId;
 		this.notificationBody = notificationBody;
 		this.notificationCreationTime = notificationCreationTime;
 	}
 
-	public Notification(String notificationBody, String notificationCreationTime) {
+	public Notification(String notificationBody, Date notificationCreationTime) {
 		super();
 		this.notificationBody = notificationBody;
 		this.notificationCreationTime = notificationCreationTime;
 	}
 
-	public int getNotificationId() {
+	public String getNotificationId() {
 		return notificationId;
 	}
 
-	public void setNotificationId(int notificationId) {
+	public void setNotificationId(String notificationId) {
 		this.notificationId = notificationId;
 	}
 
@@ -37,11 +39,11 @@ public class Notification {
 		this.notificationBody = notificationBody;
 	}
 
-	public String getNotificationCreationTime() {
+	public Date getNotificationCreationTime() {
 		return notificationCreationTime;
 	}
 
-	public void setNotificationCreationTime(String notificationCreationTime) {
+	public void setNotificationCreationTime(Date notificationCreationTime) {
 		this.notificationCreationTime = notificationCreationTime;
 	}
 

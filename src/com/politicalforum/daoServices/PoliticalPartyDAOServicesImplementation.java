@@ -150,7 +150,6 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		} catch (SQLException e) {
 			throw new GroupAlreadyExistException(
 					"This group already exists please create another group or join that group");
-			// e.printStackTrace();
 		}
 		return new Group(groupId, group.getGroupName(), group.getGroupDescription(), group.getGroupOwnerId(),
 				group.getGroupCreationTime());
@@ -173,7 +172,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	}
 
 	@Override
-	public Boolean addFollowerToAGroup(String userId, Group group)throws GroupAlreadyJoinedException {
+	public Boolean addFollowerToAGroup(String userId, Group group) throws GroupAlreadyJoinedException {
 		try {
 			preparedStatement = connection.prepareStatement(
 					"insert into groupfollowers(groupfollowersid, groupdetailsid, userid) values('GF'||groupfollowers_sequence.nextval,?,?)");
@@ -186,9 +185,9 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			return true;
 		} catch (SQLException e) {
 			throw new GroupAlreadyJoinedException("You are already in the group");
-			
+
 		}
-		
+
 	}
 
 	private String getUserId(String emailId) throws SQLException, InvalidCredentialsException {
@@ -295,9 +294,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 				group.add(new Group(groupId, groupName, groupDescription, groupOwnerId, groupCreationTime));
 			}
 			return group;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 		return new ArrayList<>();
 	}
@@ -321,10 +319,11 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			String groupDiscussionId = resultSet.getString(1);
 			groupDiscussion.setGroupDiscussionId(groupDiscussionId);
 			group.getGroupDiscussions().add(groupDiscussion);
+			insertNotification(userId, groupDiscussion.getGroupDiscussionName().toUpperCase() + " Discussion is Created in Group "
+					+ group.getGroupName().toUpperCase(), group.getGroupId());
 			return group;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 
 		return null;
@@ -338,9 +337,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			if (resultSet.next()) {
 				return resultSet.getString(1);
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 		return null;
 	}
@@ -362,9 +360,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 						groupFollowersId));
 			}
 			return discussions;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 		return null;
 	}
@@ -399,10 +396,14 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.executeQuery();
 			connection.commit();
 			preparedStatement.close();
+			String name = user.getIsAnonymous() ? "Anonymous" : user.getFirstName();
+			insertNotification(user.getUserId(),
+					name + " posted a comment in " + user.getSelectedGroup().getGroupName() + " under discussion "
+							+ user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionName(),
+					user.getSelectedGroup().getGroupId());
 			return true;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 		return false;
 	}
@@ -422,15 +423,14 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 				comments.add(new GroupComments(commentId, commentBody, commentCreationTime, commentPostedBy));
 			}
 			return comments;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 		return comments;
 	}
 
 	@Override
-	public Group createProject(Group group, Project project) {
+	public Group createProject(String userId, Group group, Project project) {
 		String groupProgressReportId = null;
 		try {
 			preparedStatement = connection.prepareStatement(
@@ -455,13 +455,13 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			project.setGroupProgressReportId(groupProgressReportId);
 			group.getProjects().add(project);
 			group.setSelectedProject(project);
-			return group;
+			insertNotification(userId, "A Project with name " + project.getTaskName() + " has been created for Group "
+					+ group.getGroupName(), group.getGroupId());
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 		return group;
-		
+
 	}
 
 	@Override
@@ -487,10 +487,9 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			poll.setPollId(pollId);
 			group.getPolls().add(poll);
 			group.setSelectedPoll(poll);
-
+			insertNotification(userId, "A Poll has been created in Group " + group.getGroupName(), group.getGroupId());
 		} catch (Exception e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 		return group;
 
@@ -499,8 +498,6 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public void closeServices() {
 		try {
-			preparedStatement.close();
-			resultSet.close();
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -555,15 +552,20 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public Group updateProject(Group group, Date newEndDate, String newContractorName) {
 		try {
-			if(newContractorName != null) {
-				preparedStatement = connection.prepareStatement("update groupprogressreport set contractor='"+newContractorName+"' where groupprogressid='"+group.getSelectedProject().getGroupProgressReportId()+"'");
-				
+			if (newContractorName != null) {
+				preparedStatement = connection.prepareStatement(
+						"update groupprogressreport set contractor='" + newContractorName + "' where groupprogressid='"
+								+ group.getSelectedProject().getGroupProgressReportId() + "'");
+
 			} else {
-				preparedStatement = connection.prepareStatement("update groupprogressreport set enddate='"+newEndDate+"' where groupprogressid='"+group.getSelectedProject().getGroupProgressReportId()+"'");
+				preparedStatement = connection.prepareStatement("update groupprogressreport set enddate='" + newEndDate
+						+ "' where groupprogressid='" + group.getSelectedProject().getGroupProgressReportId() + "'");
 			}
 			preparedStatement.executeUpdate();
 			connection.commit();
-			preparedStatement = connection.prepareStatement("select contractor,enddate from groupprogressreport where groupprogressid='"+group.getSelectedProject().getGroupProgressReportId()+"'");
+			preparedStatement = connection
+					.prepareStatement("select contractor,enddate from groupprogressreport where groupprogressid='"
+							+ group.getSelectedProject().getGroupProgressReportId() + "'");
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			group.getSelectedProject().setContractorName(resultSet.getString("contractor"));
@@ -579,9 +581,10 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	public List<Poll> viewPolls(String groupId) {
 		List<Poll> polls = new ArrayList<>();
 		try {
-			preparedStatement = connection.prepareStatement("select * from poll where groupdetailsid='"+groupId+"'");
+			preparedStatement = connection
+					.prepareStatement("select * from poll where groupdetailsid='" + groupId + "'");
 			resultSet = preparedStatement.executeQuery();
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				String pollId = resultSet.getString("POLLID");
 				String pollTopic = resultSet.getString("POLLTOPIC");
 				Date dateOfPoll = resultSet.getDate("DATEOFPOLL");
@@ -590,30 +593,83 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 				String option3 = resultSet.getString("OPTION3");
 				String userId = resultSet.getString("USERID");
 				String groupFollowersId = resultSet.getString("GROUPFOLLOWERSID");
-				polls.add(new Poll(pollId, pollTopic, dateOfPoll, option1, option2, option3, userId, groupId, groupFollowersId));
+				polls.add(new Poll(pollId, pollTopic, dateOfPoll, option1, option2, option3, userId, groupId,
+						groupFollowersId));
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO: handle exception
 		}
 		return polls;
 	}
 
+	@Override
 	public List<Notification> fetchNotifications(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> notificationIds = getNotificationBody(userId);
+		List<Notification> notifications = new ArrayList<>();
+		for (String id : notificationIds) {
+			try {
+				preparedStatement = connection.prepareStatement(
+						"select notificationbody,dateofnotification from notifications where notificationid='" + id
+								+ "'");
+				resultSet = preparedStatement.executeQuery();
+				if (resultSet.next()) {
+					notifications.add(new Notification(id, resultSet.getString("NOTIFICATIONBODY"),
+							resultSet.getDate("DATEOFNOTIFICATION")));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return notifications;
+	}
+
+	private List<String> getNotificationBody(String userId) {
+		List<String> notificationIds = new ArrayList<>();
+		try {
+			preparedStatement = connection.prepareStatement(
+					"select notificationid from usernotification where userid='" + userId + "' and isread=0");
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				notificationIds.add(resultSet.getString(1));
+			}
+			updateNotifications(userId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return notificationIds;
 	}
 
 	@Override
 	public void updateNotifications(String userId) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private void insertNotification(String userId, String notificationBody) {
 		try {
-			preparedStatement = connection.prepareStatement("");
+			preparedStatement = connection.prepareStatement(
+					"update usernotification set isread=1 where userid='" + userId + "' and isread=0");
+			preparedStatement.executeUpdate();
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void insertNotification(String userId, String notificationBody, String groupId) {
+		String notificationId = null;
+		try {
+			preparedStatement = connection.prepareStatement(
+					"insert into notifications(notificationid,notificationbody,dateofnotification,groupdetailsid) values ('N'||notification_sequence.nextval,?,?,?)");
+			preparedStatement.setString(1, notificationBody);
+			preparedStatement.setDate(2, Helper.getCurrentDateOfTypeJavaSql());
+			preparedStatement.setString(3, groupId);
+			preparedStatement.executeQuery();
+			connection.commit();
+			preparedStatement = connection.prepareStatement("select max(notificationid) from notifications");
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			notificationId = resultSet.getString(1);
+			List<String> userIds = fetchUserId(groupId);
+			for (String id : userIds) {
+				insertUserNotifications(id, notificationId);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -622,7 +678,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public Boolean answerPoll(User user, PollAnswer pollAnswer) throws PollAlreadyAnsweredException {
 		try {
-			preparedStatement = connection.prepareStatement("insert into pollanswer(pollanswerid,pollid,userid,answer) values('PA'||pollanswer_sequence.nextval,?,?,?)");
+			preparedStatement = connection.prepareStatement(
+					"insert into pollanswer(pollanswerid,pollid,userid,answer) values('PA'||pollanswer_sequence.nextval,?,?,?)");
 			preparedStatement.setString(1, pollAnswer.getPollId());
 			preparedStatement.setString(2, user.getUserId());
 			preparedStatement.setString(3, pollAnswer.getAnswer());
@@ -633,4 +690,33 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			throw new PollAlreadyAnsweredException("You have already answered this poll.");
 		}
 	}
+
+	private List<String> fetchUserId(String groupId) {
+		List<String> userIds = new ArrayList<>();
+		try {
+			preparedStatement = connection
+					.prepareStatement("select userid from groupfollowers where groupdetailsid='" + groupId + "'");
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				userIds.add(resultSet.getString("USERID"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return userIds;
+	}
+
+	private void insertUserNotifications(String userId, String notificationId) {
+		try {
+			preparedStatement = connection.prepareStatement(
+					"insert into usernotification(usernotificationid,notificationid,userid,isread) values (usernotification_sequence.nextval,?,?,0)");
+			preparedStatement.setString(1, notificationId);
+			preparedStatement.setString(2, userId);
+			preparedStatement.executeUpdate();
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

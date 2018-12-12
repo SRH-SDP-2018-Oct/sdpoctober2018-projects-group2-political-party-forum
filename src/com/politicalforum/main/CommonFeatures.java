@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.politicalforum.beans.Group;
+import com.politicalforum.beans.Notification;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.services.PoliticalPartyServices;
@@ -13,10 +14,11 @@ public class CommonFeatures {
 
 	private static Scanner sc = new Scanner(System.in);
 
-	public static void joinGroup(User user, PoliticalPartyServices politicalPartyServices) throws GroupAlreadyJoinedException{
+	public static void joinGroup(User user, PoliticalPartyServices politicalPartyServices)
+			throws GroupAlreadyJoinedException {
 		System.out.println("Available groups to join");
 		List<Group> groups = politicalPartyServices.browseGroups();
-		if(groups.isEmpty()) {
+		if (groups.isEmpty()) {
 			System.out.println("No groups are available to join at the moment.");
 			return;
 		}
@@ -36,7 +38,8 @@ public class CommonFeatures {
 		}
 	}
 
-	public static void myGroups(User user, PoliticalPartyServices politicalPartyServices)throws GroupAlreadyJoinedException {
+	public static void myGroups(User user, PoliticalPartyServices politicalPartyServices)
+			throws GroupAlreadyJoinedException {
 		int choice = 0;
 		HashMap<Integer, Group> map = new HashMap<>();
 		System.out.println("\n********MY GROUPS*************");
@@ -54,6 +57,20 @@ public class CommonFeatures {
 			user.setSelectedGroup(map.get(choice));
 			GroupFeatures.viewGroup(user, politicalPartyServices);
 		}
+	}
+
+	public static void notificationView(User user, PoliticalPartyServices politicalPartyServices) {
+		List<Notification> notifications = politicalPartyServices.getNotifications(user.getUserId());
+		System.out.println("***************Notifications*******************\n");
+		if (notifications.isEmpty()) {
+			System.out.println("No Notifications at the moment.");
+			return;
+		}
+		for (int i = 0; i < notifications.size(); i++) {
+			System.out.println((i + 1) + ". " + notifications.get(i).getNotificationBody() + "::: dated:- "
+					+ notifications.get(i).getNotificationCreationTime()+"\n");
+		}
+		return;
 	}
 
 }

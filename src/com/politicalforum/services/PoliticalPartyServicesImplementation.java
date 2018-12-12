@@ -9,6 +9,7 @@ import com.politicalforum.beans.GeneralUser;
 import com.politicalforum.beans.Group;
 import com.politicalforum.beans.GroupComments;
 import com.politicalforum.beans.GroupDiscussion;
+import com.politicalforum.beans.Notification;
 import com.politicalforum.beans.PoliticalUser;
 import com.politicalforum.beans.Poll;
 import com.politicalforum.beans.PollAnswer;
@@ -20,7 +21,6 @@ import com.politicalforum.exceptions.GroupAlreadyJoinedException;
 import com.politicalforum.exceptions.InvalidCredentialsException;
 import com.politicalforum.exceptions.PollAlreadyAnsweredException;
 import com.politicalforum.exceptions.ServiceNotFoundException;
-import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.providers.PoliticalPartyDAOServicesProvider;
 import com.politicalforum.utils.Helper;
@@ -65,7 +65,6 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 					return user;
 				}
 			} catch (GroupAlreadyJoinedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -123,7 +122,7 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 
 	@Override
 	public User createProject(User user, Project project) {
-		user.setSelectedGroup(politicalPartyDaoServices.createProject(user.getSelectedGroup(), project));
+		user.setSelectedGroup(politicalPartyDaoServices.createProject(user.getUserId() ,user.getSelectedGroup(), project));
 		return user; 
 	}
 
@@ -162,6 +161,11 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 	@Override
 	public List<Poll> listPolls(String groupId) {
 		return politicalPartyDaoServices.viewPolls(groupId);
+	}
+
+	@Override
+	public List<Notification> getNotifications(String userId) {
+		return politicalPartyDaoServices.fetchNotifications(userId);
 	}
 
 }

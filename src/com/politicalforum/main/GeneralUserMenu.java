@@ -15,7 +15,7 @@ public class GeneralUserMenu {
 			throws UserAlreadyExistsException, GroupAlreadyJoinedException {
 		int choice = 0;
 		do {
-			System.out.println("\t\tMenu\n\n1. Browse Groups \n2. My Groups");
+			System.out.println("\t\tMenu\n\n1. Browse Groups \n2. My Groups \n3. Notifications\n4. Logout\n");
 			System.out.println("Enter Option:- ");
 			choice = sc.nextInt();
 			sc.nextLine();
@@ -27,11 +27,14 @@ public class GeneralUserMenu {
 				CommonFeatures.myGroups(user, politicalPartyServices);
 				break;
 			case 3:
+				CommonFeatures.notificationView(user, politicalPartyServices);
+				break;
+			case 4:
 				break;
 			default:
 				System.out.println("Wrong Option!");
 				break;
 			}
-		} while (choice != 3);
+		} while (choice != 4);
 	}
 }

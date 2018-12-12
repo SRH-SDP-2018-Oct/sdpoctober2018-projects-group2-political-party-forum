@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import com.politicalforum.exceptions.GroupAlreadyExistException;
 import com.politicalforum.exceptions.GroupAlreadyJoinedException;
-import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.exceptions.UserAlreadyExistsException;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.validation.Validations;

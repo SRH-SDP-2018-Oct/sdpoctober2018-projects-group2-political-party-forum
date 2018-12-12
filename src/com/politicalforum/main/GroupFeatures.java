@@ -2,7 +2,6 @@ package com.politicalforum.main;
 
 import java.util.Scanner;
 
-import com.politicalforum.beans.Poll;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.UnknownDateFormatException;
 import com.politicalforum.services.PoliticalPartyServices;
