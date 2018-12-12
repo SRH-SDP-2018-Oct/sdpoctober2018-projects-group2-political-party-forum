@@ -554,17 +554,17 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		try {
 			if (newContractorName != null) {
 				preparedStatement = connection.prepareStatement(
-						"update groupprogressreport set contractor='" + newContractorName + "' where groupprogressid='"
+						"update groupprogressreport set contractor='" + newContractorName + "' where groupprogressreportid='"
 								+ group.getSelectedProject().getGroupProgressReportId() + "'");
 
 			} else {
-				preparedStatement = connection.prepareStatement("update groupprogressreport set enddate='" + newEndDate
-						+ "' where groupprogressid='" + group.getSelectedProject().getGroupProgressReportId() + "'");
+				preparedStatement = connection.prepareStatement("update groupprogressreport set enddate=? where groupprogressreportid='" + group.getSelectedProject().getGroupProgressReportId() + "'");
+				preparedStatement.setDate(1, newEndDate);
 			}
 			preparedStatement.executeUpdate();
 			connection.commit();
 			preparedStatement = connection
-					.prepareStatement("select contractor,enddate from groupprogressreport where groupprogressid='"
+					.prepareStatement("select contractor,enddate from groupprogressreport where groupprogressreportid='"
 							+ group.getSelectedProject().getGroupProgressReportId() + "'");
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();

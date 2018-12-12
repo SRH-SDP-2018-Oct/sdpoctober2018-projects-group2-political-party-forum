@@ -70,7 +70,7 @@ public class ProjectFeatures {
 	public static void viewProject(User user, PoliticalPartyServices politicalPartyServices,
 			Boolean isUserPoliticianAndGroupOwner) {
 		Project selectedProject = user.getSelectedGroup().getSelectedProject();
-		System.out.println("\n*************Project*****************");
+		System.out.println("\n----------------Project------------------");
 		System.out.println("\nProject Created On:- " + selectedProject.getTaskCreationTimestamp());
 		System.out.println("\nProject Name:- " + selectedProject.getTaskName());
 		System.out.println("\nProject Description:- " + selectedProject.getTaskDescription());
@@ -82,7 +82,7 @@ public class ProjectFeatures {
 		do {
 			System.out.println("Generate Report?(y/n)");
 			choice = sc.nextLine();
-		} while (!choice.equalsIgnoreCase("y") || !choice.equalsIgnoreCase("n"));
+		} while (!(choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n")));
 		if (choice.equalsIgnoreCase("y")) {
 			// Generate Report
 		}
@@ -90,7 +90,7 @@ public class ProjectFeatures {
 			do {
 				System.out.println("Would you like to update the project(y/n):- ");
 				choice = sc.nextLine();
-			} while (choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n"));
+			} while (!(choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n")));
 			if (choice.equalsIgnoreCase("y")) {
 				updateProject(user, politicalPartyServices);
 			}
@@ -125,7 +125,8 @@ public class ProjectFeatures {
 
 			System.out.println("\nWhat would you like to update? ");
 			System.out.println("\n1. Project End Date ");
-			System.out.println("2.Project Contractor ");
+			System.out.println("2. Project Contractor ");
+			System.out.println("3. Back");
 			choice = sc.nextInt();
 			sc.nextLine();
 			switch (choice) {
