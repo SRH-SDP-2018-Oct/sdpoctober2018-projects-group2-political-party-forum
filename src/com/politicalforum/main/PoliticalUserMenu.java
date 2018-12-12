@@ -18,7 +18,8 @@ public class PoliticalUserMenu {
 			throws UserAlreadyExistsException, GroupAlreadyExistException {
 		int choice = 0;
 		do {
-			System.out.println("\t\tMenu\n\n1. Create Group \n2. Browse Groups\n3. My Groups\n4. Notifications\n5. Logout\n");
+			System.out.println(
+					"\t\tMenu\n\n1. Create Group \n2. Browse Groups\n3. My Groups\n4. Notifications\n5. Logout\n");
 			System.out.println("Enter Option:- ");
 			choice = sc.nextInt();
 			sc.nextLine();
@@ -43,7 +44,7 @@ public class PoliticalUserMenu {
 					int groupNumber = sc.nextInt();
 					sc.nextLine();
 					try {
-						user = politicalPartyServices.joinGroup(user, similarGroups.get(groupNumber));
+						user = politicalPartyServices.joinGroup(user, similarGroups.get(groupNumber - 1));
 					} catch (GroupAlreadyJoinedException e) {
 						e.printStackTrace();
 					}
@@ -57,14 +58,14 @@ public class PoliticalUserMenu {
 				try {
 					CommonFeatures.joinGroup(user, politicalPartyServices);
 				} catch (GroupAlreadyJoinedException e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 				break;
 			case 3:
 				try {
 					CommonFeatures.myGroups(user, politicalPartyServices);
 				} catch (GroupAlreadyJoinedException e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 				break;
 			case 4:

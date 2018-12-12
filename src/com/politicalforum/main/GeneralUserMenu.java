@@ -12,9 +12,10 @@ public class GeneralUserMenu {
 	private static Scanner sc = new Scanner(System.in);
 
 	public static void menu(User user, PoliticalPartyServices politicalPartyServices)
-			throws UserAlreadyExistsException, GroupAlreadyJoinedException {
+			throws UserAlreadyExistsException {
 		int choice = 0;
 		do {
+			try {
 			System.out.println("\t\tMenu\n\n1. Browse Groups \n2. My Groups \n3. Notifications\n4. Logout\n");
 			System.out.println("Enter Option:- ");
 			choice = sc.nextInt();
@@ -34,6 +35,9 @@ public class GeneralUserMenu {
 			default:
 				System.out.println("Wrong Option!");
 				break;
+			}
+			}catch(GroupAlreadyJoinedException e) {
+				System.out.println(e.getMessage());
 			}
 		} while (choice != 4);
 	}
