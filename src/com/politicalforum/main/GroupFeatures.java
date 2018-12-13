@@ -53,11 +53,6 @@ public class GroupFeatures {
 					}
 					ProjectFeatures.createProject(user, politicalPartyServices, isUserPoliticianAndGroupOwner);
 					break;
-				case 7: // View DashBoard
-					if (!isUserPoliticianAndGroupOwner) {
-						System.out.println("Wrong Option!");
-						break;
-					}
 				case 0:
 					break;
 				default:
