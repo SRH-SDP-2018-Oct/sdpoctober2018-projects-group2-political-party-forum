@@ -15,7 +15,7 @@ public class GeneralUserMenu {
 		do {
 			try {
 				System.out.println(
-						"\t\tMenu\n\n1. Browse Groups \n2. My Groups \n3. Notifications\n4.Update Profile \n5. Logout\n");
+						"\t\tMenu\n\n1. Browse Groups \n2. My Groups \n3. Notifications\n4. Update Profile \n5. Logout\n");
 				System.out.println("Enter Option:- ");
 				choice = sc.nextInt();
 				sc.nextLine();
@@ -31,6 +31,8 @@ public class GeneralUserMenu {
 					break;
 				case 4:
 					CommonFeatures.updateProfile(user, politicalPartyServices);
+					break;
+				case 5:
 					break;
 				default:
 					System.out.println("Wrong Option!");
