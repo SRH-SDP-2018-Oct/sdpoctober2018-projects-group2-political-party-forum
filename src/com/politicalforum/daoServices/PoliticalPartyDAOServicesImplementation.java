@@ -95,7 +95,6 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			politicalUserId = resultSet.getString(1);
-			System.out.println("Political Id:- " + politicalUserId);
 			hashPassword = Helper.generateHashPassword(politicalUser.getPassword());
 			preparedStatement = connection
 					.prepareStatement("insert into usercredentials(userid, hashpassword) values(?,?)");
