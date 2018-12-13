@@ -8,6 +8,7 @@ import java.util.Scanner;
 import com.politicalforum.beans.Project;
 import com.politicalforum.beans.User;
 import com.politicalforum.exceptions.UnknownDateFormatException;
+import com.politicalforum.report.DynamicJasperReportGroupProgressReport;
 import com.politicalforum.services.PoliticalPartyServices;
 import com.politicalforum.utils.Helper;
 import com.politicalforum.validation.Validations;
@@ -79,11 +80,11 @@ public class ProjectFeatures {
 		System.out.println("\nProject Ends On:- " + selectedProject.getTaskEndDate());
 		String choice = null;
 		do {
-			System.out.println("Generate Report?(y/n)");
+			System.out.println("\nGenerate Report?(y/n)");
 			choice = sc.nextLine();
 		} while (!(choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n")));
 		if (choice.equalsIgnoreCase("y")) {
-			// Generate Report
+			DynamicJasperReportGroupProgressReport.generateGroupProgressReport(user.getSelectedGroup().getSelectedProject().getGroupProgressReportId());
 		}
 		if (isUserPoliticianAndGroupOwner) {
 			do {
@@ -144,11 +145,13 @@ public class ProjectFeatures {
 				} while (Validations.validateIfDateToCompareIsGreater(newEndDate,
 						user.getSelectedGroup().getSelectedProject().getTaskStartDate()));
 				politicalPartyServices.updateProject(user.getSelectedGroup(), newEndDate, null);
+				System.out.println("\nProject successfully updated.\n");
 				break;
 			case 2:
 				System.out.println("Update Contractor To:- ");
 				String newContractor = sc.nextLine();
 				politicalPartyServices.updateProject(user.getSelectedGroup(), null, newContractor);
+				System.out.println("\nProject successfully updated.\n");
 				break;
 			case 3:
 				break;
