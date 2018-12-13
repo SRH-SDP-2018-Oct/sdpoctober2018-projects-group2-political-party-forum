@@ -54,8 +54,10 @@ public class CommonFeatures {
 				System.out.println((i + 1) + ". " + user.getGroups().get(i).getGroupName());
 				map.put((i + 1), user.getGroups().get(i));
 			}
-			System.out.println("Your Choice:- ");
-			choice = sc.nextInt();
+			do {
+				System.out.println("Your Choice:- ");
+				choice = sc.nextInt();
+			} while (choice < 1 || choice > user.getGroups().size());
 			sc.nextLine();
 			user.setSelectedGroup(map.get(choice));
 			GroupFeatures.viewGroup(user, politicalPartyServices);
@@ -83,7 +85,7 @@ public class CommonFeatures {
 			System.out.println("\nChange your current anonymous to " + !user.getIsAnonymous() + "?(y/n)");
 			choice = sc.nextLine();
 		} while (!(choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("n")));
-		if(choice.equalsIgnoreCase("y")) {
+		if (choice.equalsIgnoreCase("y")) {
 			user = politicalPartyServices.updateProfile(user);
 			System.out.println("Profile Updated!");
 		} else {

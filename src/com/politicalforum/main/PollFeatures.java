@@ -23,7 +23,7 @@ public class PollFeatures {
 		do {
 			System.out.println("Number of options in this poll(Min.2 and Max 3):- ");
 			numberOfOptions = sc.nextInt();
-		} while (numberOfOptions != 2 || numberOfOptions != 3);
+		} while (!(numberOfOptions == 2 || numberOfOptions == 3));
 		sc.nextLine();
 		String optionOne = null;
 		String optionTwo = null;
@@ -49,7 +49,6 @@ public class PollFeatures {
 		}
 		user = politicalPartyServices.createPoll(user, new Poll(pollName, Helper.getCurrentDateOfTypeJavaSql(),
 				optionOne, optionTwo, optionThree, user.getUserId(), user.getSelectedGroup().getGroupId()));
-		System.out.println("Poll created:- " + user.getSelectedGroup().getSelectedPoll().toString());
 		viewPoll(user, politicalPartyServices);
 	}
 
@@ -82,6 +81,7 @@ public class PollFeatures {
 		HashMap<String, Boolean> postedBy = new HashMap<>();
 		postedBy = politicalPartyServices.getPostedByDetails(selectedPoll.getGroupFollowersId());
 		String createdBy = null;
+		int option = 0;
 		for (String key : postedBy.keySet()) {
 			createdBy = postedBy.get(key) ? "Anonymous" : key;
 		}
@@ -98,8 +98,10 @@ public class PollFeatures {
 			System.out.println("3. " + selectedPoll.getOption3());
 			map.put(3, selectedPoll.getOption3());
 		}
-		System.out.println("\nEnter Option to answer Poll:-");
-		int option = sc.nextInt();
+		do {
+			System.out.println("\nEnter Option to answer Poll:-\n");
+			option = sc.nextInt();
+		} while (option < 1 || option > map.size());
 		sc.nextLine();
 		try {
 			if (politicalPartyServices.answerPoll(user,
@@ -107,7 +109,7 @@ public class PollFeatures {
 				System.out.println("Thank you for answering.");
 			}
 		} catch (PollAlreadyAnsweredException e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
 	}
 

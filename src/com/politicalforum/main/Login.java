@@ -18,16 +18,14 @@ public class Login {
 			System.out.println("Enter Password:- ");
 			String password = sc.nextLine();
 			User user = politicalPartyServices.login(emailId, password);
-			System.out.println("Login success  " + user);
+			System.out.println("Login success  ");
 			if (Helper.checkIfUserIsPolitician(user.getUserId())) {
 				PoliticalUserMenu.menu(user, politicalPartyServices);
 			} else {
 				GeneralUserMenu.menu(user, politicalPartyServices);
 			}
 		} catch (InvalidCredentialsException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 

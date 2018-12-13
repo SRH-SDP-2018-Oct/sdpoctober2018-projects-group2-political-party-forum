@@ -325,8 +325,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			String groupDiscussionId = resultSet.getString(1);
 			groupDiscussion.setGroupDiscussionId(groupDiscussionId);
 			group.getGroupDiscussions().add(groupDiscussion);
-			insertNotification(userId, groupDiscussion.getGroupDiscussionName().toUpperCase()
-					+ " Discussion is Created in Group " + group.getGroupName().toUpperCase(), group.getGroupId());
+			insertNotification(userId, "\""+groupDiscussion.getGroupDiscussionName().toUpperCase()
+					+ "\" Discussion is Created in Group \"" + group.getGroupName().toUpperCase() + "\"", group.getGroupId());
 			return group;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -404,8 +404,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement.close();
 			String name = user.getIsAnonymous() ? "Anonymous" : user.getFirstName();
 			insertNotification(user.getUserId(),
-					name + " posted a comment in " + user.getSelectedGroup().getGroupName() + " under discussion "
-							+ user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionName(),
+					name + " posted a comment in \"" + user.getSelectedGroup().getGroupName() + "\" under discussion \""
+							+ user.getSelectedGroup().getSelectedGroupDiscussion().getGroupDiscussionName()+"\"",
 					user.getSelectedGroup().getGroupId());
 			return true;
 		} catch (SQLException e) {
@@ -461,7 +461,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			project.setGroupProgressReportId(groupProgressReportId);
 			group.getProjects().add(project);
 			group.setSelectedProject(project);
-			insertNotification(userId, "A Project with name " + project.getTaskName() + " has been created for Group "
+			insertNotification(userId, "A Project with name \"" + project.getTaskName() + "\" has been created for Group "
 					+ group.getGroupName(), group.getGroupId());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -493,7 +493,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			poll.setPollId(pollId);
 			group.getPolls().add(poll);
 			group.setSelectedPoll(poll);
-			insertNotification(userId, "A Poll has been created in Group " + group.getGroupName(), group.getGroupId());
+			insertNotification(userId, "A Poll has been created in Group \"" + group.getGroupName(), group.getGroupId()+"\"");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

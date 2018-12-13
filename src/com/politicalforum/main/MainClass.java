@@ -39,7 +39,9 @@ public class MainClass {
 					break;
 				}
 			} catch (ServiceNotFoundException e) {
-				System.out.println(e.getMessage());
+				System.err.println(e.getMessage());
+			} catch (Exception e) {
+				System.err.println(":(   "+e.getMessage() + "    ):");
 			}
 		} while (choice != 3);
 	}

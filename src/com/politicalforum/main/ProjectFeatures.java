@@ -63,7 +63,6 @@ public class ProjectFeatures {
 		user = politicalPartyServices.createProject(user,
 				new Project(taskName, taskStartDate, taskEndDate, intendedCompletionDate, taskDescription,
 						taskAllocatedFund, Helper.getCurrentDateOfTypeJavaSql(), contractorName));
-		System.out.println("Project Details:- " + user.getSelectedGroup().getSelectedProject().toString());
 		viewProject(user, politicalPartyServices, isUserPoliticianAndGroupOwner);
 	}
 
@@ -111,8 +110,10 @@ public class ProjectFeatures {
 			System.out.println((i + 1) + ". " + projects.get(i).getTaskName());
 			map.put(i + 1, projects.get(i));
 		}
-		System.out.println("\nYour Choice:- ");
-		choice = sc.nextInt();
+		do {
+			System.out.println("\nYour Choice:- ");
+			choice = sc.nextInt();
+		} while (choice < 1 || choice > projects.size());
 		sc.nextLine();
 		user.getSelectedGroup().setSelectedProject(map.get(choice));
 		viewProject(user, politicalPartyServices, isUserPoliticianAndGroupOwner);
@@ -138,7 +139,7 @@ public class ProjectFeatures {
 						String updateEndDate = sc.nextLine();
 						newEndDate = Helper.convertDateToSqlDate(updateEndDate);
 					} catch (UnknownDateFormatException e) {
-						System.out.println(e.getMessage());
+						System.err.println(e.getMessage());
 					}
 				} while (Validations.validateIfDateToCompareIsGreater(newEndDate,
 						user.getSelectedGroup().getSelectedProject().getTaskStartDate()));

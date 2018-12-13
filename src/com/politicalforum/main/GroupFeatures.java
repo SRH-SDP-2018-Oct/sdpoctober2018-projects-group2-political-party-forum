@@ -16,7 +16,7 @@ public class GroupFeatures {
 		do {
 			try {
 				System.out.println("---------------Group Menu------------------");
-				System.out.println("\n" + user.getSelectedGroup().getGroupName());
+				System.out.println("\nGroup Name:- " + user.getSelectedGroup().getGroupName());
 				System.out.println("\nAbout This Group:- " + user.getSelectedGroup().getGroupDescription());
 				System.out.println(
 						"\n\n1. View Discussions\n2. View Polls\n3. View Projects for this group\n4. Create Discussions\n5. Create Polls");
@@ -64,7 +64,7 @@ public class GroupFeatures {
 					break;
 				}
 			} catch (UnknownDateFormatException e) {
-				System.out.println(e.getMessage());
+				System.err.println(e.getMessage());
 			}
 		} while (choice != 0);
 
