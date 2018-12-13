@@ -15,14 +15,15 @@ public class GroupFeatures {
 		int choice = 0;
 		do {
 			try {
-				System.out.println("---------------Group Menu------------------");
-				System.out.println("\nGroup Name:- " + user.getSelectedGroup().getGroupName());
-				System.out.println("\nAbout This Group:- " + user.getSelectedGroup().getGroupDescription());
-				System.out.println(
-						"\n\n1. View Discussions\n2. View Polls\n3. View Projects for this group\n4. Create Discussions\n5. Create Polls");
 				boolean isUserPoliticianAndGroupOwner = Helper.checkIfUserIsPolitician(user.getUserId())
 						&& politicalPartyServices.checkIfUserIsGroupOwner(user.getUserId(),
 								user.getSelectedGroup().getGroupId());
+				System.out.println("---------------Group Menu------------------");
+				System.out.println("\nGroup Name:- " + user.getSelectedGroup().getGroupName());
+				System.out.println("\nAbout This Group:- " + user.getSelectedGroup().getGroupDescription());
+				System.out.println("\nGroup Created By:- "+ (isUserPoliticianAndGroupOwner?"You":(user.getFirstName()+" "+user.getLastName())));
+				System.out.println(
+						"\n\n1. View Discussions\n2. View Polls\n3. View Projects for this group\n4. Create Discussions\n5. Create Polls");
 				if (isUserPoliticianAndGroupOwner) {
 					System.out.println("6. Create Project\n");
 				}

@@ -65,7 +65,7 @@ public class PoliticalPartyServicesImplementation implements PoliticalPartyServi
 					return user;
 				}
 			} catch (GroupAlreadyJoinedException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 		}
 		return user;

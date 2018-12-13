@@ -178,8 +178,6 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public Boolean joinGroup(String userId, Group group) throws GroupAlreadyJoinedException {
 		try {
-			System.out.println("User Id:- "+ userId);
-			System.out.println("group :- "+ group.toString());
 			preparedStatement = connection.prepareStatement(
 					"insert into groupfollowers(groupfollowersid, groupdetailsid, userid) values('GF'||groupfollowers_sequence.nextval,?,?)");
 			preparedStatement.setString(1, group.getGroupId());
@@ -493,7 +491,7 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			poll.setPollId(pollId);
 			group.getPolls().add(poll);
 			group.setSelectedPoll(poll);
-			insertNotification(userId, "A Poll has been created in Group \"" + group.getGroupName(), group.getGroupId()+"\"");
+			insertNotification(userId, "A Poll has been created in Group \"" + group.getGroupName() +"\"", group.getGroupId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
