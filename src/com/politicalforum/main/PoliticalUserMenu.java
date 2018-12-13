@@ -48,12 +48,12 @@ public class PoliticalUserMenu {
 					sc.nextLine();
 					try {
 						user = politicalPartyServices.joinGroup(user, map.get(groupNumber));
+						user.setSelectedGroup(user.getGroups().get(user.getGroups().size() - 1));
+						System.out.println(user.getSelectedGroup().getGroupName() + " Group joined");
+						GroupFeatures.viewGroup(user, politicalPartyServices);
 					} catch (GroupAlreadyJoinedException e) {
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					}
-					user.setSelectedGroup(user.getGroups().get(user.getGroups().size() - 1));
-					System.out.println(user.getSelectedGroup().getGroupName() + " Group joined");
-					GroupFeatures.viewGroup(user, politicalPartyServices);
 				}
 
 				break;

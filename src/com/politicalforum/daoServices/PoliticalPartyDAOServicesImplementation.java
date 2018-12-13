@@ -116,11 +116,15 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 		List<Group> groups = new ArrayList<>();
 		try {
 			preparedStatement = connection
-					.prepareStatement("select groupdetailsname from groupdetails where groupdetailsname like '%"
+					.prepareStatement("select * from groupdetails where groupdetailsname like '%"
 							+ groupName.toUpperCase() + "%'");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				groups.add(new Group(resultSet.getString(1)));
+				String groupId = resultSet.getString("GROUPDETAILSID");
+				String groupDescription = resultSet.getString("GROUPDETAILSNAME");
+				String groupOwnerId = resultSet.getString("GROUPDETAILSBODY");
+				Date groupCreationTime = resultSet.getDate("DATEOFCREATION");
+				groups.add(new Group(groupId, groupName, groupDescription, groupOwnerId, groupCreationTime));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -174,6 +178,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 	@Override
 	public Boolean joinGroup(String userId, Group group) throws GroupAlreadyJoinedException {
 		try {
+			System.out.println("User Id:- "+ userId);
+			System.out.println("group :- "+ group.toString());
 			preparedStatement = connection.prepareStatement(
 					"insert into groupfollowers(groupfollowersid, groupdetailsid, userid) values('GF'||groupfollowers_sequence.nextval,?,?)");
 			preparedStatement.setString(1, group.getGroupId());
@@ -206,14 +212,14 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement = connection.prepareStatement("select * from userdetails where userid='" + userId + "'");
 			resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				String firstName = resultSet.getString(2);
-				String lastName = resultSet.getString(3);
-				String region = resultSet.getString(4);
-				String emailId = resultSet.getString(5);
-				String aadharNumber = resultSet.getString(6);
-				String gender = resultSet.getString(7);
-				int age = Integer.parseInt(resultSet.getString(8));
-				Boolean isAnonymous = resultSet.getInt(9) > 0 ? true : false;
+				String firstName = resultSet.getString("FIRSTNAME");
+				String lastName = resultSet.getString("LASTNAME");
+				String region = resultSet.getString("REGION");
+				String emailId = resultSet.getString("EMAILID");
+				String aadharNumber = resultSet.getString("AADHARNUMBER");
+				String gender = resultSet.getString("GENDER");
+				int age = Integer.parseInt(resultSet.getString("AGE"));
+				Boolean isAnonymous = resultSet.getInt("ISANONYMOUS") > 0 ? true : false;
 				return new GeneralUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region,
 						new ArrayList<>(), aadharNumber);
 			}
@@ -228,14 +234,14 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement = connection.prepareStatement("select * from userdetails where userid='" + userId + "'");
 			resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				String firstName = resultSet.getString(2);
-				String lastName = resultSet.getString(3);
-				String region = resultSet.getString(4);
-				String emailId = resultSet.getString(5);
-				String politicianId = resultSet.getString(6);
-				String gender = resultSet.getString(7);
-				int age = Integer.parseInt(resultSet.getString(8));
-				Boolean isAnonymous = resultSet.getInt(9) > 0 ? true : false;
+				String firstName = resultSet.getString("FIRSTNAME");
+				String lastName = resultSet.getString("LASTNAME");
+				String region = resultSet.getString("REGION");
+				String emailId = resultSet.getString("EMAILID");
+				String politicianId = resultSet.getString("POLITICALID");
+				String gender = resultSet.getString("GENDER");
+				int age = Integer.parseInt(resultSet.getString("AGE"));
+				Boolean isAnonymous = resultSet.getInt("ISANONYMOUS") > 0 ? true : false;
 				return new PoliticalUser(userId, firstName, lastName, age, emailId, gender, isAnonymous, region,
 						new ArrayList<>(), politicianId);
 			}
@@ -252,11 +258,11 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 			preparedStatement = connection.prepareStatement("select * from groupdetails");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				String groupId = resultSet.getString(1);
-				String groupName = resultSet.getString(2);
-				String groupDescription = resultSet.getString(3);
-				String groupOwnerId = resultSet.getString(4);
-				Date groupCreationTime = resultSet.getDate(5);
+				String groupId = resultSet.getString("GROUPDETAILSID");
+				String groupName = resultSet.getString("GROUPDETAILSNAME");
+				String groupDescription = resultSet.getString("GROUPDETAILSBODY");
+				String groupOwnerId = resultSet.getString("USERID");
+				Date groupCreationTime = resultSet.getDate("DATEOFCREATION");
 				groups.add(new Group(groupId, groupName, groupDescription, groupOwnerId, groupCreationTime));
 			}
 		} catch (SQLException e) {
@@ -286,11 +292,11 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 							+ userId + "')");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				String groupId = resultSet.getString(1);
-				String groupName = resultSet.getString(2);
-				String groupDescription = resultSet.getString(3);
-				Date groupCreationTime = resultSet.getDate(4);
-				String groupOwnerId = resultSet.getString(5);
+				String groupId = resultSet.getString("GROUPDETAILSID");
+				String groupName = resultSet.getString("GROUPDETAILSNAME");
+				String groupDescription = resultSet.getString("GROUPDETAILSBODY");
+				Date groupCreationTime = resultSet.getDate("DATEOFCREATION");
+				String groupOwnerId = resultSet.getString("USERID");
 				group.add(new Group(groupId, groupName, groupDescription, groupOwnerId, groupCreationTime));
 			}
 			return group;
@@ -351,11 +357,11 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 					.prepareStatement("select * from discussion where groupdetailsid='" + groupId + "'");
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				String discussionId = resultSet.getString(1);
-				String discussionName = resultSet.getString(2);
-				String discussionBody = resultSet.getString(3);
-				String groupFollowersId = resultSet.getString(4);
-				Date dateOfDiscussion = resultSet.getDate("dateOfDiscussion");
+				String discussionId = resultSet.getString("DISCUSSIONID");
+				String discussionName = resultSet.getString("DISCUSSIONNAME");
+				String discussionBody = resultSet.getString("DISCUSSIONBODY");
+				String groupFollowersId = resultSet.getString("GROUPFOLLOWERSID");
+				Date dateOfDiscussion = resultSet.getDate("DATEOFDISCUSSION");
 				discussions.add(new GroupDiscussion(discussionId, discussionName, discussionBody, dateOfDiscussion,
 						groupFollowersId));
 			}

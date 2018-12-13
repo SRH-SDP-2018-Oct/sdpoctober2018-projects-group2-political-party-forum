@@ -29,7 +29,9 @@ public class MainClass {
 					Login.userLogin(politicalPartyServices);
 					break;
 				case 3:
+					System.out.println("Closing connection....");
 					politicalPartyServices.exit();
+					System.out.println("Connection Closed");
 					System.exit(0);
 					break;
 				default:
