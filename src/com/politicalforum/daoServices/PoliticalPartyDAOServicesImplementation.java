@@ -382,8 +382,8 @@ public class PoliticalPartyDAOServicesImplementation implements PoliticalPartyDA
 				map.put(resultSet.getString(1), Integer.parseInt(resultSet.getString(2)) > 0 ? true : false);
 			}
 			return map;
-		} catch (Exception e) {
-
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return map;
 	}

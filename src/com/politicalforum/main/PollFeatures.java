@@ -87,7 +87,8 @@ public class PollFeatures {
 		}
 		System.out.println("\n----------------View Poll-------------------");
 		System.out.println("\nPoll Topic:- " + selectedPoll.getPollTopic());
-		System.out.println("\nPoll Created By:- " + createdBy);
+		if (createdBy != null)
+			System.out.println("\nPoll Created By:- " + createdBy);
 		System.out.println("\nPoll Created On:- " + selectedPoll.getDateOfPoll());
 		System.out.println("\nOptions:-");
 		System.out.println("\n1. " + selectedPoll.getOption1());
