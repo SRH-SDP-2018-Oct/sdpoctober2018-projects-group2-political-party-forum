@@ -86,7 +86,7 @@ public class Registration {
 						}
 					} while (!confirmPassword.equals(password));
 
-					GeneralUserMenu.menu(politicalPartyServices.registerUserDetails(firstName, lastName, 0, emailId,
+					GeneralUserMenu.menu(politicalPartyServices.registerUserDetails(firstName, lastName, Integer.parseInt(age), emailId,
 							gender, aadharNumber, isAnonymous, region, password), politicalPartyServices);
 
 					break;
@@ -151,7 +151,7 @@ public class Registration {
 						}
 					} while (!confirmPassword.equals(password));
 
-					PoliticalUserMenu.menu(politicalPartyServices.registerPoliticalUserDetails(firstName, lastName, 0,
+					PoliticalUserMenu.menu(politicalPartyServices.registerPoliticalUserDetails(firstName, lastName, Integer.parseInt(age),
 							emailId, gender, politicianId, isAnonymous, region, password), politicalPartyServices);
 					break;
 
